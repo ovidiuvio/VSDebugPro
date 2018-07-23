@@ -1,0 +1,8 @@
+Debug
+Release
+TestResults
+*.suo
+*.sdf
+*.opensdf
+/.vs/dtool/v15
+/Backup

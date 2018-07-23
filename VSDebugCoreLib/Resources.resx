@@ -1,0 +1,214 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AboutCommandString" xml:space="preserve">
+    <value>about</value>
+  </data>
+  <data name="CanNotCreateWindow" xml:space="preserve">
+    <value>Unable to create window!</value>
+  </data>
+  <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="changelog" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\changelog.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="CmdAboutDesc" xml:space="preserve">
+    <value>Opens product about window.</value>
+  </data>
+  <data name="CmdAliasDesc" xml:space="preserve">
+    <value>Alias allows a more familiar command or name to execute a long string</value>
+  </data>
+  <data name="CmdAliasString" xml:space="preserve">
+    <value>alias</value>
+  </data>
+  <data name="CmdDumpMemDesc" xml:space="preserve">
+    <value>Dump memory utility.</value>
+  </data>
+  <data name="CmdHelpDesc" xml:space="preserve">
+    <value>Provides help information for commands.</value>
+  </data>
+  <data name="CmdImageDesc" xml:space="preserve">
+    <value>Opens the debug image visualizer</value>
+  </data>
+  <data name="CmdLoadMemDesc" xml:space="preserve">
+    <value>Load memory utility.</value>
+  </data>
+  <data name="CmdLoadMemString" xml:space="preserve">
+    <value>loadmem</value>
+  </data>
+  <data name="CmdMemAllocDesc" xml:space="preserve">
+    <value>Allocates memory in the process heap.</value>
+  </data>
+  <data name="CmdMemAllocString" xml:space="preserve">
+    <value>malloc</value>
+  </data>
+  <data name="CmdMemCpyDesc" xml:space="preserve">
+    <value>Memory copy utility.</value>
+  </data>
+  <data name="CmdMemCpyString" xml:space="preserve">
+    <value>memcpy</value>
+  </data>
+  <data name="CmdMemDiffDesc" xml:space="preserve">
+    <value>Diff utility.</value>
+  </data>
+  <data name="CmdMemDiffString" xml:space="preserve">
+    <value>diff</value>
+  </data>
+  <data name="CmdMemFreeDesc" xml:space="preserve">
+    <value>Free memory allocated with malloc.</value>
+  </data>
+  <data name="CmdMemFreeString" xml:space="preserve">
+    <value>free</value>
+  </data>
+  <data name="CmdMemSetDesc" xml:space="preserve">
+    <value>Fills a block of memory with a pattern.</value>
+  </data>
+  <data name="CmdMemSetString" xml:space="preserve">
+    <value>memset</value>
+  </data>
+  <data name="CmdSettingsDesc" xml:space="preserve">
+    <value>Opens product settings dialog.</value>
+  </data>
+  <data name="CmdSettingsString" xml:space="preserve">
+    <value>settings</value>
+  </data>
+  <data name="ContactInfo" xml:space="preserve">
+    <value>support@vsdebug.pro</value>
+  </data>
+  <data name="DumpMemString" xml:space="preserve">
+    <value>dumpmem</value>
+  </data>
+  <data name="HelpCmdString" xml:space="preserve">
+    <value>help</value>
+  </data>
+  <data name="HelpWebsite" xml:space="preserve">
+    <value>www.vsdebug.pro/support</value>
+  </data>
+  <data name="ImageCmdString" xml:space="preserve">
+    <value>image</value>
+  </data>
+  <data name="ProductCopyright" xml:space="preserve">
+    <value>© Copyright 2012 - 2018 Ovidiu Ionescu</value>
+  </data>
+  <data name="Website" xml:space="preserve">
+    <value>www.vsdebug.pro</value>
+  </data>
+  <data name="license" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>Resources\license.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+</root>

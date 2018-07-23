@@ -1,0 +1,216 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<CommandTable xmlns="http://schemas.microsoft.com/VisualStudio/2005-10-18/CommandTable" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+
+  <!--  This is the file that defines the actual layout and type of the commands.
+        It is divided in different sections (e.g. command definition, command
+        placement, ...), with each defining a specific set of properties.
+        See the comment before each section for more details about how to
+        use it. -->
+
+  <!--  The VSCT compiler (the tool that translates this file into the binary 
+        format that VisualStudio will consume) has the ability to run a preprocessor 
+        on the vsct file; this preprocessor is (usually) the C++ preprocessor, so 
+        it is possible to define includes and macros with the same syntax used 
+        in C++ files. Using this ability of the compiler here, we include some files 
+        defining some of the constants that we will use inside the file. -->
+
+  <!--This is the file that defines the IDs for all the commands exposed by VisualStudio. -->
+  <Extern href="stdidcmd.h"/>
+
+  <!--This header contains the command ids for the menus provided by the shell. -->
+  <Extern href="vsshlids.h"/>
+
+
+
+
+  <!--The Commands section is where we the commands, menus and menu groups are defined.
+      This section uses a Guid to identify the package that provides the command defined inside it. -->
+  <Commands package="GuidVSDebugProPkg">
+    <!-- Inside this section we have different sub-sections: one for the menus, another  
+    for the menu groups, one for the buttons (the actual commands), one for the combos 
+    and the last one for the bitmaps used. Each element is identified by a command id that  
+    is a unique pair of guid and numeric identifier; the guid part of the identifier is usually  
+    called "command set" and is used to group different command inside a logically related  
+    group; your package should define its own command set in order to avoid collisions  
+    with command ids defined by other packages. -->
+
+    <!-- Menu section definition -->
+    <Menus>
+      <Menu guid="GuidVSDebugProMenuBaseGroup" id="GroupIDVSDebugProMenuBaseGroup" priority="0x0800" type="Menu">
+        <Parent guid="guidSHLMainMenu" id="IDG_VS_MM_TOOLSADDINS" />
+        <Strings>
+          <ButtonText>&amp;VSDebugPro</ButtonText>
+          <CommandName>&amp;VSDebugPro</CommandName>
+        </Strings>
+      </Menu>
+      <Menu guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleCtx" priority="0x0000" type="Context">
+        <Parent guid="GuidVSDebugProConsoleMenu" id="0" />
+        <Strings>
+          <ButtonText>&amp;VSD Console</ButtonText>
+          <CommandName>&amp;VSD Console</CommandName>
+        </Strings>
+      </Menu>
+      <Menu guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbar" type="ToolWindowToolbar">
+        <Strings>
+          <ButtonText>&amp;Console Toolbar</ButtonText>
+          <CommandName>&amp;Console Toolbar</CommandName>
+        </Strings>
+      </Menu>
+    </Menus>
+   
+    <Groups>
+      <Group guid="GuidVSDebugProCmds" id="GroupIDVSDebugProCmds" priority="0x0600">
+        <Parent guid="GuidVSDebugProMenuBaseGroup" id="GroupIDVSDebugProMenuBaseGroup"/>
+      </Group>
+      <!-- Define a group inside our context menu for the standard edit commands -->
+      <Group guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleEditGrp" priority="0x100">
+        <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleCtx"/>
+      </Group>
+      <!-- Define a group inside the our context menu. -->
+      <Group guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleClearGrp" priority="0x200">
+        <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleCtx"/>
+      </Group>
+      <Group guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" priority="0x0000">
+        <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbar"/>
+      </Group>
+    </Groups>
+    
+    <!--Buttons section. -->
+  
+    <Buttons>
+
+      <Button guid="GuidVSDebugProConsole" id="CmdIDConsole" priority="0x0100" type="Button">
+        <Parent guid="GuidVSDebugProCmds" id="GroupIDVSDebugProCmds" />
+        <Icon guid="guidImages" id="bmpCon" />
+        <Strings>
+          <ButtonText>Console</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="GuidVSDebugProSettings" id="CmdIDSettings" priority="0x0100" type="Button">
+        <Parent guid="GuidVSDebugProCmds" id="GroupIDVSDebugProCmds" />
+        <Icon guid="guidImages" id="bmpSet" />
+        <Strings>
+          <ButtonText>Settings</ButtonText>
+        </Strings>
+      </Button>
+      
+      <Button guid="GuidVSDebugProAbout" id="CmdIDAbout" priority="0x0100" type="Button">
+        <Parent guid="GuidVSDebugProCmds" id="GroupIDVSDebugProCmds" />
+        <Icon guid="guidImages" id="bmpInfo" />
+        <Strings>
+          <ButtonText>About</ButtonText>
+        </Strings>
+      </Button>
+
+      <Button guid="GuidVSDebugProExploreWD" id="CmdIDExploreWD" priority="0x0101" type="Button">
+        <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" />
+        <Icon guid="guidImages" id="bmpFolder" />
+        <Strings>
+          <ButtonText>Open Working Directory</ButtonText>
+        </Strings>
+      </Button>
+
+     
+
+    </Buttons>
+   
+    <!--The bitmaps section is used to define the bitmaps that are used for the commands.-->
+    <Bitmaps>
+      <!--  The bitmap id is defined in a way that is a little bit different from the others: 
+            the declaration starts with a guid for the bitmap strip, then there is the resource id of the 
+            bitmap strip containing the bitmaps and then there are the numeric ids of the elements used 
+            inside a button definition. An important aspect of this declaration is that the element id 
+            must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
+      <Bitmap guid="guidImages" href="Resources\Images.png" usedList="bmpInfo, bmpHelp, bmpSet, bmpCon, bmpFolder"/>
+      
+    </Bitmaps>
+    
+ 
+  </Commands>
+
+  <!--Within this section you can specify the set of commands defined somewhere else that your  
+      packages uses; for instance if your package uses the standard ‘Copy’ command, you don’t  
+      need to define it, because it is defined by the shell, but you have to use this section  
+      of the CTC file to notify the shell that your package uses it using this section. -->
+  <UsedCommands>
+    <UsedCommand guid="guidVSStd97" id="cmdidCut"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidCopy"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidPaste"/>
+    <UsedCommand guid="guidVSStd97" id="cmdidClearPane"/>
+  </UsedCommands>
+
+  <!--Inside this section, we have the ability to place menu groups inside some other menu or 
+      menu / commands inside other groups. 
+      For instance, it is possible to place one of VisualStudio's menus or commands inside one of our  
+      groups or one of our groups inside a menu defined somewhere else. -->
+  <CommandPlacements>
+    <CommandPlacement guid="guidVSStd97" id="cmdidCut" priority="0x0100">
+      <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleEditGrp"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidCopy" priority="0x0300">
+      <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleEditGrp"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidPaste" priority="0x0500">
+      <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleEditGrp"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidClearPane" priority="0x100">
+      <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleClearGrp"/>
+    </CommandPlacement>
+    <CommandPlacement guid="guidVSStd97" id="cmdidClearPane" priority="0x100">
+      <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp"/>
+    </CommandPlacement>
+    <CommandPlacement guid="GuidVSDebugProSettings" id="CmdIDSettings" priority="0x110">
+      <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp"/>
+    </CommandPlacement>
+  </CommandPlacements>
+
+  <Symbols>
+    <!-- This is the package guid. -->
+    <GuidSymbol name="GuidVSDebugProPkg" value="{89964642-1cad-4344-9ed3-e3997f19687f}" />
+    
+    <!-- Menu guids -->
+    <GuidSymbol name="GuidVSDebugProMenuBaseGroup" value="{75CB598B-9D23-4FBC-BD3E-4F2B5C70AAEF}">
+      <IDSymbol name="GroupIDVSDebugProMenuBaseGroup" value="0x1050" />
+    </GuidSymbol>
+
+    <GuidSymbol name="GuidVSDebugProCmds" value="{5E308F9C-8C6C-4EF5-BEAD-422005091961}">
+      <IDSymbol name="GroupIDVSDebugProCmds" value="0x1051" />
+    </GuidSymbol>
+
+    <GuidSymbol name="GuidVSDebugProConsoleMenu" value="{3408ABC4-299F-489A-8203-4165EC9557D4}">
+      <IDSymbol name="VSDProConsoleCtx" value="0x2200" />
+      <IDSymbol name="VSDProConsoleToolbar" value="0x2220" />
+      <IDSymbol name="VSDProConsoleEditGrp" value="0x2230" />
+      <IDSymbol name="VSDProConsoleClearGrp" value="0x2240" />
+      <IDSymbol name="VSDProConsoleToolbarGrp" value="0x2250" />
+    </GuidSymbol>
+    
+    <!-- Commands -->
+    <GuidSymbol name="GuidVSDebugProAbout" value="{2CB356A8-2154-42AC-B953-4F7E3A5F53F4}">
+      <IDSymbol name="CmdIDAbout" value="0x1100" />
+    </GuidSymbol>
+    <GuidSymbol name="GuidVSDebugProConsole" value="{1B349D26-5B87-48DD-A3DB-0CFBA5C4F8E2}">
+      <IDSymbol name="CmdIDConsole" value="0x1101" />
+    </GuidSymbol>
+    <GuidSymbol name="GuidVSDebugProHelp" value="{5B184540-B184-4540-A017-B1960519183E}">
+      <IDSymbol name="CmdIDHelp" value="0x1102" />
+    </GuidSymbol>
+    <GuidSymbol name="GuidVSDebugProSettings" value="{317DB7DB-D080-42B2-A298-404F42FFD60E}">
+      <IDSymbol name="CmdIDSettings" value="0x1103" />
+    </GuidSymbol>
+    <GuidSymbol name="GuidVSDebugProExploreWD" value="{D71DB7A7-6183-4D16-9018-747123D2DD39}">
+      <IDSymbol name="CmdIDExploreWD" value="0x1105" />
+    </GuidSymbol>
+
+    <GuidSymbol name="guidImages" value="{3b9502c5-dedc-4e85-b9b3-40cc6794ed11}" >
+      <IDSymbol name="bmpInfo" value="1" />
+      <IDSymbol name="bmpHelp" value="2" />
+      <IDSymbol name="bmpSet" value="3" />
+      <IDSymbol name="bmpCon" value="4" />
+      <IDSymbol name="bmpFolder" value="5" />
+      <IDSymbol name="bmpPicStrikethrough" value="6" />
+    </GuidSymbol>
+  </Symbols>
+
+</CommandTable>

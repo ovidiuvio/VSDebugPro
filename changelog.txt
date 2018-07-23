@@ -1,0 +1,100 @@
+VSDebugPro_3-1-0-0_2018-07-19
+    
+    [*] Renamed VSDebugTool to VSDebugPro
+    [*] Updated Copyright
+    [*] Updated .net assemblies
+    [*] Minor bug fix
+
+VSDebugTool_3-0-0-0_2018-03-21
+    
+    [+] VS2017 is now supported
+    [-] Removed support for VS2010
+    [*] Reworked Logo :)
+    [*] Compiled with VS2017
+    [*] Fixes & Code updates
+    [*] Code refactoring
+    [*] Settings UI updated
+    [*] updated wow64ext
+    [*] Reworked dependencies
+    
+
+VSDebugTool_2-0-7-4_2014-07-22
+
+    [+] VS2014 compatibility
+
+VSDebugTool_2-0-7-3_2014-07-12
+
+    [*] updated wow64ext to 1.0.0.6
+    [*] updated copyright year for wow64ext
+
+VSDebugTool_2-0-7-2_2014-06-23
+
+    [*] fixed some issues with empty arguments for commands
+    [*] improved command line parsing
+    [+] added -f ( overwrite file ) option for dumpmem
+    [+] added -a ( append to file ) option for dumpmem
+
+VSDebugTool_2-0-7-1_2014-06-15
+    
+    [*] updated wow64ext
+    [*] updated build toolset
+    [*] fixed visual studio crashes on Windows 8 / 8.1
+    [*] fixed an issue with Settings window layout
+    [*] moved settings to user.config
+    [*] alias, settings, commands history should now be properly reloaded after IDE restart.
+
+VSDebugTool_2-0-7-0_2014-04-24
+
+    [+] added malloc command
+    [+] added free command
+    [+] adjusted the settings window layout
+    [+] added ok / cancel buttons to the settings window
+    [+] added license info to the about dialog
+    [+] added version history to the about dialog
+    [+] added tooltips to the settings window
+    [+] x64 support for all commands
+    [+] refactored memory operations into a new native lib: libntdbg.dll
+
+    [*] fixed a bug with corrupt settings file
+
+
+
+VSDebugTool_2-0-6-0_2013-07-20
+
+    [+] added alias command
+    [+] added a customized context menu for VSD Console
+    [+] added a toolbar for VSD Console
+    [+] added clear console button to VSD Console toolbar
+    [+] added settings button to VSD Console toolbar
+    [+] added explore working directory button to VSD Console toolbar
+    [+] added VSD Console commands history
+    [*] fixed a bug related to the settings file access
+    [*] fixed an exception in VSD Console
+    [*] removed zoom view from VSD Console
+
+
+VSDebugTool_2-0-5-0_2013-07-06
+
+    [+] added diff command
+    [+] added ui settings for diff utility
+    [*] downgraded build toolset to vc100
+    
+    NOTE: This update may reset some of the settings made for previous versions.
+
+
+VSDebugTool_2-0-4-0_2013-07-02
+
+    [+] added memset command
+    [+] added memcpy command
+    [*] updated package description
+    [*] fixed a console parser bug with space char before command name
+    [*] fixed an exception thrown by dumpmem command  if the working directory doesn`t exist
+
+
+VSDebugTool_2-0-3-0_2013-06-29
+
+    [+] added loadmem command
+    [+] Visual Studio 2013 support
+    [*] fixed an exception thrown in extensions manager
+    [*] the help button will now open the support page on this website
+    [*] added logo, thumbnail to the vsix package

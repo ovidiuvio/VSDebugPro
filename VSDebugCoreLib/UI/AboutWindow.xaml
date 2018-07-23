@@ -1,0 +1,59 @@
+﻿<Window
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:System="clr-namespace:System;assembly=mscorlib" x:Class="VSDebugCoreLib.UI.AboutWindow"
+        Title="VSDebugTool" SizeToContent="Height" Width="556" WindowStartupLocation="CenterScreen" ShowInTaskbar="False" MouseLeftButtonDown="OnMouseLeftButtonDown" BorderThickness="2" Background="#FFE6E7E8" VerticalContentAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center" HorizontalContentAlignment="Center" ResizeMode="NoResize" BorderBrush="#FF5F574F" WindowStyle="None" Foreground="#FF5F574F" MaxHeight="500" ScrollViewer.CanContentScroll="True" Topmost="True">
+
+    <Border BorderThickness="1" CornerRadius="3" Padding="0" Margin="10" BorderBrush="#FF5F574F" ScrollViewer.CanContentScroll="True">
+        <Grid Background="#FFE7E8EC" Margin="2" ScrollViewer.CanContentScroll="True">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="50" />
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="{x:Type RowDefinition}">
+                            <Setter Property="Height" Value="*" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=_expHistory, Path=IsExpanded}" Value="False">
+                                    <Setter Property="Height" Value="Auto" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>
+                <RowDefinition Height="28" />
+                <RowDefinition>
+                    <RowDefinition.Style>
+                        <Style TargetType="{x:Type RowDefinition}">
+                            <Setter Property="Height" Value="*" />
+                            <Style.Triggers>
+                                <DataTrigger Binding="{Binding ElementName=_expLicense, Path=IsExpanded}" Value="False">
+                                    <Setter Property="Height" Value="Auto" />
+                                </DataTrigger>
+                            </Style.Triggers>
+                        </Style>
+                    </RowDefinition.Style>
+                </RowDefinition>              
+                <RowDefinition />
+            </Grid.RowDefinitions>
+
+            <Label x:Name="_labelProduct" Content="Label" FontFamily="Consolas" FontSize="18" FontWeight="Bold" HorizontalContentAlignment="Center" Foreground="#FF5F574F" VerticalContentAlignment="Center" MinWidth="150"/>
+            <Label x:Name="_labelWWW" Content="Label" FontFamily="Consolas" HorizontalContentAlignment="Center" FontSize="14" VerticalContentAlignment="Center" FontWeight="Bold" MinWidth="150" Foreground="#FF5F574F" Grid.Row="2" MouseDown="labelWWW_Click" ToolTip="Open VSDebugTool website"/>
+            <Expander x:Name="_expHistory" IsExpanded="False" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" MinWidth="150" Foreground="#FF5F574F" ScrollViewer.CanContentScroll="True">
+                <Expander.Header>
+                    <Grid x:Name="_gridVersion" Width="464" HorizontalAlignment="Center">
+                        <Label x:Name="_labelVersion" Content="Label" FontFamily="Consolas" HorizontalContentAlignment="Center" Foreground="#FF1A88F5" FontSize="14" VerticalContentAlignment="Center" MinWidth="150" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    </Grid>
+                </Expander.Header>
+                <TextBox x:Name="_txtHistory" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Foreground="#FF5F574F" Background="#FFF6F6F6" />
+            </Expander>
+            <Expander x:Name="_expLicense" IsExpanded="False" Grid.Row="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" MinWidth="150" Foreground="#FF5F574F" ScrollViewer.CanContentScroll="True">
+                <Expander.Header>
+                    <Grid x:Name="_gridLicense" Width="464" HorizontalAlignment="Center">
+                        <Label x:Name="_labelLicense" Content="Label" FontFamily="Consolas" HorizontalContentAlignment="Center" Foreground="#FF5F574F" FontSize="14" VerticalContentAlignment="Center" MinWidth="150" FontWeight="Bold" HorizontalAlignment="Center"/>
+                    </Grid>
+                </Expander.Header>
+                <TextBox x:Name="_txtLicense" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Foreground="#FF5F574F" Background="#FFF6F6F6" />
+            </Expander>
+        </Grid>
+    </Border>
+</Window>

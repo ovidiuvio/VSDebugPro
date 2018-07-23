@@ -1,0 +1,63 @@
+﻿<?xml version='1.0' encoding='utf-8'?>
+<SettingsFile xmlns="http://schemas.microsoft.com/VisualStudio/2004/01/settings" CurrentProfile="(Default)" GeneratedClassNamespace="VSDebugCoreLib.Properties" GeneratedClassName="Settings">
+  <Profiles />
+  <Settings>
+    <Setting Name="HexEditor" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="TextEditor" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ImgEditor" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="WorkingDirectory" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="DiffTool" Type="System.String" Scope="User">
+      <Value Profile="(Default)" />
+    </Setting>
+    <Setting Name="ExtensionsMap" Type="VSDebugCoreLib.CExtensionsMap" Scope="User">
+      <Value Profile="(Default)">
+                    &lt;CExtensionsMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+                        &lt;Values&gt;
+                            &lt;CExtensionMapElement&gt;
+                                &lt;Extension&gt;.bin&lt;/Extension&gt;
+                                &lt;Tool&gt;Hex Editor&lt;/Tool&gt;
+                            &lt;/CExtensionMapElement&gt;
+                            &lt;CExtensionMapElement&gt;
+                                &lt;Extension&gt;.hex&lt;/Extension&gt;
+                                &lt;Tool&gt;Hex Editor&lt;/Tool&gt;
+                            &lt;/CExtensionMapElement&gt;
+                            &lt;CExtensionMapElement&gt;
+                                &lt;Extension&gt;.dmp&lt;/Extension&gt;
+                                &lt;Tool&gt;Hex Editor&lt;/Tool&gt;
+                            &lt;/CExtensionMapElement&gt;
+                            &lt;CExtensionMapElement&gt;
+                                &lt;Extension&gt;.txt&lt;/Extension&gt;
+                                &lt;Tool&gt;Text Editor&lt;/Tool&gt;
+                            &lt;/CExtensionMapElement&gt;
+                            &lt;CExtensionMapElement&gt;
+                                &lt;Extension&gt;.raw&lt;/Extension&gt;
+                                &lt;Tool&gt;Image Editor&lt;/Tool&gt;
+                            &lt;/CExtensionMapElement&gt;
+                        &lt;/Values&gt;
+                    &lt;/CExtensionsMap&gt;
+                </Value>
+    </Setting>
+    <Setting Name="AliasMap" Type="VSDebugCoreLib.CAliasMap" Scope="User">
+      <Value Profile="(Default)">
+                    &lt;CAliasMap xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+                        &lt;Values /&gt;
+                    &lt;/CAliasMap&gt;
+                </Value>
+    </Setting>
+    <Setting Name="CmdHistory" Type="VSDebugCoreLib.CCmdHistory" Scope="User">
+      <Value Profile="(Default)">
+                    &lt;CCmdHistory xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema"&gt;
+                        &lt;Values /&gt;
+                    &lt;/CCmdHistory&gt;
+                </Value>
+    </Setting>
+  </Settings>
+</SettingsFile>
