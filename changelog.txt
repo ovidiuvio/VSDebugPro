@@ -1,3 +1,9 @@
+VSDebugPro_3-1-0-1_2018-07-24
+    
+    [*] Changed VSDebugPro license to MIT
+    [*] Updated Copyright
+    [*] Released extension code on github
+
 VSDebugPro_3-1-0-0_2018-07-19
     
     [*] Renamed VSDebugTool to VSDebugPro
