@@ -110,9 +110,11 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            if (!MemoryHelpers.LoadFileToMemory(strArgFile, processId, startAddress, dataSize))
+            int ntdbgStatus = NativeMethods.NTDBG_OK;
+            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.LoadFileToMemory(strArgFile, processId, startAddress, dataSize)))
             {
                 Context.CONSOLE.Write("Couldn`t load memory to address:" + "0x" +startAddress.ToString("X") +" !");
+                Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
                 return;
             }
 

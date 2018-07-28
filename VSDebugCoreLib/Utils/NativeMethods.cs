@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.InteropServices;
+using System.Collections.Generic;
 
 namespace VSDebugCoreLib.Utils
 {
@@ -14,6 +15,20 @@ namespace VSDebugCoreLib.Utils
         public const int  NTDBG_INVALID_ADDRESS		= -2;
         public const int  NTDBG_ACCESS_DENIED       = -3;
         public const int  NTDBG_INVALID_SIZE        = -4;
+
+        public static string GetStatusString(int err)
+        {
+            switch(err)
+            {
+                case NTDBG_OK: return nameof(NTDBG_OK);
+                case NTDBG_FAIL: return nameof(NTDBG_FAIL);
+                case NTDBG_INVALID_ADDRESS: return nameof(NTDBG_INVALID_ADDRESS);
+                case NTDBG_ACCESS_DENIED: return nameof(NTDBG_ACCESS_DENIED);
+                case NTDBG_INVALID_SIZE: return nameof(NTDBG_INVALID_SIZE);
+            }
+
+            return "";
+        }
 
         [DllImport("libntdbg.dll")]
         public static extern IntPtr NtDbgOpenProcess(

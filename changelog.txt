@@ -1,3 +1,9 @@
+VSDebugPro_3-1-0-2_2018-07-28
+    
+    [*] Updated command status message to actually be usefull
+    [+] Added error code messages for commands
+    [+] Added exception tracing for commands
+
 VSDebugPro_3-1-0-1_2018-07-24
     
     [*] Changed VSDebugPro license to MIT

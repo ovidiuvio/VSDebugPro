@@ -72,9 +72,11 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            if (!MemoryHelpers.ProcFree(processId,lpAddress))
+            int ntdbgStatus = NativeMethods.NTDBG_OK;
+            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.ProcFree(processId,lpAddress)))
             {
                 Context.CONSOLE.Write("Failed to release memory!");
+                Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
                 return;
             }
 
