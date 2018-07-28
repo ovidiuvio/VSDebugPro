@@ -171,11 +171,13 @@ namespace VSDebugCoreLib.Commands.Memory
                 fileMode = FileMode.Append;
             }
 
-            if (!MemoryHelpers.WriteMemoryToFile(strArgFile, processId, startAddress, dataSize, fileMode))
+            int ntdbgStatus = NativeMethods.NTDBG_OK;
+            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.WriteMemoryToFile(strArgFile, processId, startAddress, dataSize, fileMode)))
             {
                 File.Delete(strArgFile);
 
                 Context.CONSOLE.Write("Couldn`t dump memory to file!");
+                Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
                 return;
             }
 

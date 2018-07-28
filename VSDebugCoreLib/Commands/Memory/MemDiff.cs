@@ -111,15 +111,18 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            if (!MemoryHelpers.WriteMemoryToFile(strFile1, processId, addr1, dataSize))
+            int ntdbgStatus = NativeMethods.NTDBG_OK;
+            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.WriteMemoryToFile(strFile1, processId, addr1, dataSize)))
             {
                 Context.CONSOLE.Write("Failed to read data from address: " + NumberHelpers.ToHex(addr1) + "!");
+                Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
                 return;
             }
 
-            if (!MemoryHelpers.WriteMemoryToFile(strFile2, processId, addr2, dataSize))
+            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.WriteMemoryToFile(strFile2, processId, addr2, dataSize)))
             {
                 Context.CONSOLE.Write("Failed to read data from address: " + NumberHelpers.ToHex(addr2) + "!");
+                Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
                 return;
             }
 

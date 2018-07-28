@@ -16,11 +16,10 @@ namespace VSDebugCoreLib.Utils
             public UInt64 size;
         }
 
-        public static bool TryReadProcessMemory(byte[] buffer, int processId, long startAddress, long size)
+        public static int TryReadProcessMemory(byte[] buffer, int processId, long startAddress, long size)
         {
             IntPtr handle = NativeMethods.NtDbgOpenProcess(NativeMethods.PROCESS_VM_READ|NativeMethods.PROCESS_QUERY_INFORMATION, 0, (uint)processId);
 
-            bool bRet   = false;
             int st      = NativeMethods.NTDBG_OK;
 
             uint nIOBytes = 0;
@@ -35,17 +34,13 @@ namespace VSDebugCoreLib.Utils
 
             NativeMethods.NtDbgCloseHandle(handle);
 
-            if (st == NativeMethods.NTDBG_OK)
-                bRet = true;
-
-            return bRet;
+            return st;
         }
 
-        public static bool LoadFileToMemory(string fileName, int processId, long fromAddress, long lengthToWrite)
+        public static int LoadFileToMemory(string fileName, int processId, long fromAddress, long lengthToWrite)
         {
             IntPtr handle = NativeMethods.NtDbgOpenProcess(NativeMethods.PROCESS_VM_OPERATION | NativeMethods.PROCESS_VM_WRITE | NativeMethods.PROCESS_QUERY_INFORMATION, 0, (uint)processId);
 
-            bool bRet = true;
             int  st   = NativeMethods.NTDBG_OK;
 
             using (FileStream fs = new FileStream(fileName, FileMode.Open))
@@ -66,19 +61,15 @@ namespace VSDebugCoreLib.Utils
                 }
             }
 
-            if (NativeMethods.NTDBG_OK != st)
-                bRet = false;
-
             NativeMethods.NtDbgCloseHandle(handle);
 
-            return bRet;
+            return st;
         }
 
-        public static bool WriteMemoryToFile(string fileName, int processId, long fromAddress, long lengthToRead, FileMode fileMode = FileMode.Create) 
+        public static int WriteMemoryToFile(string fileName, int processId, long fromAddress, long lengthToRead, FileMode fileMode = FileMode.Create) 
         {
             IntPtr handle = NativeMethods.NtDbgOpenProcess(NativeMethods.PROCESS_VM_READ | NativeMethods.PROCESS_QUERY_INFORMATION, 0, (uint)processId);
 
-            bool bRet   = false;
             int st      = NativeMethods.NTDBG_OK;
 
             using (FileStream fs = new FileStream(fileName, fileMode)) 
@@ -104,17 +95,13 @@ namespace VSDebugCoreLib.Utils
 
             NativeMethods.NtDbgCloseHandle(handle);
 
-            if (st == NativeMethods.NTDBG_OK)
-                bRet = true;
-
-            return bRet;
+            return st;
         }
 
-        public static bool ProcMemoryCopy( int processId, long dstAddress, long srcAddress, long length )
+        public static int ProcMemoryCopy( int processId, long dstAddress, long srcAddress, long length )
         {
             IntPtr handle = NativeMethods.NtDbgOpenProcess(NativeMethods.PROCESS_VM_OPERATION | NativeMethods.PROCESS_VM_READ | NativeMethods.PROCESS_VM_WRITE | NativeMethods.PROCESS_QUERY_INFORMATION, 0, (uint)processId);
 
-            bool bRet   = false;
             int  st     = NativeMethods.NTDBG_OK;
 
             uint nIOBytes = 0;
@@ -127,19 +114,15 @@ namespace VSDebugCoreLib.Utils
                 ,   out nIOBytes
                 );
 
-            if (st == NativeMethods.NTDBG_OK)
-                bRet = true;
-
             NativeMethods.NtDbgCloseHandle(handle);
 
-            return bRet;
+            return st;
         }
 
-        public static bool ProcMemset(int processId, long dstAddress, byte val, long length)
+        public static int ProcMemset(int processId, long dstAddress, byte val, long length)
         {
             IntPtr handle = NativeMethods.NtDbgOpenProcess(NativeMethods.PROCESS_VM_OPERATION | NativeMethods.PROCESS_VM_READ | NativeMethods.PROCESS_VM_WRITE | NativeMethods.PROCESS_QUERY_INFORMATION, 0, (uint)processId);
 
-            bool bRet = false;
             int st = NativeMethods.NTDBG_OK;
 
             uint nIOBytes = 0;
@@ -151,12 +134,9 @@ namespace VSDebugCoreLib.Utils
                     , out nIOBytes
                 );
 
-            if (st == NativeMethods.NTDBG_OK)
-                bRet = true;
-
             NativeMethods.NtDbgCloseHandle(handle);
 
-            return bRet;
+            return st;
         }
 
         public static UInt64 ProcAlloc(int processId, long size)
@@ -172,21 +152,17 @@ namespace VSDebugCoreLib.Utils
             return dwRet;
         }
 
-        public static bool ProcFree(int processId, long address)
+        public static int ProcFree(int processId, long address)
         {
             IntPtr handle = NativeMethods.NtDbgOpenProcess(NativeMethods.PROCESS_VM_OPERATION | NativeMethods.PROCESS_VM_READ | NativeMethods.PROCESS_VM_WRITE | NativeMethods.PROCESS_QUERY_INFORMATION, 0, (uint)processId);
 
-            bool bRet = false;
             int st = NativeMethods.NTDBG_OK;
 
             st = NativeMethods.NtDbgProcessFree(handle, (UInt64)address);
 
-            if (st == NativeMethods.NTDBG_OK)
-                bRet = true;
-
             NativeMethods.NtDbgCloseHandle(handle);
 
-            return bRet;
+            return st;
         }
 
         public static MemoryStream SerializeToStream(object o)

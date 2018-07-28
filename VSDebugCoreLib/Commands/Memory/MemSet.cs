@@ -96,10 +96,11 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-
-            if (!MemoryHelpers.ProcMemset(processId, dstAddress, (byte)byteval, dataSize))
+            int ntdbgStatus = NativeMethods.NTDBG_OK;
+            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.ProcMemset(processId, dstAddress, (byte)byteval, dataSize)))
             {
                 Context.CONSOLE.Write("Memory set dst:" + NumberHelpers.ToHex(dstAddress) + " " + ((byte)byteval).ToString() + " " + dataSize.ToString() + " failed!");
+                Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
                 return;
             }
 

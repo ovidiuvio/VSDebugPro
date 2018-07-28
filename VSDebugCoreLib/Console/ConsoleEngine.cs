@@ -74,7 +74,7 @@ namespace VSDebugCoreLib.Console
 
                 if (eCommandStatus.CommandStatus_Disabled == command.CommandStatus)
                 {
-                    string strError = "Command: " + "<" + argv[0] + ">" + " is not available at this time.";
+                    string strError = "Command: " + "<" + argv[0] + ">" + " is only available while debugging.";
                     Write(strError);
 
                     return;
@@ -88,6 +88,16 @@ namespace VSDebugCoreLib.Console
             catch (Exception e)
             {
                 System.Diagnostics.Debugger.Log(0, "Diag", e.ToString());
+
+                try
+                {
+                    Write("Command Exception:" + e.Message);
+                    Write(e.StackTrace);
+                }
+                catch (Exception ex)
+                {
+                    System.Diagnostics.Debugger.Log(0, "Diag", ex.ToString());
+                }
             }
         }
 

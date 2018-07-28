@@ -95,11 +95,12 @@ namespace VSDebugCoreLib.Commands.Memory
                 Context.CONSOLE.Write("Failed to evaluate command arguments!");
                 return;
             }
-                      
 
-            if (!MemoryHelpers.ProcMemoryCopy( processId, dstAddress, srcAddress, dataSize))
+            int ntdbgStatus = NativeMethods.NTDBG_OK;
+            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.ProcMemoryCopy( processId, dstAddress, srcAddress, dataSize)))
             {
                 Context.CONSOLE.Write("Memory copy src:" + NumberHelpers.ToHex(srcAddress) + " dst:" + NumberHelpers.ToHex(dstAddress) + " " + dataSize.ToString() + " failed!");
+                Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
                 return;
             }
 
