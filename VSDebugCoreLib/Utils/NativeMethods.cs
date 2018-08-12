@@ -30,19 +30,19 @@ namespace VSDebugCoreLib.Utils
             return "";
         }
 
-        [DllImport("libntdbg.dll")]
+        [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr NtDbgOpenProcess(
               UInt32 dwDesiredAccess
             , Int32  bInheritHandle
             , UInt32 dwProcessId
         );
 
-        [DllImport("libntdbg.dll")]
+        [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern Int32 NtDbgCloseHandle(
                 IntPtr hObject
         );
 
-        [DllImport("libntdbg.dll")]
+        [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern Int32 NtDbgReadProcessMemory(
                 IntPtr hProcess
             ,   long   lpBaseAddress
@@ -51,7 +51,7 @@ namespace VSDebugCoreLib.Utils
             ,   out uint lpNumberOfBytesRead
         );
 
-        [DllImport("libntdbg.dll")]
+        [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern Int32 NtDbgWriteProcessMemory(
                 IntPtr hProcess
             ,   long lpBaseAddress
@@ -60,7 +60,7 @@ namespace VSDebugCoreLib.Utils
             ,   out uint lpNumberOfBytesWritten
         );
 
-        [DllImport("libntdbg.dll")]
+        [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern Int32 NtDbgProcessMemCpy(
                 IntPtr hSrcProcess
             ,   IntPtr hDstProcess
@@ -70,7 +70,7 @@ namespace VSDebugCoreLib.Utils
             ,   out uint lpNumberOfBytesCopied
         );
 
-        [DllImport("libntdbg.dll")]
+        [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern Int32 NtDbgProcessMemSet(
                 IntPtr hProcess
             ,   long lpBaseAddress
@@ -79,13 +79,13 @@ namespace VSDebugCoreLib.Utils
             ,   out uint lpNumberOfBytesWritten
         );
 
-        [DllImport("libntdbg.dll")]
+        [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern UInt64 NtDbgProcessAlloc(
                 IntPtr hProcess
             ,   UInt32 nSize
         );
 
-        [DllImport("libntdbg.dll")]
+        [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern Int32 NtDbgProcessFree(
                 IntPtr hProcess
             ,   UInt64 lpAddress
@@ -102,56 +102,6 @@ namespace VSDebugCoreLib.Utils
             public uint Type;
         }
 
-        // Imaging API
-        public const int CVT_OK                  =  0;
-        public const int CVT_FAIL                = -1;
-        public const int CVT_INVALID_ARG         = -2;
-        public const int CVT_NULLPTR             = -3;
-        public const int CVT_NOT_SUPPORTED       = -4;
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct cvtColorPlane
-        {
-            public IntPtr data;
-            public UInt32 stride;
-        }
-
-        [StructLayout(LayoutKind.Sequential)]
-        public struct cvtColorImage
-        {
-            public Int32 width;
-            public Int32 height;
-            public UInt32 format;
-            public cvtColorPlane p0;
-            public cvtColorPlane p1;
-            public cvtColorPlane p2;
-            public cvtColorPlane p3;
-        }
-
-        [DllImport("libCvtColor.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Int32 cvtColor(
-                ref cvtColorImage src
-            ,   ref cvtColorImage dst
-        );
-
-        [DllImport("libCvtColor.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Int32 cvtGetImageSize(
-                ref cvtColorImage img
-            ,   out UInt64 size
-        );
-
-        [DllImport("libCvtColor.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Int32 cvtGetPlaneSize(
-                ref cvtColorImage img
-            ,   UInt32 plane
-            ,   out UInt64 size
-        );
-
-        [DllImport("libCvtColor.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Int32 cvtGetImagePlanes(
-                UInt32 format
-            ,   out UInt32 numPlanes
-        );
     }
 
 }

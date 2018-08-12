@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
-
+using System.IO;
 using VSDebugCoreLib.Properties;
 
 namespace VSDebugCoreLib
@@ -131,7 +131,14 @@ namespace VSDebugCoreLib
 
         public string WorkingDirectory 
         {
-            get => _workingDirectory; set
+            get
+            {
+                if (string.Empty == _workingDirectory)
+                    return Path.GetTempPath();
+
+                return _workingDirectory;
+            }
+            set
             {
                 _workingDirectory = value;
                 OnPropertyChanged("WorkingDirectory");

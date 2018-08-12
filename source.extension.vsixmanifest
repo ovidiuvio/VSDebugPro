@@ -1,7 +1,7 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
     <Metadata>
-        <Identity Publisher="Ovidiu Ionescu" Version="3.1.0.2" Id="89964642-1cad-4344-9ed3-e3997f19687f" Language="en-US" />
+        <Identity Publisher="Ovidiu Ionescu" Version="3.1.0.3" Id="89964642-1cad-4344-9ed3-e3997f19687f" Language="en-US" />
         <DisplayName>VSDebugPro</DisplayName>
         <Description xml:space="preserve">VSDebugPro - Enhanced debugging for C/C++. Dump blocks of data to files, load data in memory from files, copy memory, and more.</Description>
         <MoreInfo>http://www.vsdebug.pro/</MoreInfo>
