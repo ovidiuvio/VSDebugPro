@@ -1,3 +1,9 @@
+VSDebugPro_3-1-0-3_2018-08-12
+
+    [+] Changed calling convention for libntdbg
+    [+] Added memory access check for Read / Write memory
+    [+] Working directory will now default to Temp
+
 VSDebugPro_3-1-0-2_2018-07-28
     
     [*] Updated command status message to actually be usefull
