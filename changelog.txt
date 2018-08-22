@@ -1,3 +1,9 @@
+VSDebugPro_3-2-0-0_2018-08-22
+
+    [+] Added DkmProcess internal apis
+    [+] Added minidump status message for commands
+    [+] Added minidump support for dumpmem command
+
 VSDebugPro_3-1-0-3_2018-08-12
 
     [+] Changed calling convention for libntdbg
