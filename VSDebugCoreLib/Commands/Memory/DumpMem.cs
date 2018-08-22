@@ -2,6 +2,7 @@
 using System.Globalization;
 using System.IO;
 using VSDebugCoreLib.Utils;
+using Microsoft.VisualStudio.Debugger.CallStack;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
@@ -130,7 +131,7 @@ namespace VSDebugCoreLib.Commands.Memory
             var varArgSource = Context.IDE.Debugger.GetExpression(strArgSource, false, 100);
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
             int processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
-
+            
             if (!varArgSource.IsValidValue)
             {
                 Context.CONSOLE.Write("Address: <"+strArgSource+"> is invalid!");                
@@ -171,14 +172,31 @@ namespace VSDebugCoreLib.Commands.Memory
                 fileMode = FileMode.Append;
             }
 
-            int ntdbgStatus = NativeMethods.NTDBG_OK;
-            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.WriteMemoryToFile(strArgFile, processId, startAddress, dataSize, fileMode)))
+            if (!DebugHelpers.IsMiniDumpProcess(Context.IDE.Debugger.CurrentProcess))
             {
-                File.Delete(strArgFile);
+                int ntdbgStatus = NativeMethods.NTDBG_OK;
+                if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.WriteMemoryToFile(strArgFile, processId, startAddress, dataSize, fileMode)))
+                {
+                    File.Delete(strArgFile);
 
-                Context.CONSOLE.Write("Couldn`t dump memory to file!");
-                Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
-                return;
+                    Context.CONSOLE.Write("Couldn`t dump memory to file!");
+                    Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
+                    return;
+                }
+            }
+            else
+            {
+                bRet = MemoryHelpers.WriteMemoryToFile(strArgFile,
+                                                DkmMethods.GetDkmProcess(Context.IDE.Debugger.CurrentStackFrame),
+                                                startAddress,
+                                                dataSize,
+                                                fileMode);
+                if (!bRet)
+                {
+                    Context.CONSOLE.Write("Couldn`t dump memory to file!");
+                    return;
+                }
+
             }
 
             Context.CONSOLE.Write("Wrote: " + dataSize.ToString() + " bytes to: " + MiscHelpers.GetClickableFileName(strArgFile) );
