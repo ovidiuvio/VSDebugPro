@@ -26,7 +26,10 @@ namespace VSDebugCoreLib.Commands.Memory
             {
                 if (null != Context.IDE.Debugger && null != Context.IDE.Debugger.DebuggedProcesses && Context.IDE.Debugger.DebuggedProcesses.Count > 0)
                 {
-                    CommandStatusFlag = eCommandStatus.CommandStatus_Enabled;
+                    if (DebugHelpers.IsMiniDumpProcess(Context.IDE.Debugger.CurrentProcess))
+                        CommandStatusFlag = eCommandStatus.CommandStatus_NA_MiniDump;
+                    else
+                        CommandStatusFlag = eCommandStatus.CommandStatus_Enabled;
                 }
                 else
                 {
