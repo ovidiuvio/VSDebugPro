@@ -79,6 +79,13 @@ namespace VSDebugCoreLib.Console
 
                     return;
                 }
+                else if(eCommandStatus.CommandStatus_NA_MiniDump == command.CommandStatus)
+                {
+                    string strError = "Command: " + "<" + argv[0] + ">" + " is not available for minidumps.";
+                    Write(strError);
+
+                    return;
+                }
 
                 if (argv.Length > 1)
                     command.Execute(argv[1]);
