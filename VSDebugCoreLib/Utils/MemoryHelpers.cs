@@ -5,6 +5,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
+using Microsoft.VisualStudio.Debugger;
 
 namespace VSDebugCoreLib.Utils
 {
@@ -66,6 +67,38 @@ namespace VSDebugCoreLib.Utils
             return st;
         }
 
+        public static bool LoadFileToMemory(string fileName, DkmProcess process, long fromAddress, long lengthToWrite)
+        {
+            bool bRes = false;
+
+            using (FileStream fs = new FileStream(fileName, FileMode.Open))
+            {
+                int bufferSize = 4096;
+                byte[] buffer = new byte[bufferSize];
+                int read;
+                long i = 0;
+                for (i = 0; (i < lengthToWrite); i += read)
+                {
+                    read = fs.Read(buffer, 0, (int)Math.Min(lengthToWrite - i, buffer.Length));
+
+                    if(read != bufferSize)
+                    {
+                        byte[] tmp = new byte[read];
+                        Buffer.BlockCopy(buffer, 0, tmp, 0, read);
+
+                        process.WriteMemory((ulong)(fromAddress + i), tmp);
+                    }
+                    else
+                        process.WriteMemory((ulong)(fromAddress + i), buffer);
+                }
+
+                if (i == lengthToWrite)
+                    bRes = true;
+            }
+
+            return bRes;
+        }
+
         public static int WriteMemoryToFile(string fileName, int processId, long fromAddress, long lengthToRead, FileMode fileMode = FileMode.Create) 
         {
             IntPtr handle = NativeMethods.NtDbgOpenProcess(NativeMethods.PROCESS_VM_READ | NativeMethods.PROCESS_QUERY_INFORMATION, 0, (uint)processId);
@@ -96,6 +129,34 @@ namespace VSDebugCoreLib.Utils
             NativeMethods.NtDbgCloseHandle(handle);
 
             return st;
+        }
+
+        public static unsafe bool WriteMemoryToFile(string fileName, DkmProcess process, long fromAddress, long lengthToRead, FileMode fileMode = FileMode.Create)
+        {
+            bool bRes = false;
+
+            using (FileStream fs = new FileStream(fileName, fileMode))
+            {
+                byte[] buffer = new byte[4096];
+                int nIOBytes = 0;
+
+                long i = 0;
+
+                for (i = 0; (i < lengthToRead); i += nIOBytes)
+                {
+                    fixed (void* pBuffer = buffer)
+                    {
+                        nIOBytes = process.ReadMemory((ulong)(fromAddress + i), DkmReadMemoryFlags.None, pBuffer, (int)Math.Min(lengthToRead - i, buffer.Length));
+                    }
+
+                    fs.Write(buffer, 0, nIOBytes);
+                }
+
+                if (i == lengthToRead)
+                    bRes = true;
+            }
+
+            return bRes;
         }
 
         public static int ProcMemoryCopy( int processId, long dstAddress, long srcAddress, long length )
