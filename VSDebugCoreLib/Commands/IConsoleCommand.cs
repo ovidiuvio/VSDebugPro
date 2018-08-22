@@ -7,6 +7,7 @@
     {
         CommandStatus_Disabled  = 0,
         CommandStatus_Enabled,
+        CommandStatus_NA_MiniDump,
     }
 
     /// <summary>
