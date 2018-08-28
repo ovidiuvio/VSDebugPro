@@ -19,7 +19,7 @@ namespace VSDebugCoreLib {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "4.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -79,27 +79,23 @@ namespace VSDebugCoreLib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VSDebugTool_3-0-0-0_2017-04-02
+        ///   Looks up a localized string similar to VSDebugPro_3-1-0-3_2018-08-12
         ///
-        ///	[*] Reworked Logo :)
-        ///    [*] Compiled with VS2017
-        ///	[*] Fixes &amp; Code updates
-        ///	[*] Reworked dependencies
+        ///    [+] Changed calling convention for libntdbg
+        ///    [+] Added memory access check for Read / Write memory
+        ///    [+] Working directory will now default to Temp
         ///
-        ///VSDebugTool_2-0-7-4_2014-07-22
+        ///VSDebugPro_3-1-0-2_2018-07-28
+        ///    
+        ///    [*] Updated command status message to actually be usefull
+        ///    [+] Added error code messages for commands
+        ///    [+] Added exception tracing for commands
         ///
-        ///    [+] VS2014 compatibility
-        ///
-        ///VSDebugTool_2-0-7-3_2014-07-12
-        ///
-        ///    [*] updated wow64ext to 1.0.0.6
-        ///    [*] updated copyright year for wow64ext
-        ///
-        ///VSDebugTool_2-0-7-2_2014-06-23
-        ///
-        ///    [*] fixed some issues with empty arguments for commands
-        ///    [*] improved command line parsing
-        ///    [+] added -f ( overwrite file ) option for dum [rest of string was truncated]&quot;;.
+        ///VSDebugPro_3-1-0-1_2018-07-24
+        ///    
+        ///    [*] Changed VSDebugPro license to MIT
+        ///    [*] Updated Copyright
+        ///    [*] Releas [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string changelog {
             get {
@@ -270,6 +266,24 @@ namespace VSDebugCoreLib {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Script management functions.
+        /// </summary>
+        internal static string CmdScriptDesc {
+            get {
+                return ResourceManager.GetString("CmdScriptDesc", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to script.
+        /// </summary>
+        internal static string CmdScriptString {
+            get {
+                return ResourceManager.GetString("CmdScriptString", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Opens product settings dialog..
         /// </summary>
         internal static string CmdSettingsDesc {
@@ -334,20 +348,18 @@ namespace VSDebugCoreLib {
         
         /// <summary>
         ///   Looks up a localized string similar to /**
-        /// * VSDebugTool - Visual Studio extension
+        /// * VSDebugPro - Visual Studio extension
         /// * 
-        /// * Copyright (c) 2018 Ionescu Ovidiu
-        /// * http://www.vsdebugtool.com
         /// * 
-        /// * This work is licensed under the Creative Commons Attribution-NoDerivs 3.0 Unported License.
-        /// * To view a copy of this license, visit http://creativecommons.org/licenses/by-nd/3.0/ or
-        /// * send a letter to Creative Commons, 444 Castro Street, Suite 900, Mountain View, California, 94041, USA.
-        /// * 
+        /// * MIT License
+        /// * Copyright (c) 2018 Ovidiu Ionescu
+        /// * http://www.vsdebug.pro
         /// *
-        /// * WOW64Ext Library
-        /// *
-        /// * Copyright (c) 2014 ReWolf
-        /// * http://blog.rewolf.pl/        /// [rest of string was truncated]&quot;;.
+        /// * Permission is hereby granted, free of charge, to any person obtaining a copy
+        /// * of this software and associated documentation files (the &quot;Software&quot;), to deal
+        /// * in the Software without restriction, including without limitation the rights
+        /// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+        /// * copies of the Software, and to permit persons  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string license {
             get {

@@ -12,6 +12,8 @@ using VSDebugCoreLib.Commands.Memory;
 using VSDebugCoreLib.Commands.Core;
 using VSDebugCoreLib.Commands.UI;
 using System.ComponentModel.Design;
+using VSDebugCoreLib.Scripting;
+using VSDebugCoreLib.Commands.Script;
 
 namespace VSDebugCoreLib
 {
@@ -28,20 +30,24 @@ namespace VSDebugCoreLib
     public class VSDebugContext
     {
         /// <summary>
-        /// VSDebugTool commands list.
+        /// VSDebugPro commands list.
         /// </summary>
         private readonly ICollection<BaseCommand> _commands = new List<BaseCommand>();
 
         /// <summary>
-        /// VS console window.
+        /// VSDebugPro console window.
         /// </summary>
         private ConsoleWindow _console;
 
         /// <summary>
-        /// VSDebugTool console engine.
+        /// VSDebugPro console engine.
         /// </summary>
         private ConsoleEngine _consoleEngine;
 
+        /// <summary>
+        /// VSDebugPro script engine.
+        /// </summary>
+        private VSDScriptEngine _scriptEngine;
 
         /// <summary>
         /// VS IDE that is executing this context.
@@ -94,6 +100,9 @@ namespace VSDebugCoreLib
         public Package PACKAGE { get; private set; }
 
         public CSettings Settings => _settingsManager.VSDSettings;
+
+        public VSDScriptEngine ScriptEngine => _scriptEngine;
+
         public Assembly VSDAssembly { get; private set; }
 
         public void Initialize()
@@ -106,6 +115,9 @@ namespace VSDebugCoreLib
 
             // Register commands
             RegisterCommands();
+
+            // Initialize script engine
+            InitScriptEngine();
         }
 
         private void InitSettings()
@@ -132,6 +144,11 @@ namespace VSDebugCoreLib
             _console.Engine = _consoleEngine;
         }
 
+        private void InitScriptEngine()
+        {
+            _scriptEngine = new VSDScriptEngine(this);
+            _scriptEngine.LoadScripts(Settings.GeneralSettings.WorkingDirectory);
+        }
 
         private void RegisterBaseCommand(BaseCommand cmd)
         {
@@ -145,6 +162,7 @@ namespace VSDebugCoreLib
                 RegisterConsoleCommand(new HelpCommand(this));
                 RegisterConsoleCommand(new AboutCommand(this));
                 RegisterConsoleCommand(new AliasCommand(this));
+                RegisterConsoleCommand(new ScriptCommand(this));
                 RegisterConsoleCommand(new OpenConsoleCommand(this));
                 RegisterConsoleCommand(new SettingsCommand(this));
                 RegisterConsoleCommand(new DumpMem(this));

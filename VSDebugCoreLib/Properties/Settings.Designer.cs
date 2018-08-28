@@ -12,7 +12,7 @@ namespace VSDebugCoreLib.Properties {
     
     
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.7.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
         
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
@@ -85,32 +85,31 @@ namespace VSDebugCoreLib.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute(@"
-                    <CExtensionsMap xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
-                        <Values>
-                            <CExtensionMapElement>
-                                <Extension>.bin</Extension>
-                                <Tool>Hex Editor</Tool>
-                            </CExtensionMapElement>
-                            <CExtensionMapElement>
-                                <Extension>.hex</Extension>
-                                <Tool>Hex Editor</Tool>
-                            </CExtensionMapElement>
-                            <CExtensionMapElement>
-                                <Extension>.dmp</Extension>
-                                <Tool>Hex Editor</Tool>
-                            </CExtensionMapElement>
-                            <CExtensionMapElement>
-                                <Extension>.txt</Extension>
-                                <Tool>Text Editor</Tool>
-                            </CExtensionMapElement>
-                            <CExtensionMapElement>
-                                <Extension>.raw</Extension>
-                                <Tool>Image Editor</Tool>
-                            </CExtensionMapElement>
-                        </Values>
-                    </CExtensionsMap>
-                ")]
+        [global::System.Configuration.DefaultSettingValueAttribute(@"<?xml version=""1.0"" encoding=""utf-16""?>
+<CExtensionsMap xmlns:xsi=""http://www.w3.org/2001/XMLSchema-instance"" xmlns:xsd=""http://www.w3.org/2001/XMLSchema"">
+  <Values>
+    <CExtensionMapElement>
+      <Extension>.bin</Extension>
+      <Tool>Hex Editor</Tool>
+    </CExtensionMapElement>
+    <CExtensionMapElement>
+      <Extension>.hex</Extension>
+      <Tool>Hex Editor</Tool>
+    </CExtensionMapElement>
+    <CExtensionMapElement>
+      <Extension>.dmp</Extension>
+      <Tool>Hex Editor</Tool>
+    </CExtensionMapElement>
+    <CExtensionMapElement>
+      <Extension>.txt</Extension>
+      <Tool>Text Editor</Tool>
+    </CExtensionMapElement>
+    <CExtensionMapElement>
+      <Extension>.raw</Extension>
+      <Tool>Image Editor</Tool>
+    </CExtensionMapElement>
+  </Values>
+</CExtensionsMap>")]
         public global::VSDebugCoreLib.CExtensionsMap ExtensionsMap {
             get {
                 return ((global::VSDebugCoreLib.CExtensionsMap)(this["ExtensionsMap"]));
@@ -122,9 +121,9 @@ namespace VSDebugCoreLib.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\r\n                    <CAliasMap xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-inst" +
-            "ance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n                        <Va" +
-            "lues />\r\n                    </CAliasMap>\r\n                ")]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<CAliasMap xmlns:xsi=\"http://www.w3.org/" +
+            "2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Value" +
+            "s />\r\n</CAliasMap>")]
         public global::VSDebugCoreLib.CAliasMap AliasMap {
             get {
                 return ((global::VSDebugCoreLib.CAliasMap)(this["AliasMap"]));
@@ -136,9 +135,9 @@ namespace VSDebugCoreLib.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\r\n                    <CCmdHistory xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-in" +
-            "stance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n                        <" +
-            "Values />\r\n                    </CCmdHistory>\r\n                ")]
+        [global::System.Configuration.DefaultSettingValueAttribute("<?xml version=\"1.0\" encoding=\"utf-16\"?>\r\n<CCmdHistory xmlns:xsi=\"http://www.w3.or" +
+            "g/2001/XMLSchema-instance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n  <Val" +
+            "ues />\r\n</CCmdHistory>")]
         public global::VSDebugCoreLib.CCmdHistory CmdHistory {
             get {
                 return ((global::VSDebugCoreLib.CCmdHistory)(this["CmdHistory"]));

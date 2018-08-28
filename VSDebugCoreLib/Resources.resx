@@ -211,4 +211,10 @@
   <data name="license" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>Resources\license.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="CmdScriptDesc" xml:space="preserve">
+    <value>Script management functions</value>
+  </data>
+  <data name="CmdScriptString" xml:space="preserve">
+    <value>script</value>
+  </data>
 </root>
