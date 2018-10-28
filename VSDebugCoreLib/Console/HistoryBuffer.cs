@@ -73,21 +73,21 @@ namespace VSDebugCoreLib.Console
             currentReturned = false;
             if (-1 != index)
             {
-                // The index is in the buffer, so set the it as the current one
-                // and return.
-                currentPosition = index;
-                return;
+                // The index is in the buffer, remove the entry from current index
+                // and add it at the end of the buffer
+                buffer.RemoveAt(index);
             }
-            // The entry is not in the buffer, so we have to add it. 
-            // Before add the new item we have to check if the buffer is over
-            // capacity.
-            if (buffer.Count == buffer.Capacity)
+            else if (buffer.Count == buffer.Capacity)
             {
+                // Before add the item we have to check if the buffer is over
+                // capacity.
                 // Remove the first element in the buffer.
                 buffer.RemoveAt(0);
             }
+
             // Add the new entry at the end of the buffer.
             buffer.Add(entry);
+
             // Set the current position at the end of the buffer.
             currentPosition = buffer.Count - 1;
         }
