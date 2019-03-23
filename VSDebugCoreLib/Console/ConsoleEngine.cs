@@ -1,26 +1,28 @@
-﻿using Microsoft.VisualStudio.Text;
-using System;
+﻿using System;
 using System.Collections.Generic;
-
+using System.Diagnostics;
+using Microsoft.VisualStudio.Text;
 using VSDebugCoreLib.Commands;
 
 namespace VSDebugCoreLib.Console
 {
     public class ConsoleEngine
     {
-        protected VSDebugContext Context { get; private set; }
-
-        private ICollection<BaseCommand> _commands { get; set; }
-
-        private Dictionary<string, IConsoleCommand> _commandsMap = new Dictionary<string, IConsoleCommand>();
-
-        public ICollection<BaseCommand> Commands => _commands;
+        private readonly Dictionary<string, IConsoleCommand> _commandsMap = new Dictionary<string, IConsoleCommand>();
 
         public ConsoleEngine(VSDebugContext context, ICollection<BaseCommand> commands)
         {
             Context = context;
             _commands = commands;
         }
+
+        protected VSDebugContext Context { get; }
+
+        private ICollection<BaseCommand> _commands { get; }
+
+        public ICollection<BaseCommand> Commands => _commands;
+
+        public ITextBuffer StdOut { get; set; }
 
         public IConsoleCommand FindCommand(string CommandString)
         {
@@ -29,7 +31,6 @@ namespace VSDebugCoreLib.Console
 
             if (command == null)
             {
-                
             }
 
             return command;
@@ -38,50 +39,44 @@ namespace VSDebugCoreLib.Console
         public void Execute(string text)
         {
             try
-            {               
-
-                char[] sp = new char[] { ' ', '\t' };
-                string[] argv = text.Split(sp, 2, StringSplitOptions.RemoveEmptyEntries);
+            {
+                char[] sp = {' ', '\t'};
+                var argv = text.Split(sp, 2, StringSplitOptions.RemoveEmptyEntries);
                 string alias = null;
 
                 if (argv.Length == 0)
                     return;
 
                 // replace first argument with alias value
-                if ( null != (alias = Context.Settings.Alias.FindAliasValue(argv[0])) )
+                if (null != (alias = Context.Settings.Alias.FindAliasValue(argv[0])))
                 {
                     if (2 == argv.Length)
-                    {
                         text = alias + " " + argv[1];
-                    }
-                    else if (1 == argv.Length)
-                    {
-                        text = alias;                        
-                    }
+                    else if (1 == argv.Length) text = alias;
 
                     argv = text.Split(sp, 2, StringSplitOptions.RemoveEmptyEntries);
-
                 }
 
-                IConsoleCommand command = FindCommand(argv[0]);
+                var command = FindCommand(argv[0]);
 
                 if (command == null)
                 {
-                    string strError = "Command: " + "<" + argv[0] + ">" + " is not valid.";
-                    Write(strError);                
+                    var strError = "Command: " + "<" + argv[0] + ">" + " is not valid.";
+                    Write(strError);
                     return;
                 }
 
-                if (eCommandStatus.CommandStatus_Disabled == command.CommandStatus)
+                if (ECommandStatus.CommandStatusDisabled == command.CommandStatus)
                 {
-                    string strError = "Command: " + "<" + argv[0] + ">" + " is only available while debugging.";
+                    var strError = "Command: " + "<" + argv[0] + ">" + " is only available while debugging.";
                     Write(strError);
 
                     return;
                 }
-                else if(eCommandStatus.CommandStatus_NA_MiniDump == command.CommandStatus)
+
+                if (ECommandStatus.CommandStatusNaMiniDump == command.CommandStatus)
                 {
-                    string strError = "Command: " + "<" + argv[0] + ">" + " is not available for minidumps.";
+                    var strError = "Command: " + "<" + argv[0] + ">" + " is not available for minidumps.";
                     Write(strError);
 
                     return;
@@ -94,7 +89,7 @@ namespace VSDebugCoreLib.Console
             }
             catch (Exception e)
             {
-                System.Diagnostics.Debugger.Log(0, "Diag", e.ToString());
+                Debugger.Log(0, "Diag", e.ToString());
 
                 try
                 {
@@ -103,7 +98,7 @@ namespace VSDebugCoreLib.Console
                 }
                 catch (Exception ex)
                 {
-                    System.Diagnostics.Debugger.Log(0, "Diag", ex.ToString());
+                    Debugger.Log(0, "Diag", ex.ToString());
                 }
             }
         }
@@ -120,8 +115,6 @@ namespace VSDebugCoreLib.Console
             Write("------------------------------------------------------------------");
         }
 
-        public ITextBuffer StdOut { get; set; }
-
         public bool AddCommand(IConsoleCommand cmd)
         {
             IConsoleCommand command = null;
@@ -135,8 +128,6 @@ namespace VSDebugCoreLib.Console
             }
 
             return false;
-           
         }
-
     }
 }

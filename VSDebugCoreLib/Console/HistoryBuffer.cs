@@ -4,130 +4,108 @@ using System.Collections.Generic;
 namespace VSDebugCoreLib.Console
 {
     /// <summary>
-    /// Implements the buffer used for the history in the console window.
+    ///     Implements the buffer used for the history in the console window.
     /// </summary>
     public class HistoryBuffer
     {
         // Default size of the buffer. This is the size used when the buffer is
         // built without any parameter.
-        internal const int defaultBufferSize = 500;
+        internal const int DefaultBufferSize = 500;
 
         // The array of strings that stores the history of the commands.
-        private List<string> buffer;
-        // Current position inside the buffer.
-        private int currentPosition;
-        // Flag true if the current item was returned.
-        private bool currentReturned;
+        private readonly List<string> _buffer;
 
-        public List<string> Cmds
+        // Current position inside the buffer.
+        private int _currentPosition;
+
+        // Flag true if the current item was returned.
+        private bool _currentReturned;
+
+        /// <summary>
+        ///     Creates an HistoryBuffer object with the default size.
+        /// </summary>
+        public HistoryBuffer() :
+            this(DefaultBufferSize)
         {
-            get
-            {
-                return buffer;
-            }
-            set { }
         }
 
         /// <summary>
-        /// Creates an HistoryBuffer object with the default size.
-        /// </summary>
-        public HistoryBuffer() :
-            this(defaultBufferSize)
-        { }
-
-        /// <summary>
-        /// Creates a HistoryBuffer object of a specifuc size.
+        ///     Creates a HistoryBuffer object of a specifuc size.
         /// </summary>
         public HistoryBuffer(int bufferSize)
         {
-            if (bufferSize <= 0)
-            {
-                throw new ArgumentOutOfRangeException("bufferSize");
-            }
-            buffer = new List<string>(bufferSize);
+            if (bufferSize <= 0) throw new ArgumentOutOfRangeException("bufferSize");
+            _buffer = new List<string>(bufferSize);
+        }
+
+        public List<string> Cmds
+        {
+            get => _buffer;
         }
 
         /// <summary>
-        /// Search in the buffer if there is an item and returns its index.
-        /// Returns -1 if the item is not in the buffer.
+        ///     Search in the buffer if there is an item and returns its index.
+        ///     Returns -1 if the item is not in the buffer.
         /// </summary>
         private int FindIndex(string entry)
         {
-            for (int i = 0; i < buffer.Count; i++)
-            {
-                if (string.CompareOrdinal(entry, buffer[i]) == 0)
-                {
+            for (var i = 0; i < _buffer.Count; i++)
+                if (string.CompareOrdinal(entry, _buffer[i]) == 0)
                     return i;
-                }
-            }
             return -1;
         }
 
         /// <summary>
-        /// Add a new entry in the list.
+        ///     Add a new entry in the list.
         /// </summary>
         public void AddEntry(string entry)
         {
             // Check if this entry is in the buffer.
-            int index = FindIndex(entry);
-            currentReturned = false;
+            var index = FindIndex(entry);
+            _currentReturned = false;
             if (-1 != index)
-            {
-                // The index is in the buffer, remove the entry from current index
-                // and add it at the end of the buffer
-                buffer.RemoveAt(index);
-            }
-            else if (buffer.Count == buffer.Capacity)
-            {
-                // Before add the item we have to check if the buffer is over
-                // capacity.
-                // Remove the first element in the buffer.
-                buffer.RemoveAt(0);
-            }
+                _buffer.RemoveAt(index);
+            else if (_buffer.Count == _buffer.Capacity) _buffer.RemoveAt(0);
 
             // Add the new entry at the end of the buffer.
-            buffer.Add(entry);
+            _buffer.Add(entry);
 
             // Set the current position at the end of the buffer.
-            currentPosition = buffer.Count - 1;
+            _currentPosition = _buffer.Count - 1;
         }
 
         /// <summary>
-        /// Returns the previous element in the history or null if there is no
-        /// previous entry.
+        ///     Returns the previous element in the history or null if there is no
+        ///     previous entry.
         /// </summary>
         public string PreviousEntry()
         {
-            if ((buffer.Count == 0) || (currentPosition < 0))
+            if (_buffer.Count == 0 || _currentPosition < 0) return null;
+            if (!_currentReturned)
             {
+                _currentReturned = true;
+                return _buffer[_currentPosition];
+            }
+
+            _currentPosition -= 1;
+            if (_currentPosition < 0)
+            {
+                _currentPosition = 0;
                 return null;
             }
-            if (!currentReturned)
-            {
-                currentReturned = true;
-                return buffer[currentPosition];
-            }
-            currentPosition -= 1;
-            if (currentPosition < 0)
-            {
-                currentPosition = 0;
-                return null;
-            }
-            return buffer[currentPosition];
+
+            return _buffer[_currentPosition];
         }
 
         /// <summary>
-        /// Return the next entry in the history or null if there is no entry.
+        ///     Return the next entry in the history or null if there is no entry.
         /// </summary>
         public string NextEntry()
         {
-            if (currentPosition >= buffer.Count - 1)
-            {
-                return null;
-            }
-            currentReturned = true;
-            currentPosition += 1;
-            return buffer[currentPosition];
+            if (_currentPosition >= _buffer.Count - 1) return null;
+            _currentReturned = true;
+            _currentPosition += 1;
+            return _buffer[_currentPosition];
         }
     }
 }

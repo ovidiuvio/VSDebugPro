@@ -1,28 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using System.IO;
 using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Forms;
-using System.IO;
-
 using VSDebugCoreLib.Properties;
 
 namespace VSDebugCoreLib.UI
 {
     /// <summary>
-    /// Interaction logic for SettingsWindow.xaml
+    ///     Interaction logic for SettingsWindow.xaml
     /// </summary>
     public partial class SettingsWindow : Window
     {
-        protected VSDebugContext Context { get; private set; }
         protected CGeneralSettings m_generalSettings;
 
         public SettingsWindow(VSDebugContext package)
@@ -34,102 +21,84 @@ namespace VSDebugCoreLib.UI
             m_generalSettings = new CGeneralSettings();
             m_generalSettings.Import(Context.Settings.GeneralSettings);
 
-         
             groupGeneralSettings.DataContext = m_generalSettings;
             groupExtensionSettings.DataContext = m_generalSettings;
         }
 
+        protected VSDebugContext Context { get; }
+
         private void Browse_WorkingDirectory(object sender, RoutedEventArgs e)
         {
-            FolderBrowserDialog dlgFolder = new FolderBrowserDialog();
+            var dlgFolder = new FolderBrowserDialog();
             dlgFolder.Description = "Select the directory to use.";
             dlgFolder.ShowNewFolderButton = true;
 
-            DialogResult result = dlgFolder.ShowDialog();
+            var result = dlgFolder.ShowDialog();
 
-            if( result == System.Windows.Forms.DialogResult.OK )
-            {
+            if (result == System.Windows.Forms.DialogResult.OK)
                 m_generalSettings.WorkingDirectory = dlgFolder.SelectedPath;
-            }
-            
         }
 
         private void Browse_TextEditor(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlgFile = new OpenFileDialog();
+            var dlgFile = new OpenFileDialog();
             dlgFile.DefaultExt = "exe";
             dlgFile.Filter = "exe files (*.exe)|*.exe";
 
-            DialogResult result = dlgFile.ShowDialog();
+            var result = dlgFile.ShowDialog();
 
-            if( result == System.Windows.Forms.DialogResult.OK )
-            {
-                m_generalSettings.TextEditor = dlgFile.FileName;
-            }
+            if (result == System.Windows.Forms.DialogResult.OK) m_generalSettings.TextEditor = dlgFile.FileName;
         }
 
         private void Browse_HexEditor(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlgFile = new OpenFileDialog();
+            var dlgFile = new OpenFileDialog();
             dlgFile.DefaultExt = "exe";
             dlgFile.Filter = "exe files (*.exe)|*.exe";
 
-            DialogResult result = dlgFile.ShowDialog();
+            var result = dlgFile.ShowDialog();
 
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                m_generalSettings.HexEditor = dlgFile.FileName;
-            }
+            if (result == System.Windows.Forms.DialogResult.OK) m_generalSettings.HexEditor = dlgFile.FileName;
         }
 
         private void Browse_ImgEditor(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlgFile = new OpenFileDialog();
+            var dlgFile = new OpenFileDialog();
             dlgFile.DefaultExt = "exe";
             dlgFile.Filter = "exe files (*.exe)|*.exe";
 
-            DialogResult result = dlgFile.ShowDialog();
+            var result = dlgFile.ShowDialog();
 
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                m_generalSettings.ImgEditor = dlgFile.FileName;
-            }
+            if (result == System.Windows.Forms.DialogResult.OK) m_generalSettings.ImgEditor = dlgFile.FileName;
         }
 
         private void Browse_DiffTool(object sender, RoutedEventArgs e)
         {
-            OpenFileDialog dlgFile = new OpenFileDialog();
+            var dlgFile = new OpenFileDialog();
             dlgFile.DefaultExt = "exe";
             dlgFile.Filter = "exe files (*.exe)|*.exe";
 
-            DialogResult result = dlgFile.ShowDialog();
+            var result = dlgFile.ShowDialog();
 
-            if (result == System.Windows.Forms.DialogResult.OK)
-            {
-                m_generalSettings.DiffTool = dlgFile.FileName;
-            }
+            if (result == System.Windows.Forms.DialogResult.OK) m_generalSettings.DiffTool = dlgFile.FileName;
         }
 
         private void add_extension_map(object sender, RoutedEventArgs e)
         {
             if (tboxExtension.Text != string.Empty && m_generalSettings.Tools.Selected != string.Empty)
             {
-                bool bAdd = true;
+                var bAdd = true;
                 foreach (var item in m_generalSettings.Tools.ExtensionsMap.Values)
-                {
                     if (item.Extension == tboxExtension.Text)
-                    {
-                        bAdd = false;                        
-                    }
+                        bAdd = false;
 
-                }
-
-                if (!System.IO.Path.HasExtension(tboxExtension.Text))
+                if (!Path.HasExtension(tboxExtension.Text))
                     bAdd = false;
 
                 if (bAdd)
                 {
-                    m_generalSettings.Tools.ExtensionsMap.Values.Add(new CExtensionMapElement(tboxExtension.Text, m_generalSettings.Tools.Selected));
+                    m_generalSettings.Tools.ExtensionsMap.Values.Add(
+                        new CExtensionMapElement(tboxExtension.Text, m_generalSettings.Tools.Selected));
                     m_generalSettings.Tools.OnPropertyChanged("ExtensionsMap");
                     m_generalSettings.Tools.OnPropertyChanged("Tool");
                     m_generalSettings.Tools.OnPropertyChanged("Extension");
@@ -142,7 +111,8 @@ namespace VSDebugCoreLib.UI
         {
             if (datagExtensionsMap.SelectedIndex >= 0)
             {
-                m_generalSettings.Tools.ExtensionsMap.Values.Remove(datagExtensionsMap.SelectedValue as CExtensionMapElement);
+                m_generalSettings.Tools.ExtensionsMap.Values.Remove(
+                    datagExtensionsMap.SelectedValue as CExtensionMapElement);
                 m_generalSettings.Tools.OnPropertyChanged("ExtensionsMap");
                 m_generalSettings.Tools.OnPropertyChanged("Tool");
                 m_generalSettings.Tools.OnPropertyChanged("Extension");
@@ -152,7 +122,7 @@ namespace VSDebugCoreLib.UI
 
         private void btnCancel_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            Close();
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
@@ -161,7 +131,7 @@ namespace VSDebugCoreLib.UI
 
             Settings.Default.Save();
 
-            this.Close();
+            Close();
         }
     }
 }

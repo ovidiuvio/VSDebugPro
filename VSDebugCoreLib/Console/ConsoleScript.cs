@@ -8,13 +8,11 @@ namespace VSDebugCoreLib.Console
         public const string ContentType = "vsdscript";
 
         /// <summary>
-        /// Exports the vsd content type
+        ///     Exports the vsd content type
         /// </summary>
         [Export]
-        [Name(VSDContentTypeDefinition.ContentType)]
+        [Name(ContentType)]
         [BaseDefinition("code")]
         internal static ContentTypeDefinition VSDContentType { get; set; }
     }
-
-
 }

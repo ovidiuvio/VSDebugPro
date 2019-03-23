@@ -1,32 +1,29 @@
 ﻿using System.Windows;
 using System.Windows.Input;
-using System.Reflection;
 using VSDebugCoreLib.Utils;
-
 
 namespace VSDebugCoreLib.UI
 {
     /// <summary>
-    /// Interaction logic for AboutWindow.xaml
+    ///     Interaction logic for AboutWindow.xaml
     /// </summary>
     public partial class AboutWindow : Window
     {
-        private VSDebugContext Context;
+        private readonly VSDebugContext Context;
 
-        public AboutWindow( VSDebugContext context )
+        public AboutWindow(VSDebugContext context)
         {
-
             Context = context;
 
             InitializeComponent();
 
-            Assembly asmProduct = Context.VSDAssembly;
+            var asmProduct = Context.VSDAssembly;
 
             _labelProduct.Content = asmProduct.GetName().Name;
             _labelVersion.Content = asmProduct.GetName().Version;
             _labelLicense.Content = VSDebugCoreLib.Resources.ProductCopyright;
             _labelWWW.Content = VSDebugCoreLib.Resources.Website + " - " + VSDebugCoreLib.Resources.ContactInfo;
-            
+
             _txtHistory.Text = VSDebugCoreLib.Resources.changelog;
             _txtHistory.IsReadOnly = true;
 
@@ -39,7 +36,7 @@ namespace VSDebugCoreLib.UI
             _labelWWW.UpdateLayout();
         }
 
-        private void OnMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DialogResult = false;
         }
@@ -48,9 +45,5 @@ namespace VSDebugCoreLib.UI
         {
             MiscHelpers.LaunchLink(@"http://" + VSDebugCoreLib.Resources.Website);
         }
-
-        
     }
-
-   
 }

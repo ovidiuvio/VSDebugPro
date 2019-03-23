@@ -1,47 +1,43 @@
 ﻿namespace VSDebugCoreLib.Commands
 {
     /// <summary>
-    /// Command status
+    ///     Command status
     /// </summary>
-    public enum eCommandStatus
+    public enum ECommandStatus
     {
-        CommandStatus_Disabled  = 0,
-        CommandStatus_Enabled,
-        CommandStatus_NA_MiniDump,
+        CommandStatusDisabled = 0,
+        CommandStatusEnabled,
+        CommandStatusNaMiniDump
     }
 
     /// <summary>
-    /// Console Command interface
+    ///     Console Command interface
     /// </summary>
     public interface IConsoleCommand
     {
         /// <summary>
-        /// Unique string identifier for the command.
+        ///     Unique string identifier for the command.
         /// </summary>
         string CommandString { get; }
 
         /// <summary>
-        /// Command help text
+        ///     Command help text
         /// </summary>
-        string CommandHelp   { get; }
+        string CommandHelp { get; }
 
-        // <summary>
+        /// <summary>
         /// Command description
         /// </summary>
-        string CommandInfo   { get; }
+        string CommandInfo { get; }
 
         /// <summary>
-        /// Command help text
+        ///     Command help text
         /// </summary>
-        eCommandStatus CommandStatus { get; }
+        ECommandStatus CommandStatus { get; }
 
         /// <summary>
-        /// Execute function
+        ///     Execute function
         /// </summary>
         void Execute(string text);
-
-
-        
-
     }
 }

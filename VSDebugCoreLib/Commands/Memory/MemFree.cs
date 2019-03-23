@@ -4,10 +4,10 @@ using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
-    class MemFree : BaseCommand
+    internal class MemFree : BaseCommand
     {
         public MemFree(VSDebugContext context)
-            : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.CmdMemFreeString)
+            : base(context, (int) PkgCmdIDList.CmdIDAbout, Resources.CmdMemFreeString)
         {
             CommandDescription = Resources.CmdMemFreeDesc;
 
@@ -15,23 +15,24 @@ namespace VSDebugCoreLib.Commands.Memory
                                 "\tEX: " + CommandString + " 0x00500000\n" +
                                 "\t<address> - allocation pointer address\n";
 
-            CommandStatusFlag = eCommandStatus.CommandStatus_Disabled;
+            CommandStatusFlag = ECommandStatus.CommandStatusDisabled;
         }
 
-        public override eCommandStatus CommandStatus
+        public override ECommandStatus CommandStatus
         {
             get
             {
-                if (null != Context.IDE.Debugger && null != Context.IDE.Debugger.DebuggedProcesses && Context.IDE.Debugger.DebuggedProcesses.Count > 0)
+                if (null != Context.IDE.Debugger && null != Context.IDE.Debugger.DebuggedProcesses &&
+                    Context.IDE.Debugger.DebuggedProcesses.Count > 0)
                 {
                     if (DebugHelpers.IsMiniDumpProcess(Context.IDE.Debugger.CurrentProcess))
-                        CommandStatusFlag = eCommandStatus.CommandStatus_NA_MiniDump;
+                        CommandStatusFlag = ECommandStatus.CommandStatusNaMiniDump;
                     else
-                        CommandStatusFlag = eCommandStatus.CommandStatus_Enabled;
+                        CommandStatusFlag = ECommandStatus.CommandStatusEnabled;
                 }
                 else
                 {
-                    CommandStatusFlag = eCommandStatus.CommandStatus_Disabled;
+                    CommandStatusFlag = ECommandStatus.CommandStatusDisabled;
                 }
 
                 return CommandStatusFlag;
@@ -42,8 +43,8 @@ namespace VSDebugCoreLib.Commands.Memory
         {
             base.Execute(text);
 
-            char[] sp = new char[] { ' ', '\t' };
-            string[] argv = text.Split(sp, 1, StringSplitOptions.RemoveEmptyEntries);
+            char[] sp = {' ', '\t'};
+            var argv = text.Split(sp, 1, StringSplitOptions.RemoveEmptyEntries);
 
             if (argv.Length != 1)
             {
@@ -51,10 +52,10 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            string strArgAddr = argv[0];
+            var strArgAddr = argv[0];
 
             var varArgAddr = Context.IDE.Debugger.GetExpression(strArgAddr, false, 100);
-            int processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
+            var processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgAddr.IsValidValue)
             {
@@ -64,8 +65,10 @@ namespace VSDebugCoreLib.Commands.Memory
 
             long lpAddress = 0;
 
-            NumberStyles numStyleAddr = NumberHelpers.IsHexNumber(varArgAddr.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
-            bool bRet = true;
+            var numStyleAddr = NumberHelpers.IsHexNumber(varArgAddr.Value)
+                ? NumberStyles.HexNumber
+                : NumberStyles.Integer;
+            var bRet = true;
 
             bRet = bRet && NumberHelpers.TryParseLong(varArgAddr.Value, numStyleAddr, out lpAddress);
 
@@ -75,11 +78,12 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            int ntdbgStatus = NativeMethods.NTDBG_OK;
-            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.ProcFree(processId,lpAddress)))
+            var ntdbgStatus = NativeMethods.NtdbgOk;
+            if (NativeMethods.NtdbgOk != (ntdbgStatus = MemoryHelpers.ProcFree(processId, lpAddress)))
             {
                 Context.CONSOLE.Write("Failed to release memory!");
-                Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
+                Context.CONSOLE.Write("Error code:" + ntdbgStatus + " - " + NativeMethods.GetStatusString(ntdbgStatus) +
+                                      ".");
                 return;
             }
 

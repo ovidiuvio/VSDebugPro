@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Runtime.InteropServices;
-using System.Collections.Generic;
 
 namespace VSDebugCoreLib.Utils
 {
-    class NativeMethods {
-        public const uint PROCESS_QUERY_INFORMATION = (0x0400);
-        public const uint PROCESS_VM_OPERATION      = 0x0008;
-        public const uint PROCESS_VM_READ           = (0x0010);
-        public const uint PROCESS_VM_WRITE          = (0x0020);
+    internal class NativeMethods
+    {
+        public const uint ProcessQueryInformation = 0x0400;
+        public const uint ProcessVmOperation = 0x0008;
+        public const uint ProcessVmRead = 0x0010;
+        public const uint ProcessVmWrite = 0x0020;
 
-        public const int  NTDBG_OK					= 0; 
-        public const int  NTDBG_FAIL				= -1;
-        public const int  NTDBG_INVALID_ADDRESS		= -2;
-        public const int  NTDBG_ACCESS_DENIED       = -3;
-        public const int  NTDBG_INVALID_SIZE        = -4;
+        public const int NtdbgOk = 0;
+        public const int NtdbgFail = -1;
+        public const int NtdbgInvalidAddress = -2;
+        public const int NtdbgAccessDenied = -3;
+        public const int NtdbgInvalidSize = -4;
 
         public static string GetStatusString(int err)
         {
-            switch(err)
+            switch (err)
             {
-                case NTDBG_OK: return nameof(NTDBG_OK);
-                case NTDBG_FAIL: return nameof(NTDBG_FAIL);
-                case NTDBG_INVALID_ADDRESS: return nameof(NTDBG_INVALID_ADDRESS);
-                case NTDBG_ACCESS_DENIED: return nameof(NTDBG_ACCESS_DENIED);
-                case NTDBG_INVALID_SIZE: return nameof(NTDBG_INVALID_SIZE);
+                case NtdbgOk: return nameof(NtdbgOk);
+                case NtdbgFail: return nameof(NtdbgFail);
+                case NtdbgInvalidAddress: return nameof(NtdbgInvalidAddress);
+                case NtdbgAccessDenied: return nameof(NtdbgAccessDenied);
+                case NtdbgInvalidSize: return nameof(NtdbgInvalidSize);
             }
 
             return "";
@@ -32,67 +32,68 @@ namespace VSDebugCoreLib.Utils
 
         [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
         public static extern IntPtr NtDbgOpenProcess(
-              UInt32 dwDesiredAccess
-            , Int32  bInheritHandle
-            , UInt32 dwProcessId
+            uint dwDesiredAccess
+            , int bInheritHandle
+            , uint dwProcessId
         );
 
         [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Int32 NtDbgCloseHandle(
-                IntPtr hObject
+        public static extern int NtDbgCloseHandle(
+            IntPtr hObject
         );
 
         [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Int32 NtDbgReadProcessMemory(
-                IntPtr hProcess
-            ,   long   lpBaseAddress
-            ,   [In, Out] byte[] buffer
-            ,   UInt32 size
-            ,   out uint lpNumberOfBytesRead
+        public static extern int NtDbgReadProcessMemory(
+            IntPtr hProcess
+            , long lpBaseAddress
+            , [In] [Out] byte[] buffer
+            , uint size
+            , out uint lpNumberOfBytesRead
         );
 
         [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Int32 NtDbgWriteProcessMemory(
-                IntPtr hProcess
-            ,   long lpBaseAddress
-            ,   [In] byte[] buffer
-            ,   UInt32 nSize
-            ,   out uint lpNumberOfBytesWritten
+        public static extern int NtDbgWriteProcessMemory(
+            IntPtr hProcess
+            , long lpBaseAddress
+            , [In] byte[] buffer
+            , uint nSize
+            , out uint lpNumberOfBytesWritten
         );
 
         [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Int32 NtDbgProcessMemCpy(
-                IntPtr hSrcProcess
-            ,   IntPtr hDstProcess
-            ,   long   lpSrcAddress
-            ,   long   lpDstAddress
-            ,   UInt32 nSize
-            ,   out uint lpNumberOfBytesCopied
+        public static extern int NtDbgProcessMemCpy(
+            IntPtr hSrcProcess
+            , IntPtr hDstProcess
+            , long lpSrcAddress
+            , long lpDstAddress
+            , uint nSize
+            , out uint lpNumberOfBytesCopied
         );
 
         [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Int32 NtDbgProcessMemSet(
-                IntPtr hProcess
-            ,   long lpBaseAddress
-            ,   UInt32 uByte
-            ,   UInt32 nSize
-            ,   out uint lpNumberOfBytesWritten
+        public static extern int NtDbgProcessMemSet(
+            IntPtr hProcess
+            , long lpBaseAddress
+            , uint uByte
+            , uint nSize
+            , out uint lpNumberOfBytesWritten
         );
 
         [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern UInt64 NtDbgProcessAlloc(
-                IntPtr hProcess
-            ,   UInt32 nSize
+        public static extern ulong NtDbgProcessAlloc(
+            IntPtr hProcess
+            , uint nSize
         );
 
         [DllImport("libntdbg.dll", CallingConvention = CallingConvention.Cdecl)]
-        public static extern Int32 NtDbgProcessFree(
-                IntPtr hProcess
-            ,   UInt64 lpAddress
+        public static extern int NtDbgProcessFree(
+            IntPtr hProcess
+            , ulong lpAddress
         );
 
         [StructLayout(LayoutKind.Sequential)]
-        public struct MEMORY_BASIC_INFORMATION {
+        public struct MemoryBasicInformation
+        {
             public IntPtr BaseAddress;
             public IntPtr AllocationBase;
             public uint AllocationProtect;
@@ -101,7 +102,5 @@ namespace VSDebugCoreLib.Utils
             public uint Protect;
             public uint Type;
         }
-
     }
-
 }
