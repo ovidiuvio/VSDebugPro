@@ -1,5 +1,10 @@
 VSDebugPro_3-2-0-0_2018-08-22
 
+    [+] Enabled install for VS2019
+	[*] Updated AddEntry method for the commands history buffer
+
+VSDebugPro_3-2-0-0_2018-08-22
+
     [+] Added DkmProcess internal apis
     [+] Added minidump status message for commands
     [+] Added minidump support for dumpmem command
