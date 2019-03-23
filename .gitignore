@@ -6,3 +6,4 @@ TestResults
 *.opensdf
 /.vs/dtool/v15
 /Backup
+.vs
