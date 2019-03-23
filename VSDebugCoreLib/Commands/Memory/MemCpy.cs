@@ -7,7 +7,7 @@ namespace VSDebugCoreLib.Commands.Memory
     internal class MemCpy : BaseCommand
     {
         public MemCpy(VSDebugContext context)
-            : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.CmdMemCpyString)
+            : base(context, (int) PkgCmdIDList.CmdIDAbout, Resources.CmdMemCpyString)
         {
             CommandDescription = Resources.CmdMemCpyDesc;
 
@@ -17,23 +17,24 @@ namespace VSDebugCoreLib.Commands.Memory
                                 "\t<src>  - source address\n" +
                                 "\t<size> - size in bytes\n";
 
-            CommandStatusFlag = eCommandStatus.CommandStatus_Disabled;
+            CommandStatusFlag = ECommandStatus.CommandStatusDisabled;
         }
 
-        public override eCommandStatus CommandStatus
+        public override ECommandStatus CommandStatus
         {
             get
             {
-                if (null != Context.IDE.Debugger && null != Context.IDE.Debugger.DebuggedProcesses && Context.IDE.Debugger.DebuggedProcesses.Count > 0)
+                if (null != Context.IDE.Debugger && null != Context.IDE.Debugger.DebuggedProcesses &&
+                    Context.IDE.Debugger.DebuggedProcesses.Count > 0)
                 {
                     if (DebugHelpers.IsMiniDumpProcess(Context.IDE.Debugger.CurrentProcess))
-                        CommandStatusFlag = eCommandStatus.CommandStatus_NA_MiniDump;
+                        CommandStatusFlag = ECommandStatus.CommandStatusNaMiniDump;
                     else
-                        CommandStatusFlag = eCommandStatus.CommandStatus_Enabled;
+                        CommandStatusFlag = ECommandStatus.CommandStatusEnabled;
                 }
                 else
                 {
-                    CommandStatusFlag = eCommandStatus.CommandStatus_Disabled;
+                    CommandStatusFlag = ECommandStatus.CommandStatusDisabled;
                 }
 
                 return CommandStatusFlag;
@@ -44,8 +45,8 @@ namespace VSDebugCoreLib.Commands.Memory
         {
             base.Execute(text);
 
-            char[] sp = new char[] { ' ', '\t' };
-            string[] argv = text.Split(sp, 3, StringSplitOptions.RemoveEmptyEntries);
+            char[] sp = {' ', '\t'};
+            var argv = text.Split(sp, 3, StringSplitOptions.RemoveEmptyEntries);
 
             if (argv.Length != 3)
             {
@@ -53,14 +54,14 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            string strArgDst = argv[0];
-            string strArgSize = argv[2];
-            string strArgSrc = argv[1];
+            var strArgDst = argv[0];
+            var strArgSize = argv[2];
+            var strArgSrc = argv[1];
 
             var varArgDst = Context.IDE.Debugger.GetExpression(strArgDst, false, 100);
             var varArgSrc = Context.IDE.Debugger.GetExpression(strArgSrc, false, 100);
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
-            int processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
+            var processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgDst.IsValidValue)
             {
@@ -83,10 +84,16 @@ namespace VSDebugCoreLib.Commands.Memory
             long srcAddress = 0;
             long dstAddress = 0;
             long dataSize = 0;
-            NumberStyles numStyleSrc = NumberHelpers.IsHexNumber(varArgSrc.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
-            NumberStyles numStyleDst = NumberHelpers.IsHexNumber(varArgDst.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
-            NumberStyles numStyleSize = NumberHelpers.IsHexNumber(varArgSize.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
-            bool bRet = true;
+            var numStyleSrc = NumberHelpers.IsHexNumber(varArgSrc.Value)
+                ? NumberStyles.HexNumber
+                : NumberStyles.Integer;
+            var numStyleDst = NumberHelpers.IsHexNumber(varArgDst.Value)
+                ? NumberStyles.HexNumber
+                : NumberStyles.Integer;
+            var numStyleSize = NumberHelpers.IsHexNumber(varArgSize.Value)
+                ? NumberStyles.HexNumber
+                : NumberStyles.Integer;
+            var bRet = true;
 
             bRet = bRet && NumberHelpers.TryParseLong(varArgDst.Value, numStyleDst, out dstAddress);
             bRet = bRet && NumberHelpers.TryParseLong(varArgSrc.Value, numStyleSrc, out srcAddress);
@@ -98,15 +105,18 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            int ntdbgStatus = NativeMethods.NTDBG_OK;
-            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.ProcMemoryCopy(processId, dstAddress, srcAddress, dataSize)))
+            var ntdbgStatus = NativeMethods.NtdbgOk;
+            if (NativeMethods.NtdbgOk !=
+                (ntdbgStatus = MemoryHelpers.ProcMemoryCopy(processId, dstAddress, srcAddress, dataSize)))
             {
-                Context.CONSOLE.Write("Memory copy src:" + NumberHelpers.ToHex(srcAddress) + " dst:" + NumberHelpers.ToHex(dstAddress) + " " + dataSize.ToString() + " failed!");
-                Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
+                Context.CONSOLE.Write("Memory copy src:" + NumberHelpers.ToHex(srcAddress) + " dst:" +
+                                      NumberHelpers.ToHex(dstAddress) + " " + dataSize + " failed!");
+                Context.CONSOLE.Write("Error code:" + ntdbgStatus + " - " + NativeMethods.GetStatusString(ntdbgStatus) +
+                                      ".");
                 return;
             }
 
-            Context.CONSOLE.Write("Wrote: " + dataSize.ToString() + " bytes to address: " + NumberHelpers.ToHex(dstAddress));
+            Context.CONSOLE.Write("Wrote: " + dataSize + " bytes to address: " + NumberHelpers.ToHex(dstAddress));
         }
     }
 }

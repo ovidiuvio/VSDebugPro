@@ -2,27 +2,27 @@
 {
     public class BaseCommand : IConsoleCommand
     {
-        protected string CommandStringID;
-        protected string CommandHelpString;
         protected string CommandDescription;
-        protected eCommandStatus CommandStatusFlag;
+        protected string CommandHelpString;
+        protected ECommandStatus CommandStatusFlag;
+        protected readonly string CommandStringId;
 
-        protected VSDebugContext Context { get; private set; }
-        public int CommandID { get; private set; }
-        public string CommandString => CommandStringID;
-        public string CommandHelp => CommandHelpString;
-        public string CommandInfo => CommandDescription;
-        public virtual eCommandStatus CommandStatus => CommandStatusFlag;
-
-        public BaseCommand(VSDebugContext context, int cmdID, string strID)
+        public BaseCommand(VSDebugContext context, int cmdId, string strId)
         {
             Context = context;
-            CommandID = cmdID;
-            CommandStringID = strID;
+            CommandId = cmdId;
+            CommandStringId = strId;
             CommandHelpString = string.Empty;
             CommandDescription = string.Empty;
-            CommandStatusFlag = eCommandStatus.CommandStatus_Enabled;
+            CommandStatusFlag = ECommandStatus.CommandStatusEnabled;
         }
+
+        protected VSDebugContext Context { get; }
+        public int CommandId { get; }
+        public string CommandString => CommandStringId;
+        public string CommandHelp => CommandHelpString;
+        public string CommandInfo => CommandDescription;
+        public virtual ECommandStatus CommandStatus => CommandStatusFlag;
 
         public virtual void Execute(string text)
         {

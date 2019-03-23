@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
@@ -10,9 +9,6 @@ namespace VSDebugCoreLib
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CExtensionMapElement
     {
-        public string Extension { get; set; }
-        public string Tool { get; set; }
-
         public CExtensionMapElement()
         {
         }
@@ -22,25 +18,25 @@ namespace VSDebugCoreLib
             Extension = ext;
             Tool = tool;
         }
+
+        public string Extension { get; set; }
+        public string Tool { get; set; }
     }
 
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CExtensionsMap
     {
-        public List<CExtensionMapElement> Values { get; set; }
-
         public CExtensionsMap()
         {
             Values = new List<CExtensionMapElement>();
         }
+
+        public List<CExtensionMapElement> Values { get; set; }
     }
 
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CAliasMapElement
     {
-        public string Alias { get; set; }
-        public string Value { get; set; }
-
         public CAliasMapElement()
         {
         }
@@ -50,59 +46,52 @@ namespace VSDebugCoreLib
             Alias = alias;
             Value = val;
         }
+
+        public string Alias { get; set; }
+        public string Value { get; set; }
     }
 
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CAliasMap
     {
-        public List<CAliasMapElement> Values { get; set; }
-
         public CAliasMap()
         {
             Values = new List<CAliasMapElement>();
         }
+
+        public List<CAliasMapElement> Values { get; set; }
     }
 
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CCmdHistory
     {
-        public List<string> Values { get; set; }
-
         public CCmdHistory()
         {
             Values = new List<string>();
         }
+
+        public List<string> Values { get; set; }
     }
 
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CToolsSettings : INotifyPropertyChanged
     {
-        private List<string> _tools;
-
-        private string _toolsSelected;
-
-        public List<String> Values
-        {
-            get => _tools; set => _tools = value;
-        }
-
-        public string Selected
-        {
-            get => _toolsSelected; set => _toolsSelected = value;
-        }
-
-        public CExtensionsMap ExtensionsMap { get; set; }
-
         public CToolsSettings()
         {
-            _tools = new List<string>();
-            _tools.Add("Text Editor");
-            _tools.Add("Hex Editor");
-            _tools.Add("Image Editor");
-            _toolsSelected = "Hex Editor";
+            Values = new List<string>();
+            Values.Add("Text Editor");
+            Values.Add("Hex Editor");
+            Values.Add("Image Editor");
+            Selected = "Hex Editor";
 
             ExtensionsMap = new CExtensionsMap();
         }
+
+        public List<string> Values { get; set; }
+
+        public string Selected { get; set; }
+
+        public CExtensionsMap ExtensionsMap { get; set; }
 
         #region INotifyPropertyChanged Members
 
@@ -120,11 +109,16 @@ namespace VSDebugCoreLib
 
     public class CGeneralSettings : INotifyPropertyChanged
     {
-        private string _workingDirectory = "";
-        private string _textEditor = "";
+        private string _diffTool = "";
         private string _hexEditor = "";
         private string _imgEditor = "";
-        private string _diffTool = "";
+        private string _textEditor = "";
+        private string _workingDirectory = "";
+
+        public CGeneralSettings()
+        {
+            Tools = new CToolsSettings();
+        }
 
         public string WorkingDirectory
         {
@@ -144,7 +138,8 @@ namespace VSDebugCoreLib
 
         public string TextEditor
         {
-            get => _textEditor; set
+            get => _textEditor;
+            set
             {
                 _textEditor = value;
                 OnPropertyChanged("TextEditor");
@@ -153,7 +148,8 @@ namespace VSDebugCoreLib
 
         public string HexEditor
         {
-            get => _hexEditor; set
+            get => _hexEditor;
+            set
             {
                 _hexEditor = value;
                 OnPropertyChanged("HexEditor");
@@ -162,7 +158,8 @@ namespace VSDebugCoreLib
 
         public string ImgEditor
         {
-            get => _imgEditor; set
+            get => _imgEditor;
+            set
             {
                 _imgEditor = value;
                 OnPropertyChanged("ImgEditor");
@@ -171,7 +168,8 @@ namespace VSDebugCoreLib
 
         public string DiffTool
         {
-            get => _diffTool; set
+            get => _diffTool;
+            set
             {
                 _diffTool = value;
                 OnPropertyChanged("DiffTool");
@@ -179,11 +177,6 @@ namespace VSDebugCoreLib
         }
 
         public CToolsSettings Tools { get; set; }
-
-        public CGeneralSettings()
-        {
-            Tools = new CToolsSettings();
-        }
 
         public void Import(CGeneralSettings settings)
         {
@@ -197,9 +190,9 @@ namespace VSDebugCoreLib
 
             Tools.ExtensionsMap.Values.Clear();
 
-            foreach (CExtensionMapElement pair in settings.Tools.ExtensionsMap.Values)
+            foreach (var pair in settings.Tools.ExtensionsMap.Values)
             {
-                CExtensionMapElement newPair = new CExtensionMapElement();
+                var newPair = new CExtensionMapElement();
                 newPair.Extension = pair.Extension;
                 newPair.Tool = pair.Tool;
 
@@ -232,7 +225,7 @@ namespace VSDebugCoreLib
 
         public bool AddAlias(string alias, string value)
         {
-            bool res = false;
+            var res = false;
 
             if (null == FindAlias(alias))
             {
@@ -245,13 +238,10 @@ namespace VSDebugCoreLib
 
         public bool DelAlias(string alias)
         {
-            bool res = false;
-            CAliasMapElement item = FindAlias(alias);
+            var res = false;
+            var item = FindAlias(alias);
 
-            if (null != item)
-            {
-                res = AliasList.Values.Remove(item);
-            }
+            if (null != item) res = AliasList.Values.Remove(item);
 
             return res;
         }
@@ -259,7 +249,7 @@ namespace VSDebugCoreLib
         public string FindAliasValue(string alias)
         {
             string res = null;
-            CAliasMapElement item = FindAlias(alias);
+            var item = FindAlias(alias);
 
             if (null != item)
                 res = item.Value;
@@ -272,13 +262,11 @@ namespace VSDebugCoreLib
             CAliasMapElement res = null;
 
             foreach (var item in AliasList.Values)
-            {
                 if (item.Alias == alias)
                 {
                     res = item;
                     break;
                 }
-            }
 
             return res;
         }
@@ -286,10 +274,6 @@ namespace VSDebugCoreLib
 
     public class CSettings
     {
-        public CGeneralSettings GeneralSettings { get; set; }
-        public CAliasSettings Alias { get; set; }
-        public CCmdHistory CmdHistory { get; set; }
-
         public CSettings()
         {
             GeneralSettings = new CGeneralSettings();
@@ -297,12 +281,14 @@ namespace VSDebugCoreLib
             CmdHistory = new CCmdHistory();
         }
 
+        public CGeneralSettings GeneralSettings { get; set; }
+        public CAliasSettings Alias { get; set; }
+        public CCmdHistory CmdHistory { get; set; }
+
         public string GetAssignedTool(string extension)
         {
             foreach (var item in GeneralSettings.Tools.ExtensionsMap.Values)
-            {
                 if (item.Extension == extension)
-                {
                     switch (item.Tool)
                     {
                         case "Text Editor":
@@ -314,8 +300,6 @@ namespace VSDebugCoreLib
                         case "Image Editor":
                             return GeneralSettings.ImgEditor;
                     }
-                }
-            }
 
             return string.Empty;
         }
@@ -323,12 +307,12 @@ namespace VSDebugCoreLib
 
     public class SettingsManager
     {
-        public CSettings VSDSettings { get; private set; }
-
         public SettingsManager()
         {
             VSDSettings = new CSettings();
         }
+
+        public CSettings VSDSettings { get; }
 
         public void LoadSettings()
         {

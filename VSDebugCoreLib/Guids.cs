@@ -1,5 +1,6 @@
 ﻿// Guids.cs
 // MUST match guids.h
+
 using System;
 
 namespace VSDebugCoreLib
@@ -26,5 +27,5 @@ namespace VSDebugCoreLib
         public static readonly Guid GuidVSDebugProSettings = new Guid("317DB7DB-D080-42B2-A298-404F42FFD60E");
 
         public static readonly Guid GuidVSDebugProExploreWD = new Guid("D71DB7A7-6183-4D16-9018-747123D2DD39");
-    };
+    }
 }

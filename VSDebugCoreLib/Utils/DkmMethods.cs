@@ -10,7 +10,7 @@ namespace VSDebugCoreLib.Utils
         {
             if (null != stackFrame)
             {
-                DkmStackFrame dkmStackFrame = DkmStackFrame.ExtractFromDTEObject(stackFrame);
+                var dkmStackFrame = DkmStackFrame.ExtractFromDTEObject(stackFrame);
                 return dkmStackFrame.Process;
             }
 

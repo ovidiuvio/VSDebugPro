@@ -1,16 +1,15 @@
-﻿using System.Reflection;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.UI
 {
     /// <summary>
-    /// Interaction logic for AboutWindow.xaml
+    ///     Interaction logic for AboutWindow.xaml
     /// </summary>
     public partial class AboutWindow : Window
     {
-        private VSDebugContext Context;
+        private readonly VSDebugContext Context;
 
         public AboutWindow(VSDebugContext context)
         {
@@ -18,7 +17,7 @@ namespace VSDebugCoreLib.UI
 
             InitializeComponent();
 
-            Assembly asmProduct = Context.VSDAssembly;
+            var asmProduct = Context.VSDAssembly;
 
             _labelProduct.Content = asmProduct.GetName().Name;
             _labelVersion.Content = asmProduct.GetName().Version;
@@ -37,7 +36,7 @@ namespace VSDebugCoreLib.UI
             _labelWWW.UpdateLayout();
         }
 
-        private void OnMouseLeftButtonDown(object sender, System.Windows.Input.MouseButtonEventArgs e)
+        private void OnMouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             DialogResult = false;
         }

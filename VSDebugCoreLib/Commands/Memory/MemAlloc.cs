@@ -7,7 +7,7 @@ namespace VSDebugCoreLib.Commands.Memory
     internal class MemAlloc : BaseCommand
     {
         public MemAlloc(VSDebugContext context)
-            : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.CmdMemAllocString)
+            : base(context, (int) PkgCmdIDList.CmdIDAbout, Resources.CmdMemAllocString)
         {
             CommandDescription = Resources.CmdMemAllocDesc;
 
@@ -15,23 +15,24 @@ namespace VSDebugCoreLib.Commands.Memory
                                 "\tEX: " + CommandString + " 200\n" +
                                 "\t<size> - size in bytes\n";
 
-            CommandStatusFlag = eCommandStatus.CommandStatus_Disabled;
+            CommandStatusFlag = ECommandStatus.CommandStatusDisabled;
         }
 
-        public override eCommandStatus CommandStatus
+        public override ECommandStatus CommandStatus
         {
             get
             {
-                if (null != Context.IDE.Debugger && null != Context.IDE.Debugger.DebuggedProcesses && Context.IDE.Debugger.DebuggedProcesses.Count > 0)
+                if (null != Context.IDE.Debugger && null != Context.IDE.Debugger.DebuggedProcesses &&
+                    Context.IDE.Debugger.DebuggedProcesses.Count > 0)
                 {
                     if (DebugHelpers.IsMiniDumpProcess(Context.IDE.Debugger.CurrentProcess))
-                        CommandStatusFlag = eCommandStatus.CommandStatus_NA_MiniDump;
+                        CommandStatusFlag = ECommandStatus.CommandStatusNaMiniDump;
                     else
-                        CommandStatusFlag = eCommandStatus.CommandStatus_Enabled;
+                        CommandStatusFlag = ECommandStatus.CommandStatusEnabled;
                 }
                 else
                 {
-                    CommandStatusFlag = eCommandStatus.CommandStatus_Disabled;
+                    CommandStatusFlag = ECommandStatus.CommandStatusDisabled;
                 }
 
                 return CommandStatusFlag;
@@ -42,8 +43,8 @@ namespace VSDebugCoreLib.Commands.Memory
         {
             base.Execute(text);
 
-            char[] sp = new char[] { ' ', '\t' };
-            string[] argv = text.Split(sp, 1, StringSplitOptions.RemoveEmptyEntries);
+            char[] sp = {' ', '\t'};
+            var argv = text.Split(sp, 1, StringSplitOptions.RemoveEmptyEntries);
 
             if (argv.Length != 1)
             {
@@ -51,10 +52,10 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            string strArgSize = argv[0];
+            var strArgSize = argv[0];
 
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
-            int processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
+            var processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgSize.IsValidValue)
             {
@@ -64,8 +65,10 @@ namespace VSDebugCoreLib.Commands.Memory
 
             long dataSize = 0;
 
-            NumberStyles numStyleSize = NumberHelpers.IsHexNumber(varArgSize.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
-            bool bRet = true;
+            var numStyleSize = NumberHelpers.IsHexNumber(varArgSize.Value)
+                ? NumberStyles.HexNumber
+                : NumberStyles.Integer;
+            var bRet = true;
 
             bRet = bRet && NumberHelpers.TryParseLong(varArgSize.Value, numStyleSize, out dataSize);
 
@@ -75,7 +78,7 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            UInt64 qwPtr = 0;
+            ulong qwPtr = 0;
             qwPtr = MemoryHelpers.ProcAlloc(processId, dataSize);
 
             if (0 == qwPtr)
@@ -84,7 +87,7 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            Context.CONSOLE.Write("Allocated: " + dataSize.ToString() + " bytes at address: " + NumberHelpers.ToHex((long)qwPtr));
+            Context.CONSOLE.Write("Allocated: " + dataSize + " bytes at address: " + NumberHelpers.ToHex((long) qwPtr));
         }
     }
 }

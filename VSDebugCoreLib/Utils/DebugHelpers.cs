@@ -1,5 +1,5 @@
-﻿using EnvDTE;
-using System.IO;
+﻿using System.IO;
+using EnvDTE;
 
 namespace VSDebugCoreLib.Utils
 {
@@ -7,7 +7,7 @@ namespace VSDebugCoreLib.Utils
     {
         public static bool IsMiniDumpProcess(Process process)
         {
-            string strExt = Path.GetExtension(process.Name.ToLower());
+            var strExt = Path.GetExtension(process.Name.ToLower());
 
             if (".dmp" == strExt)
                 return true;
