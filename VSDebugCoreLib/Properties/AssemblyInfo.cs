@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("VSDebugCoreLib")]
-[assembly: AssemblyCopyright("©  Copyright 2012 - 2018 Ovidiu Ionescu")]
+[assembly: AssemblyCopyright("©  Copyright 2012 - 2019 Ovidiu Ionescu")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
