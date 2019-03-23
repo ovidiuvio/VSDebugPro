@@ -5,7 +5,7 @@ using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
-    class LoadMem : BaseCommand
+    internal class LoadMem : BaseCommand
     {
         public LoadMem(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.CmdLoadMemString)
@@ -54,7 +54,7 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            string strArgDst  = argv[1];
+            string strArgDst = argv[1];
             string strArgSize = argv[2];
             string strArgFile = argv[0];
 
@@ -95,7 +95,6 @@ namespace VSDebugCoreLib.Commands.Memory
             NumberStyles numStyleSize = NumberHelpers.IsHexNumber(varArgSize.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
             bool bRet = true;
 
-
             bRet = bRet && NumberHelpers.TryParseLong(varArgDst.Value, numStyleSource, out startAddress);
             bRet = bRet && NumberHelpers.TryParseLong(varArgSize.Value, numStyleSize, out dataSize);
 
@@ -106,7 +105,7 @@ namespace VSDebugCoreLib.Commands.Memory
             }
 
             FileInfo fileInfo = new FileInfo(strArgFile);
-            
+
             if (fileInfo.Length < dataSize)
             {
                 Context.CONSOLE.Write("Input file size:" + fileInfo.Length.ToString() + " is less than the specified size:" + dataSize.ToString() + " !");
@@ -116,7 +115,7 @@ namespace VSDebugCoreLib.Commands.Memory
             int ntdbgStatus = NativeMethods.NTDBG_OK;
             if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.LoadFileToMemory(strArgFile, processId, startAddress, dataSize)))
             {
-                Context.CONSOLE.Write("Couldn`t load memory to address:" + "0x" +startAddress.ToString("X") +" !");
+                Context.CONSOLE.Write("Couldn`t load memory to address:" + "0x" + startAddress.ToString("X") + " !");
                 Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");
                 return;
             }

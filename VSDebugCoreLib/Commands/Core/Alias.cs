@@ -2,7 +2,7 @@
 
 namespace VSDebugCoreLib.Commands.Core
 {
-    class AliasCommand : BaseCommand
+    internal class AliasCommand : BaseCommand
     {
         public AliasCommand(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.CmdAliasString)
@@ -23,17 +23,18 @@ namespace VSDebugCoreLib.Commands.Core
         {
             base.Execute(text);
 
-            char[]      sp      = new char[] { ' ', '\t' };
-            string[]    argv    = text.Split(sp, 3, StringSplitOptions.RemoveEmptyEntries);
-            bool        bRes    = false;
-            string      alias   = null;
-            string      value   = null;
+            char[] sp = new char[] { ' ', '\t' };
+            string[] argv = text.Split(sp, 3, StringSplitOptions.RemoveEmptyEntries);
+            bool bRes = false;
+            string alias = null;
+            string value = null;
 
             switch (argv.Length)
             {
                 case 0:
                     Context.CONSOLE.Write(CommandHelp);
                     return;
+
                 case 1:
                     {
                         if ("list" == argv[0])
@@ -54,6 +55,7 @@ namespace VSDebugCoreLib.Commands.Core
                         }
                     }
                     return;
+
                 case 2:
                     {
                         alias = argv[1];
@@ -68,7 +70,6 @@ namespace VSDebugCoreLib.Commands.Core
                             }
                             else
                                 Context.CONSOLE.Write("Alias: " + alias + " not found.");
-
                         }
                         else
                         {
@@ -76,6 +77,7 @@ namespace VSDebugCoreLib.Commands.Core
                         }
                     }
                     return;
+
                 case 3:
                     {
                         alias = argv[1];
@@ -121,9 +123,8 @@ namespace VSDebugCoreLib.Commands.Core
                             Context.CONSOLE.Write(CommandHelp);
                         }
                     }
-                    return;                
+                    return;
             }
-            
         }
     }
 }

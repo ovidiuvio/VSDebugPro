@@ -1,8 +1,7 @@
-﻿using System.Windows;
+﻿using System.Reflection;
+using System.Windows;
 using System.Windows.Input;
-using System.Reflection;
 using VSDebugCoreLib.Utils;
-
 
 namespace VSDebugCoreLib.UI
 {
@@ -13,9 +12,8 @@ namespace VSDebugCoreLib.UI
     {
         private VSDebugContext Context;
 
-        public AboutWindow( VSDebugContext context )
+        public AboutWindow(VSDebugContext context)
         {
-
             Context = context;
 
             InitializeComponent();
@@ -26,7 +24,7 @@ namespace VSDebugCoreLib.UI
             _labelVersion.Content = asmProduct.GetName().Version;
             _labelLicense.Content = VSDebugCoreLib.Resources.ProductCopyright;
             _labelWWW.Content = VSDebugCoreLib.Resources.Website + " - " + VSDebugCoreLib.Resources.ContactInfo;
-            
+
             _txtHistory.Text = VSDebugCoreLib.Resources.changelog;
             _txtHistory.IsReadOnly = true;
 
@@ -48,9 +46,5 @@ namespace VSDebugCoreLib.UI
         {
             MiscHelpers.LaunchLink(@"http://" + VSDebugCoreLib.Resources.Website);
         }
-
-        
     }
-
-   
 }

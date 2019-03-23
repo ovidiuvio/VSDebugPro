@@ -1,10 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Globalization;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace VSDebugCoreLib.Utils
 {
@@ -37,11 +33,9 @@ namespace VSDebugCoreLib.Utils
                 string substring = stringToConvert.Substring(2);
 
                 result = long.TryParse(substring, styles, provider, out number);
-
             }
 
             return result;
-
         }
 
         public static Int32 ParseInt32(string stringToConvert)

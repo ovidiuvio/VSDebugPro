@@ -14,8 +14,10 @@ namespace VSDebugCoreLib.Console
 
         // The array of strings that stores the history of the commands.
         private List<string> buffer;
+
         // Current position inside the buffer.
         private int currentPosition;
+
         // Flag true if the current item was returned.
         private bool currentReturned;
 

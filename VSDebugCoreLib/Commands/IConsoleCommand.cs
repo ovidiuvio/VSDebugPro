@@ -5,7 +5,7 @@
     /// </summary>
     public enum eCommandStatus
     {
-        CommandStatus_Disabled  = 0,
+        CommandStatus_Disabled = 0,
         CommandStatus_Enabled,
         CommandStatus_NA_MiniDump,
     }
@@ -23,12 +23,12 @@
         /// <summary>
         /// Command help text
         /// </summary>
-        string CommandHelp   { get; }
+        string CommandHelp { get; }
 
         // <summary>
         /// Command description
         /// </summary>
-        string CommandInfo   { get; }
+        string CommandInfo { get; }
 
         /// <summary>
         /// Command help text
@@ -39,9 +39,5 @@
         /// Execute function
         /// </summary>
         void Execute(string text);
-
-
-        
-
     }
 }

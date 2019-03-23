@@ -4,7 +4,7 @@ using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
-    class MemAlloc : BaseCommand
+    internal class MemAlloc : BaseCommand
     {
         public MemAlloc(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.CmdMemAllocString)
@@ -74,7 +74,6 @@ namespace VSDebugCoreLib.Commands.Memory
                 Context.CONSOLE.Write("Failed to evaluate command arguments!");
                 return;
             }
-
 
             UInt64 qwPtr = 0;
             qwPtr = MemoryHelpers.ProcAlloc(processId, dataSize);

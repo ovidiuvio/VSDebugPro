@@ -21,22 +21,21 @@ namespace VSDebugCoreLib.Commands
             base.Execute(text);
 
             char[] sp = new char[] { ' ', '\t' };
-            string[] argv = text.Split(sp,2);
+            string[] argv = text.Split(sp, 2);
 
-            if (1 == argv.Length && argv[0] == string.Empty )
+            if (1 == argv.Length && argv[0] == string.Empty)
             {
                 Context.CONSOLE.Write("For more information on a specific command, type help command-name");
                 Context.CONSOLE.WriteSeparator();
-                
 
                 // list all commands
                 foreach (var item in Context.CONSOLE.Commands)
                 {
-                    if( item.CommandString != string.Empty )                        
+                    if (item.CommandString != string.Empty)
                         Context.CONSOLE.Write(String.Format("{0,10}\t{1,10}", item.CommandString, item.CommandInfo));
                 }
 
-                Context.CONSOLE.WriteSeparator();           
+                Context.CONSOLE.WriteSeparator();
             }
             else if (argv.Length >= 1 && argv[0] != string.Empty)
             {
@@ -60,11 +59,7 @@ namespace VSDebugCoreLib.Commands
                 {
                     Context.CONSOLE.Write("Command: " + "<" + argv[0] + ">" + " is not valid.");
                 }
-
             }
-
         }
-
-
     }
 }

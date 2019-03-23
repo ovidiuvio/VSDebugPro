@@ -4,7 +4,7 @@ using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
-    class MemFree : BaseCommand
+    internal class MemFree : BaseCommand
     {
         public MemFree(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.CmdMemFreeString)
@@ -76,7 +76,7 @@ namespace VSDebugCoreLib.Commands.Memory
             }
 
             int ntdbgStatus = NativeMethods.NTDBG_OK;
-            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.ProcFree(processId,lpAddress)))
+            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.ProcFree(processId, lpAddress)))
             {
                 Context.CONSOLE.Write("Failed to release memory!");
                 Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");

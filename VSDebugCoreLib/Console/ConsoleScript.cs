@@ -1,5 +1,5 @@
-﻿using System.ComponentModel.Composition;
-using Microsoft.VisualStudio.Utilities;
+﻿using Microsoft.VisualStudio.Utilities;
+using System.ComponentModel.Composition;
 
 namespace VSDebugCoreLib.Console
 {
@@ -15,6 +15,4 @@ namespace VSDebugCoreLib.Console
         [BaseDefinition("code")]
         internal static ContentTypeDefinition VSDContentType { get; set; }
     }
-
-
 }

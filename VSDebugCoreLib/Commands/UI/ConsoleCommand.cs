@@ -1,6 +1,6 @@
-﻿using System;
+﻿using Microsoft.VisualStudio.Shell;
 using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Shell;
+using System;
 using VSDebugCoreLib.Console;
 
 namespace VSDebugCoreLib.Commands
@@ -22,9 +22,8 @@ namespace VSDebugCoreLib.Commands
         }
 
         public OpenConsoleCommand(VSDebugContext context)
-            :base(context, GuidList.GuidVSDebugProConsole, (int)PkgCmdIDList.CmdIDConsole)
+            : base(context, GuidList.GuidVSDebugProConsole, (int)PkgCmdIDList.CmdIDConsole)
         {
-            
         }
     }
 }

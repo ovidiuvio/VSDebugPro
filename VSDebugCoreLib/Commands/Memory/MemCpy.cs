@@ -4,7 +4,7 @@ using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
-    class MemCpy : BaseCommand
+    internal class MemCpy : BaseCommand
     {
         public MemCpy(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.CmdMemCpyString)
@@ -83,11 +83,10 @@ namespace VSDebugCoreLib.Commands.Memory
             long srcAddress = 0;
             long dstAddress = 0;
             long dataSize = 0;
-            NumberStyles numStyleSrc  = NumberHelpers.IsHexNumber(varArgSrc.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
-            NumberStyles numStyleDst  = NumberHelpers.IsHexNumber(varArgDst.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
+            NumberStyles numStyleSrc = NumberHelpers.IsHexNumber(varArgSrc.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
+            NumberStyles numStyleDst = NumberHelpers.IsHexNumber(varArgDst.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
             NumberStyles numStyleSize = NumberHelpers.IsHexNumber(varArgSize.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
             bool bRet = true;
-
 
             bRet = bRet && NumberHelpers.TryParseLong(varArgDst.Value, numStyleDst, out dstAddress);
             bRet = bRet && NumberHelpers.TryParseLong(varArgSrc.Value, numStyleSrc, out srcAddress);
@@ -100,7 +99,7 @@ namespace VSDebugCoreLib.Commands.Memory
             }
 
             int ntdbgStatus = NativeMethods.NTDBG_OK;
-            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.ProcMemoryCopy( processId, dstAddress, srcAddress, dataSize)))
+            if (NativeMethods.NTDBG_OK != (ntdbgStatus = MemoryHelpers.ProcMemoryCopy(processId, dstAddress, srcAddress, dataSize)))
             {
                 Context.CONSOLE.Write("Memory copy src:" + NumberHelpers.ToHex(srcAddress) + " dst:" + NumberHelpers.ToHex(dstAddress) + " " + dataSize.ToString() + " failed!");
                 Context.CONSOLE.Write("Error code:" + ntdbgStatus.ToString() + " - " + NativeMethods.GetStatusString(ntdbgStatus) + ".");

@@ -7,8 +7,8 @@
         protected string CommandDescription;
         protected eCommandStatus CommandStatusFlag;
 
-        protected VSDebugContext Context    { get; private set; }
-        public int CommandID                    { get; private set; }
+        protected VSDebugContext Context { get; private set; }
+        public int CommandID { get; private set; }
         public string CommandString => CommandStringID;
         public string CommandHelp => CommandHelpString;
         public string CommandInfo => CommandDescription;
@@ -16,17 +16,16 @@
 
         public BaseCommand(VSDebugContext context, int cmdID, string strID)
         {
-            Context             = context;
-            CommandID           = cmdID;
-            CommandStringID     = strID;
-            CommandHelpString   = string.Empty;
-            CommandDescription  = string.Empty;
-            CommandStatusFlag   = eCommandStatus.CommandStatus_Enabled;
+            Context = context;
+            CommandID = cmdID;
+            CommandStringID = strID;
+            CommandHelpString = string.Empty;
+            CommandDescription = string.Empty;
+            CommandStatusFlag = eCommandStatus.CommandStatus_Enabled;
         }
 
-        public virtual void Execute( string text )
+        public virtual void Execute(string text)
         {
         }
-
     }
 }

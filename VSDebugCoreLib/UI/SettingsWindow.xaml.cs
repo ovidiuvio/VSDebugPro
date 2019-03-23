@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
+﻿using System.Windows;
 using System.Windows.Forms;
-using System.IO;
 
 using VSDebugCoreLib.Properties;
 
@@ -34,7 +22,6 @@ namespace VSDebugCoreLib.UI
             m_generalSettings = new CGeneralSettings();
             m_generalSettings.Import(Context.Settings.GeneralSettings);
 
-         
             groupGeneralSettings.DataContext = m_generalSettings;
             groupExtensionSettings.DataContext = m_generalSettings;
         }
@@ -47,11 +34,10 @@ namespace VSDebugCoreLib.UI
 
             DialogResult result = dlgFolder.ShowDialog();
 
-            if( result == System.Windows.Forms.DialogResult.OK )
+            if (result == System.Windows.Forms.DialogResult.OK)
             {
                 m_generalSettings.WorkingDirectory = dlgFolder.SelectedPath;
             }
-            
         }
 
         private void Browse_TextEditor(object sender, RoutedEventArgs e)
@@ -62,7 +48,7 @@ namespace VSDebugCoreLib.UI
 
             DialogResult result = dlgFile.ShowDialog();
 
-            if( result == System.Windows.Forms.DialogResult.OK )
+            if (result == System.Windows.Forms.DialogResult.OK)
             {
                 m_generalSettings.TextEditor = dlgFile.FileName;
             }
@@ -119,9 +105,8 @@ namespace VSDebugCoreLib.UI
                 {
                     if (item.Extension == tboxExtension.Text)
                     {
-                        bAdd = false;                        
+                        bAdd = false;
                     }
-
                 }
 
                 if (!System.IO.Path.HasExtension(tboxExtension.Text))

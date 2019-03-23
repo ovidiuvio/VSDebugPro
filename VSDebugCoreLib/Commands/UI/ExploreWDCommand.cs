@@ -9,7 +9,7 @@ namespace VSDebugCoreLib.Commands.UI
         {
             string windir = Environment.GetEnvironmentVariable("WINDIR");
 
-            Process.Start( windir + "\\explorer.exe", Context.Settings.GeneralSettings.WorkingDirectory );
+            Process.Start(windir + "\\explorer.exe", Context.Settings.GeneralSettings.WorkingDirectory);
         }
 
         public ExploreWDCommand(VSDebugContext context)
@@ -17,6 +17,5 @@ namespace VSDebugCoreLib.Commands.UI
         {
             CommandDescription = Resources.CmdAboutDesc;
         }
-
     }
 }

@@ -29,7 +29,6 @@ namespace VSDebugCoreLib.Console
 
             if (command == null)
             {
-                
             }
 
             return command;
@@ -38,8 +37,7 @@ namespace VSDebugCoreLib.Console
         public void Execute(string text)
         {
             try
-            {               
-
+            {
                 char[] sp = new char[] { ' ', '\t' };
                 string[] argv = text.Split(sp, 2, StringSplitOptions.RemoveEmptyEntries);
                 string alias = null;
@@ -48,7 +46,7 @@ namespace VSDebugCoreLib.Console
                     return;
 
                 // replace first argument with alias value
-                if ( null != (alias = Context.Settings.Alias.FindAliasValue(argv[0])) )
+                if (null != (alias = Context.Settings.Alias.FindAliasValue(argv[0])))
                 {
                     if (2 == argv.Length)
                     {
@@ -56,11 +54,10 @@ namespace VSDebugCoreLib.Console
                     }
                     else if (1 == argv.Length)
                     {
-                        text = alias;                        
+                        text = alias;
                     }
 
                     argv = text.Split(sp, 2, StringSplitOptions.RemoveEmptyEntries);
-
                 }
 
                 IConsoleCommand command = FindCommand(argv[0]);
@@ -68,7 +65,7 @@ namespace VSDebugCoreLib.Console
                 if (command == null)
                 {
                     string strError = "Command: " + "<" + argv[0] + ">" + " is not valid.";
-                    Write(strError);                
+                    Write(strError);
                     return;
                 }
 
@@ -79,7 +76,7 @@ namespace VSDebugCoreLib.Console
 
                     return;
                 }
-                else if(eCommandStatus.CommandStatus_NA_MiniDump == command.CommandStatus)
+                else if (eCommandStatus.CommandStatus_NA_MiniDump == command.CommandStatus)
                 {
                     string strError = "Command: " + "<" + argv[0] + ">" + " is not available for minidumps.";
                     Write(strError);
@@ -135,8 +132,6 @@ namespace VSDebugCoreLib.Console
             }
 
             return false;
-           
         }
-
     }
 }

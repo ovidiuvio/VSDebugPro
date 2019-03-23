@@ -7,7 +7,7 @@ namespace VSDebugCoreLib.Commands.UI
     {
         public override void MenuCallback(object sender, EventArgs e)
         {
-            new SettingsWindow( Context ).ShowDialog();
+            new SettingsWindow(Context).ShowDialog();
         }
 
         public SettingsCommand(VSDebugContext context)
@@ -22,7 +22,5 @@ namespace VSDebugCoreLib.Commands.UI
 
             MenuCallback(this, EventArgs.Empty);
         }
-
-
     }
 }

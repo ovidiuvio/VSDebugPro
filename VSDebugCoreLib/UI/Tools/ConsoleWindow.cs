@@ -1,29 +1,25 @@
-﻿using System;
-using System.Runtime.InteropServices;
-using Microsoft.VisualStudio.Shell.Interop;
-using Microsoft.VisualStudio.Shell;
+﻿using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost; //scomponentmodel
-
 using Microsoft.VisualStudio.Editor; //editor
+using Microsoft.VisualStudio.OLE.Interop;
+using Microsoft.VisualStudio.Shell;
+using Microsoft.VisualStudio.Shell.Interop;
 using Microsoft.VisualStudio.Text;  //text
 using Microsoft.VisualStudio.Text.Editor; //Text
-using Microsoft.VisualStudio.Utilities; // for content type
-using Microsoft.VisualStudio;
-using System.ComponentModel.Design;
 using Microsoft.VisualStudio.TextManager.Interop; //IVsTextView
+using Microsoft.VisualStudio.Utilities; // for content type
+using System;
+using System.ComponentModel.Design;
+using System.Runtime.InteropServices;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
-using Microsoft.VisualStudio.OLE.Interop;
-
 
 namespace VSDebugCoreLib.Console
 {
-
     [Guid("4EC19E3D-EFB0-41D7-B08D-79B00BECF072")]
     public class ConsoleWindow : ToolWindowPane
-    {       
-
+    {
         public ConsoleWindow()
-            :base(null)
+            : base(null)
         {
             ToolBar = new CommandID(GuidList.GuidVSDebugProConsoleMenu, (int)PkgCmdIDList.VSDConsoleTbar);
             Caption = "VSD Console";
@@ -37,9 +33,9 @@ namespace VSDebugCoreLib.Console
             //
         }
 
-        IWpfTextView _textView;
-        ITextBuffer mefTextBuffer;
-        IWpfTextViewHost _textViewHost;
+        private IWpfTextView _textView;
+        private ITextBuffer mefTextBuffer;
+        private IWpfTextViewHost _textViewHost;
 
         // The text view used to visualize the text inside the console
         private IVsTextView textView;
@@ -68,7 +64,7 @@ namespace VSDebugCoreLib.Console
             IVsTextBuffer textBuffer = adapterFactory.CreateVsTextBufferAdapter(GetService(typeof(IOleServiceProvider)) as IOleServiceProvider);
             uint textViewInitFlags = (uint)TextViewInitFlags.VIF_DEFAULT |
                                      (uint)TextViewInitFlags.VIF_HSCROLL |
-                                     (uint)TextViewInitFlags.VIF_VSCROLL; 
+                                     (uint)TextViewInitFlags.VIF_VSCROLL;
             textBuffer.InitializeContent("", 0);
             textView.Initialize(textBuffer as IVsTextLines, IntPtr.Zero, textViewInitFlags, null);
 
@@ -84,7 +80,7 @@ namespace VSDebugCoreLib.Console
                 int hr = userData.GetData(ref g, out obj);
                 if (hr == VSConstants.S_OK)
                 {
-                    _textViewHost = obj as IWpfTextViewHost;                    
+                    _textViewHost = obj as IWpfTextViewHost;
                 }
             }
 
@@ -92,11 +88,10 @@ namespace VSDebugCoreLib.Console
             _textView.Options.SetOptionValue(DefaultTextViewHostOptions.ZoomControlId, false);
 
             //Initialize the history
-            if( null == history )
+            if (null == history)
                 history = new HistoryBuffer();
 
             adapterFactory.GetWpfTextView(textView).Caret.MoveTo(new SnapshotPoint(mefTextBuffer.CurrentSnapshot, mefTextBuffer.CurrentSnapshot.Length));
-
 
             IContentType ivsdContentType = registryService.GetContentType(VSDContentTypeDefinition.ContentType);
 
@@ -104,7 +99,7 @@ namespace VSDebugCoreLib.Console
 
             // init console input
             WriteConsoleInputSymbol();
-            
+
             return;
         }
 
@@ -117,7 +112,6 @@ namespace VSDebugCoreLib.Console
             {
                 if (disposing)
                 {
-
                     // Close the text view.
                     if (null != textView)
                     {
@@ -309,6 +303,7 @@ namespace VSDebugCoreLib.Console
         }
 
         #region Command Handlers
+
         /// <summary>
         /// Set the Supported property on the sender command to true if and only if the
         /// current position of the cursor is an input position.
@@ -344,38 +339,39 @@ namespace VSDebugCoreLib.Console
         private void OnHistory(object sender, EventArgs e)
         {
             //if (!completionBroker.IsCompletionActive(_textView))
-           // {
-                // Get the command to figure out from the ID if we have to get the previous or the
-                // next element in the history.
-                OleMenuCommand command = sender as OleMenuCommand;
-                if (null == command ||
-                    command.CommandID.Guid != typeof(Microsoft.VisualStudio.VSConstants.VSStd2KCmdID).GUID)
-                {
-                    return;
-                }
-                string historyEntry = null;
-                if (command.CommandID.ID == (int)Microsoft.VisualStudio.VSConstants.VSStd2KCmdID.UP)
-                {
-                    historyEntry = history.PreviousEntry();
-                }
-                else if (command.CommandID.ID == (int)Microsoft.VisualStudio.VSConstants.VSStd2KCmdID.DOWN)
-                {
-                    historyEntry = history.NextEntry();
-                }
-                if (string.IsNullOrEmpty(historyEntry))
-                {
-                    return;
-                }
+            // {
+            // Get the command to figure out from the ID if we have to get the previous or the
+            // next element in the history.
+            OleMenuCommand command = sender as OleMenuCommand;
+            if (null == command ||
+                command.CommandID.Guid != typeof(Microsoft.VisualStudio.VSConstants.VSStd2KCmdID).GUID)
+            {
+                return;
+            }
+            string historyEntry = null;
+            if (command.CommandID.ID == (int)Microsoft.VisualStudio.VSConstants.VSStd2KCmdID.UP)
+            {
+                historyEntry = history.PreviousEntry();
+            }
+            else if (command.CommandID.ID == (int)Microsoft.VisualStudio.VSConstants.VSStd2KCmdID.DOWN)
+            {
+                historyEntry = history.NextEntry();
+            }
+            if (string.IsNullOrEmpty(historyEntry))
+            {
+                return;
+            }
 
-                int start = GetReadOnlyLength(mefTextBuffer.CurrentSnapshot);
-                if (!mefTextBuffer.EditInProgress)
-                {
-                    var edit = mefTextBuffer.CreateEdit();
-                    edit.Replace(new Span(start, mefTextBuffer.CurrentSnapshot.Length - start), historyEntry);
-                    edit.Apply();
-                }
-           // }
+            int start = GetReadOnlyLength(mefTextBuffer.CurrentSnapshot);
+            if (!mefTextBuffer.EditInProgress)
+            {
+                var edit = mefTextBuffer.CreateEdit();
+                edit.Replace(new Span(start, mefTextBuffer.CurrentSnapshot.Length - start), historyEntry);
+                edit.Apply();
+            }
+            // }
         }
+
         /// <summary>
         /// Handles the HOME command in two different ways if the current line is the input
         /// line or not.
@@ -434,6 +430,7 @@ namespace VSDebugCoreLib.Console
                 }
             }
         }
+
         /// <summary>
         /// Empty command handler used to overwrite some standard command with an empty action.
         /// </summary>
@@ -441,6 +438,7 @@ namespace VSDebugCoreLib.Console
         {
             // Do Nothing.
         }
+
         /// <summary>
         /// Command handler for the RETURN command.
         /// It is called when the user presses the ENTER key inside the console window and
@@ -450,7 +448,6 @@ namespace VSDebugCoreLib.Console
         {
             //if (!completionBroker.IsCompletionActive(_textView))
             //{
-
             //    // If the user is not on the input line, then this should be a no-action.
             //    if (!IsCurrentLineInputLine())
             //    {
@@ -462,11 +459,9 @@ namespace VSDebugCoreLib.Console
             //    SetCursorAtEndOfBuffer();
             //}
 
-            
             ExecuteUserInput();
 
             AfterConsoleExecute();
-            
         }
 
         private void ExecuteUserInput()
@@ -499,7 +494,7 @@ namespace VSDebugCoreLib.Console
         }
 
         private void AfterConsoleExecute()
-        {  
+        {
             // write the console input character
             WriteConsoleInputSymbol();
 
@@ -587,10 +582,9 @@ namespace VSDebugCoreLib.Console
                 uiShell.ShowContextMenu(0, ref menuGuid, (int)PkgCmdIDList.VSDConsoleContext, pnts, textView as IOleCommandTarget));
         }
 
-       
-        #endregion
+        #endregion Command Handlers
 
-        System.Windows.Controls.UserControl uc = null;
+        private System.Windows.Controls.UserControl uc = null;
 
         public override object Content
         {
@@ -615,13 +609,12 @@ namespace VSDebugCoreLib.Console
             catch (Exception)
             {
             }
-
         }
 
         public void LoadHistory(CCmdHistory cmdHistory)
         {
             try
-            {             
+            {
                 foreach (var item in cmdHistory.Values)
                 {
                     history.AddEntry(item);
@@ -631,6 +624,5 @@ namespace VSDebugCoreLib.Console
             {
             }
         }
-
     }
 }

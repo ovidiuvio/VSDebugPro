@@ -32,16 +32,16 @@
                             </Style.Triggers>
                         </Style>
                     </RowDefinition.Style>
-                </RowDefinition>              
+                </RowDefinition>
                 <RowDefinition />
             </Grid.RowDefinitions>
 
-            <Label x:Name="_labelProduct" Content="Label" FontFamily="Consolas" FontSize="18" FontWeight="Bold" HorizontalContentAlignment="Center" Foreground="#FF5F574F" VerticalContentAlignment="Center" MinWidth="150"/>
-            <Label x:Name="_labelWWW" Content="Label" FontFamily="Consolas" HorizontalContentAlignment="Center" FontSize="14" VerticalContentAlignment="Center" FontWeight="Bold" MinWidth="150" Foreground="#FF5F574F" Grid.Row="2" MouseDown="labelWWW_Click" ToolTip="Open VSDebugTool website"/>
+            <Label x:Name="_labelProduct" Content="Label" FontFamily="Consolas" FontSize="18" FontWeight="Bold" HorizontalContentAlignment="Center" Foreground="#FF5F574F" VerticalContentAlignment="Center" MinWidth="150" />
+            <Label x:Name="_labelWWW" Content="Label" FontFamily="Consolas" HorizontalContentAlignment="Center" FontSize="14" VerticalContentAlignment="Center" FontWeight="Bold" MinWidth="150" Foreground="#FF5F574F" Grid.Row="2" MouseDown="labelWWW_Click" ToolTip="Open VSDebugTool website" />
             <Expander x:Name="_expHistory" IsExpanded="False" Grid.Row="1" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" MinWidth="150" Foreground="#FF5F574F" ScrollViewer.CanContentScroll="True">
                 <Expander.Header>
                     <Grid x:Name="_gridVersion" Width="464" HorizontalAlignment="Center">
-                        <Label x:Name="_labelVersion" Content="Label" FontFamily="Consolas" HorizontalContentAlignment="Center" Foreground="#FF1A88F5" FontSize="14" VerticalContentAlignment="Center" MinWidth="150" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <Label x:Name="_labelVersion" Content="Label" FontFamily="Consolas" HorizontalContentAlignment="Center" Foreground="#FF1A88F5" FontSize="14" VerticalContentAlignment="Center" MinWidth="150" FontWeight="Bold" HorizontalAlignment="Center" />
                     </Grid>
                 </Expander.Header>
                 <TextBox x:Name="_txtHistory" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Foreground="#FF5F574F" Background="#FFF6F6F6" />
@@ -49,7 +49,7 @@
             <Expander x:Name="_expLicense" IsExpanded="False" Grid.Row="3" HorizontalContentAlignment="Center" VerticalContentAlignment="Stretch" MinWidth="150" Foreground="#FF5F574F" ScrollViewer.CanContentScroll="True">
                 <Expander.Header>
                     <Grid x:Name="_gridLicense" Width="464" HorizontalAlignment="Center">
-                        <Label x:Name="_labelLicense" Content="Label" FontFamily="Consolas" HorizontalContentAlignment="Center" Foreground="#FF5F574F" FontSize="14" VerticalContentAlignment="Center" MinWidth="150" FontWeight="Bold" HorizontalAlignment="Center"/>
+                        <Label x:Name="_labelLicense" Content="Label" FontFamily="Consolas" HorizontalContentAlignment="Center" Foreground="#FF5F574F" FontSize="14" VerticalContentAlignment="Center" MinWidth="150" FontWeight="Bold" HorizontalAlignment="Center" />
                     </Grid>
                 </Expander.Header>
                 <TextBox x:Name="_txtLicense" ScrollViewer.CanContentScroll="True" VerticalScrollBarVisibility="Auto" FontFamily="Consolas" Foreground="#FF5F574F" Background="#FFF6F6F6" />

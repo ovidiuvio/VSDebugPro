@@ -1,12 +1,12 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Globalization;
 using System.IO;
-using System.Diagnostics;
 using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
-    class MemDiff : BaseCommand
+    internal class MemDiff : BaseCommand
     {
         public MemDiff(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.CmdMemDiffString)
@@ -57,13 +57,12 @@ namespace VSDebugCoreLib.Commands.Memory
 
             string strArgAddr1 = argv[0];
             string strArgAddr2 = argv[1];
-            string strArgSize  = argv[2];
-
+            string strArgSize = argv[2];
 
             var varArgAddr1 = Context.IDE.Debugger.GetExpression(strArgAddr1, false, 100);
             var varArgAddr2 = Context.IDE.Debugger.GetExpression(strArgAddr2, false, 100);
-            var varArgSize  = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
-            int processId   = Context.IDE.Debugger.CurrentProcess.ProcessID;
+            var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
+            int processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgAddr1.IsValidValue)
             {
@@ -91,7 +90,6 @@ namespace VSDebugCoreLib.Commands.Memory
             NumberStyles numStyleSize = NumberHelpers.IsHexNumber(varArgSize.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
             bool bRet = true;
 
-
             bRet = bRet && NumberHelpers.TryParseLong(varArgAddr1.Value, numStyleAddr1, out addr1);
             bRet = bRet && NumberHelpers.TryParseLong(varArgAddr2.Value, numStyleAddr2, out addr2);
             bRet = bRet && NumberHelpers.TryParseLong(varArgSize.Value, numStyleSize, out dataSize);
@@ -103,10 +101,10 @@ namespace VSDebugCoreLib.Commands.Memory
             }
 
             // get file path
-            string strPath      = Path.GetTempPath();
-            string strFile1     = Path.GetTempFileName();
-            string strFile2     = Path.GetTempFileName();
-            string strDiffTool  = Context.Settings.GeneralSettings.DiffTool;
+            string strPath = Path.GetTempPath();
+            string strFile1 = Path.GetTempFileName();
+            string strFile2 = Path.GetTempFileName();
+            string strDiffTool = Context.Settings.GeneralSettings.DiffTool;
 
             if (string.Empty == strDiffTool)
             {
@@ -131,8 +129,6 @@ namespace VSDebugCoreLib.Commands.Memory
 
             Process.Start(strDiffTool, strFile1 + " " + strFile2);
             return;
-            
-
         }
     }
 }

@@ -13,7 +13,6 @@ using System.Linq;
 using System.Threading;
 using System.Windows.Media;
 using VSDebugCoreLib.Commands;
-using VSDebugPro;
 
 namespace VSDebugPro.VSDebugScript
 {

@@ -75,23 +75,21 @@ namespace VSDebugCoreLib
     }
 
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
-    public class CToolsSettings : INotifyPropertyChanged 
+    public class CToolsSettings : INotifyPropertyChanged
     {
         private List<string> _tools;
 
         private string _toolsSelected;
-       
+
         public List<String> Values
         {
             get => _tools; set => _tools = value;
         }
 
-       
         public string Selected
         {
             get => _toolsSelected; set => _toolsSelected = value;
         }
-
 
         public CExtensionsMap ExtensionsMap { get; set; }
 
@@ -100,7 +98,7 @@ namespace VSDebugCoreLib
             _tools = new List<string>();
             _tools.Add("Text Editor");
             _tools.Add("Hex Editor");
-            _tools.Add("Image Editor");            
+            _tools.Add("Image Editor");
             _toolsSelected = "Hex Editor";
 
             ExtensionsMap = new CExtensionsMap();
@@ -117,19 +115,18 @@ namespace VSDebugCoreLib
                     this, new PropertyChangedEventArgs(propName));
         }
 
-        #endregion
-
+        #endregion INotifyPropertyChanged Members
     }
 
     public class CGeneralSettings : INotifyPropertyChanged
     {
         private string _workingDirectory = "";
-        private string _textEditor       = "";
-        private string _hexEditor        = "";
-        private string _imgEditor        = "";
-        private string _diffTool         = "";
+        private string _textEditor = "";
+        private string _hexEditor = "";
+        private string _imgEditor = "";
+        private string _diffTool = "";
 
-        public string WorkingDirectory 
+        public string WorkingDirectory
         {
             get
             {
@@ -144,6 +141,7 @@ namespace VSDebugCoreLib
                 OnPropertyChanged("WorkingDirectory");
             }
         }
+
         public string TextEditor
         {
             get => _textEditor; set
@@ -152,6 +150,7 @@ namespace VSDebugCoreLib
                 OnPropertyChanged("TextEditor");
             }
         }
+
         public string HexEditor
         {
             get => _hexEditor; set
@@ -160,6 +159,7 @@ namespace VSDebugCoreLib
                 OnPropertyChanged("HexEditor");
             }
         }
+
         public string ImgEditor
         {
             get => _imgEditor; set
@@ -168,6 +168,7 @@ namespace VSDebugCoreLib
                 OnPropertyChanged("ImgEditor");
             }
         }
+
         public string DiffTool
         {
             get => _diffTool; set
@@ -177,16 +178,14 @@ namespace VSDebugCoreLib
             }
         }
 
-
         public CToolsSettings Tools { get; set; }
-       
 
         public CGeneralSettings()
         {
             Tools = new CToolsSettings();
         }
 
-        public void Import( CGeneralSettings settings )
+        public void Import(CGeneralSettings settings)
         {
             DiffTool = settings.DiffTool;
             HexEditor = settings.HexEditor;
@@ -212,14 +211,14 @@ namespace VSDebugCoreLib
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        void OnPropertyChanged(string propName)
+        private void OnPropertyChanged(string propName)
         {
             if (PropertyChanged != null)
                 PropertyChanged(
                     this, new PropertyChangedEventArgs(propName));
         }
 
-        #endregion
+        #endregion INotifyPropertyChanged Members
     }
 
     public class CAliasSettings
@@ -231,9 +230,9 @@ namespace VSDebugCoreLib
 
         public CAliasMap AliasList { get; set; }
 
-        public bool   AddAlias( string alias, string value )
+        public bool AddAlias(string alias, string value)
         {
-            bool    res     = false;
+            bool res = false;
 
             if (null == FindAlias(alias))
             {
@@ -244,10 +243,10 @@ namespace VSDebugCoreLib
             return res;
         }
 
-        public bool   DelAlias( string alias )
+        public bool DelAlias(string alias)
         {
             bool res = false;
-            CAliasMapElement item = FindAlias( alias );
+            CAliasMapElement item = FindAlias(alias);
 
             if (null != item)
             {
@@ -260,7 +259,7 @@ namespace VSDebugCoreLib
         public string FindAliasValue(string alias)
         {
             string res = null;
-            CAliasMapElement item = FindAlias( alias );
+            CAliasMapElement item = FindAlias(alias);
 
             if (null != item)
                 res = item.Value;
@@ -291,16 +290,15 @@ namespace VSDebugCoreLib
         public CAliasSettings Alias { get; set; }
         public CCmdHistory CmdHistory { get; set; }
 
-        public CSettings() 
+        public CSettings()
         {
             GeneralSettings = new CGeneralSettings();
-            Alias           = new CAliasSettings();
-            CmdHistory      = new CCmdHistory();
+            Alias = new CAliasSettings();
+            CmdHistory = new CCmdHistory();
         }
 
         public string GetAssignedTool(string extension)
         {
-
             foreach (var item in GeneralSettings.Tools.ExtensionsMap.Values)
             {
                 if (item.Extension == extension)
@@ -309,13 +307,14 @@ namespace VSDebugCoreLib
                     {
                         case "Text Editor":
                             return GeneralSettings.TextEditor;
+
                         case "Hex Editor":
                             return GeneralSettings.HexEditor;
+
                         case "Image Editor":
                             return GeneralSettings.ImgEditor;
                     }
                 }
-
             }
 
             return string.Empty;
@@ -341,23 +340,20 @@ namespace VSDebugCoreLib
             VSDSettings.GeneralSettings.Tools.ExtensionsMap = Settings.Default.ExtensionsMap;
             VSDSettings.Alias.AliasList = Settings.Default.AliasMap;
             VSDSettings.CmdHistory = Settings.Default.CmdHistory;
-
-            
         }
 
         public void SaveSettings()
         {
-            Settings.Default.WorkingDirectory   = VSDSettings.GeneralSettings.WorkingDirectory;
-            Settings.Default.DiffTool           = VSDSettings.GeneralSettings.DiffTool;
-            Settings.Default.HexEditor          = VSDSettings.GeneralSettings.HexEditor;
-            Settings.Default.TextEditor         = VSDSettings.GeneralSettings.TextEditor;
-            Settings.Default.ImgEditor          = VSDSettings.GeneralSettings.ImgEditor;
-            Settings.Default.ExtensionsMap      = VSDSettings.GeneralSettings.Tools.ExtensionsMap;
-            Settings.Default.AliasMap           = VSDSettings.Alias.AliasList;
-            Settings.Default.CmdHistory         = VSDSettings.CmdHistory;
+            Settings.Default.WorkingDirectory = VSDSettings.GeneralSettings.WorkingDirectory;
+            Settings.Default.DiffTool = VSDSettings.GeneralSettings.DiffTool;
+            Settings.Default.HexEditor = VSDSettings.GeneralSettings.HexEditor;
+            Settings.Default.TextEditor = VSDSettings.GeneralSettings.TextEditor;
+            Settings.Default.ImgEditor = VSDSettings.GeneralSettings.ImgEditor;
+            Settings.Default.ExtensionsMap = VSDSettings.GeneralSettings.Tools.ExtensionsMap;
+            Settings.Default.AliasMap = VSDSettings.Alias.AliasList;
+            Settings.Default.CmdHistory = VSDSettings.CmdHistory;
 
             Settings.Default.Save();
         }
-        
     }
 }

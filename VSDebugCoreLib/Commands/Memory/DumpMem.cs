@@ -2,14 +2,13 @@
 using System.Globalization;
 using System.IO;
 using VSDebugCoreLib.Utils;
-using Microsoft.VisualStudio.Debugger.CallStack;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
-    class DumpMem : BaseCommand
+    internal class DumpMem : BaseCommand
     {
-        const char tkn_force    = 'f';
-        const char tkn_append   = 'a';
+        private const char tkn_force = 'f';
+        private const char tkn_append = 'a';
 
         public DumpMem(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.DumpMemString)
@@ -17,7 +16,7 @@ namespace VSDebugCoreLib.Commands.Memory
             CommandDescription = Resources.CmdDumpMemDesc;
 
             CommandHelpString = "Syntax: <" + CommandString + ">" + " <optional flags> <filename> <address> <size>\n" +
-                                "\tEX: " + CommandString + " c:\\memdump.bin 0x00656789 200\n"  +
+                                "\tEX: " + CommandString + " c:\\memdump.bin 0x00656789 200\n" +
                                 "\tEX: " + CommandString + " -f c:\\memdump.bin 0x00656789 200\n" +
                                 "\tFlags:\n" +
                                 "\t\t  -" + tkn_force + "   - Force file overwrite.\n" +
@@ -47,11 +46,11 @@ namespace VSDebugCoreLib.Commands.Memory
         }
 
         public override void Execute(string text)
-        {            
+        {
             base.Execute(text);
 
             char[] sp = new char[] { ' ', '\t' };
-            string[] argv = text.Split(sp,2,StringSplitOptions.RemoveEmptyEntries);
+            string[] argv = text.Split(sp, 2, StringSplitOptions.RemoveEmptyEntries);
 
             if (argv.Length < 2)
             {
@@ -87,12 +86,11 @@ namespace VSDebugCoreLib.Commands.Memory
             {
                 Context.CONSOLE.Write(CommandHelp);
                 return;
-            } 
-            
+            }
 
-            strArgFile   = ('\0' == chrFlag) ? argv[0] : argv[1];
+            strArgFile = ('\0' == chrFlag) ? argv[0] : argv[1];
             strArgSource = ('\0' == chrFlag) ? argv[1] : argv[2];
-            strArgSize   = ('\0' == chrFlag) ? argv[2] : argv[3];
+            strArgSize = ('\0' == chrFlag) ? argv[2] : argv[3];
 
             // get file path
             string strPath = Path.GetDirectoryName(strArgFile);
@@ -111,17 +109,17 @@ namespace VSDebugCoreLib.Commands.Memory
             {
                 strArgFile = Path.Combine(Context.Settings.GeneralSettings.WorkingDirectory, strArgFile);
 
-                strPath    = Path.GetDirectoryName(strArgFile);
+                strPath = Path.GetDirectoryName(strArgFile);
 
                 // create folder if it doesn`t exist
                 if (!Directory.Exists(strPath))
                 {
                     Directory.CreateDirectory(strPath);
                 }
-            }           
+            }
 
             // if append or force is not specified, return error
-            if (File.Exists(strArgFile) && !( tkn_force == chrFlag || tkn_append == chrFlag) )
+            if (File.Exists(strArgFile) && !(tkn_force == chrFlag || tkn_append == chrFlag))
             {
                 Context.CONSOLE.Write("Output file name: " + strArgFile + " is in use!");
                 Context.CONSOLE.Write("Use -" + tkn_force + "/-" + tkn_append + " to overwrite/append");
@@ -131,25 +129,24 @@ namespace VSDebugCoreLib.Commands.Memory
             var varArgSource = Context.IDE.Debugger.GetExpression(strArgSource, false, 100);
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
             int processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
-            
+
             if (!varArgSource.IsValidValue)
             {
-                Context.CONSOLE.Write("Address: <"+strArgSource+"> is invalid!");                
+                Context.CONSOLE.Write("Address: <" + strArgSource + "> is invalid!");
                 return;
             }
 
             if (!varArgSize.IsValidValue)
             {
-                Context.CONSOLE.Write("Size: <" + strArgSize + "> is invalid!");                
+                Context.CONSOLE.Write("Size: <" + strArgSize + "> is invalid!");
                 return;
             }
 
-            long startAddress  = 0;
-            long dataSize      = 0;
-            NumberStyles numStyleSource = NumberHelpers.IsHexNumber( varArgSource.Value ) ? NumberStyles.HexNumber : NumberStyles.Integer;
+            long startAddress = 0;
+            long dataSize = 0;
+            NumberStyles numStyleSource = NumberHelpers.IsHexNumber(varArgSource.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
             NumberStyles numStyleSize = NumberHelpers.IsHexNumber(varArgSize.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
-            bool bRet        = true;
-
+            bool bRet = true;
 
             bRet = bRet && NumberHelpers.TryParseLong(varArgSource.Value, numStyleSource, out startAddress);
             bRet = bRet && NumberHelpers.TryParseLong(varArgSize.Value, numStyleSize, out dataSize);
@@ -162,7 +159,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             FileMode fileMode = FileMode.Create;
             // if force flag is specified, and the file exists, then delete it
-            if( tkn_force == chrFlag && File.Exists(strArgFile) )
+            if (tkn_force == chrFlag && File.Exists(strArgFile))
             {
                 File.Delete(strArgFile);
             }
@@ -196,10 +193,9 @@ namespace VSDebugCoreLib.Commands.Memory
                     Context.CONSOLE.Write("Couldn`t dump memory to file!");
                     return;
                 }
-
             }
 
-            Context.CONSOLE.Write("Wrote: " + dataSize.ToString() + " bytes to: " + MiscHelpers.GetClickableFileName(strArgFile) );
+            Context.CONSOLE.Write("Wrote: " + dataSize.ToString() + " bytes to: " + MiscHelpers.GetClickableFileName(strArgFile));
         }
     }
 }

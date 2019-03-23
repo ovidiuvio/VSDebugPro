@@ -4,7 +4,7 @@ using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
-    class MemSet : BaseCommand
+    internal class MemSet : BaseCommand
     {
         public MemSet(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, Resources.CmdMemSetString)
@@ -87,7 +87,6 @@ namespace VSDebugCoreLib.Commands.Memory
             NumberStyles numStyleDst = NumberHelpers.IsHexNumber(varArgDst.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
             NumberStyles numStyleSize = NumberHelpers.IsHexNumber(varArgSize.Value) ? NumberStyles.HexNumber : NumberStyles.Integer;
             bool bRet = true;
-
 
             bRet = bRet && NumberHelpers.TryParseLong(varArgDst.Value, numStyleDst, out dstAddress);
             bRet = bRet && NumberHelpers.TryParseLong(varArgVal.Value, numStyleSrc, out byteval);

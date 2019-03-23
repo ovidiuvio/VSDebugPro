@@ -5,7 +5,7 @@ namespace VSDebugCoreLib.Commands
 {
     public class ShellCommand : BaseCommand
     {
-        public ShellCommand(VSDebugContext context, Guid guid, int cmdID, string strID = "" )
+        public ShellCommand(VSDebugContext context, Guid guid, int cmdID, string strID = "")
             : base(context, cmdID, strID)
         {
             try
@@ -23,8 +23,6 @@ namespace VSDebugCoreLib.Commands
 
         public virtual void MenuCallback(object sender, EventArgs e)
         {
-
         }
-
     }
 }

@@ -1,17 +1,13 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using EnvDTE80;
+﻿using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
-
+using System;
+using System.Collections.Generic;
 using System.Reflection;
-
-using VSDebugCoreLib.Console;
 using VSDebugCoreLib.Commands;
-using VSDebugCoreLib.Commands.Memory;
 using VSDebugCoreLib.Commands.Core;
+using VSDebugCoreLib.Commands.Memory;
 using VSDebugCoreLib.Commands.UI;
-using System.ComponentModel.Design;
+using VSDebugCoreLib.Console;
 
 namespace VSDebugCoreLib
 {
@@ -42,11 +38,11 @@ namespace VSDebugCoreLib
         /// </summary>
         private ConsoleEngine _consoleEngine;
 
-
         /// <summary>
         /// VS IDE that is executing this context.
         /// </summary>
         private DTE2 _ide;
+
         /// <summary>
         /// Menu command service
         /// </summary>
@@ -65,10 +61,8 @@ namespace VSDebugCoreLib
 
         ~VSDebugContext()
         {
-
             _console.SaveHistory(_settingsManager.VSDSettings.CmdHistory);
             _settingsManager.SaveSettings();
-
         }
 
         public ICollection<BaseCommand> Commands => _commands;
@@ -132,11 +126,11 @@ namespace VSDebugCoreLib
             _console.Engine = _consoleEngine;
         }
 
-
         private void RegisterBaseCommand(BaseCommand cmd)
         {
             _commands.Add(cmd);
         }
+
         private void RegisterCommands()
         {
             var menuService = MenuCommandService;
@@ -155,7 +149,6 @@ namespace VSDebugCoreLib
                 RegisterConsoleCommand(new MemAlloc(this));
                 RegisterConsoleCommand(new MemFree(this));
                 RegisterBaseCommand(new ExploreWDCommand(this));
-
             }
         }
 
