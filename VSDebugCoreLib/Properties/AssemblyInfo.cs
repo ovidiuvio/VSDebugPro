@@ -10,7 +10,7 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("VSDebugCoreLib")]
-[assembly: AssemblyCopyright("©  Copyright 2012 - 2018 Ovidiu Ionescu")]
+[assembly: AssemblyCopyright("©  Copyright 2012 - 2019 Ovidiu Ionescu")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 
@@ -32,5 +32,5 @@ using System.Runtime.InteropServices;
 // You can specify all the values or you can default the Build and Revision Numbers 
 // by using the '*' as shown below:
 // [assembly: AssemblyVersion("1.0.*")]
-[assembly: AssemblyVersion("3.2.0.0")]
-[assembly: AssemblyFileVersion("3.2.0.0")]
+[assembly: AssemblyVersion("3.2.0.1")]
+[assembly: AssemblyFileVersion("3.2.0.1")]
