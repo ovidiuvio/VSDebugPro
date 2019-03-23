@@ -7,7 +7,7 @@ using EnvDTE;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using VSDebugCoreLib;
-using VSDebugCoreLib.Console;
+using VSDebugCoreLib.UI.Tools;
 
 namespace VSDebugPro
 {

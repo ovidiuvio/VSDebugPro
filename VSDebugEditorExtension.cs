@@ -18,7 +18,7 @@ using VSDebugCoreLib.Commands;
 //Text
 //EditorOperations
 
-namespace VSDebugPro.VSDebugScript
+namespace VSDebugPro
 {
     [Export(typeof(EditorFormatDefinition))]
     [Name("MarkerFormatDefinition/VSDHighlightWordFormatDefinition")]

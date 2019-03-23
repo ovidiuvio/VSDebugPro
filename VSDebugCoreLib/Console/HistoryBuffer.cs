@@ -13,7 +13,6 @@ namespace VSDebugCoreLib.Console
         internal const int DefaultBufferSize = 500;
 
         // The array of strings that stores the history of the commands.
-        private readonly List<string> _buffer;
 
         // Current position inside the buffer.
         private int _currentPosition;
@@ -35,13 +34,10 @@ namespace VSDebugCoreLib.Console
         public HistoryBuffer(int bufferSize)
         {
             if (bufferSize <= 0) throw new ArgumentOutOfRangeException("bufferSize");
-            _buffer = new List<string>(bufferSize);
+            Cmds = new List<string>(bufferSize);
         }
 
-        public List<string> Cmds
-        {
-            get => _buffer;
-        }
+        public List<string> Cmds { get; }
 
         /// <summary>
         ///     Search in the buffer if there is an item and returns its index.
@@ -49,8 +45,8 @@ namespace VSDebugCoreLib.Console
         /// </summary>
         private int FindIndex(string entry)
         {
-            for (var i = 0; i < _buffer.Count; i++)
-                if (string.CompareOrdinal(entry, _buffer[i]) == 0)
+            for (var i = 0; i < Cmds.Count; i++)
+                if (string.CompareOrdinal(entry, Cmds[i]) == 0)
                     return i;
             return -1;
         }
@@ -64,14 +60,14 @@ namespace VSDebugCoreLib.Console
             var index = FindIndex(entry);
             _currentReturned = false;
             if (-1 != index)
-                _buffer.RemoveAt(index);
-            else if (_buffer.Count == _buffer.Capacity) _buffer.RemoveAt(0);
+                Cmds.RemoveAt(index);
+            else if (Cmds.Count == Cmds.Capacity) Cmds.RemoveAt(0);
 
             // Add the new entry at the end of the buffer.
-            _buffer.Add(entry);
+            Cmds.Add(entry);
 
             // Set the current position at the end of the buffer.
-            _currentPosition = _buffer.Count - 1;
+            _currentPosition = Cmds.Count - 1;
         }
 
         /// <summary>
@@ -80,11 +76,11 @@ namespace VSDebugCoreLib.Console
         /// </summary>
         public string PreviousEntry()
         {
-            if (_buffer.Count == 0 || _currentPosition < 0) return null;
+            if (Cmds.Count == 0 || _currentPosition < 0) return null;
             if (!_currentReturned)
             {
                 _currentReturned = true;
-                return _buffer[_currentPosition];
+                return Cmds[_currentPosition];
             }
 
             _currentPosition -= 1;
@@ -94,7 +90,7 @@ namespace VSDebugCoreLib.Console
                 return null;
             }
 
-            return _buffer[_currentPosition];
+            return Cmds[_currentPosition];
         }
 
         /// <summary>
@@ -102,10 +98,10 @@ namespace VSDebugCoreLib.Console
         /// </summary>
         public string NextEntry()
         {
-            if (_currentPosition >= _buffer.Count - 1) return null;
+            if (_currentPosition >= Cmds.Count - 1) return null;
             _currentReturned = true;
             _currentPosition += 1;
-            return _buffer[_currentPosition];
+            return Cmds[_currentPosition];
         }
     }
 }

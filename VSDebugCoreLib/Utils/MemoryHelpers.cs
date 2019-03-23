@@ -13,11 +13,9 @@ namespace VSDebugCoreLib.Utils
             var handle = NativeMethods.NtDbgOpenProcess(
                 NativeMethods.ProcessVmRead | NativeMethods.ProcessQueryInformation, 0, (uint) processId);
 
-            var st = NativeMethods.NtdbgOk;
-
             uint nIOBytes = 0;
 
-            st = NativeMethods.NtDbgReadProcessMemory(handle
+            var st = NativeMethods.NtDbgReadProcessMemory(handle
                 , startAddress
                 , buffer
                 , (uint) Math.Min(size, buffer.Length)
@@ -162,11 +160,9 @@ namespace VSDebugCoreLib.Utils
                 NativeMethods.ProcessVmOperation | NativeMethods.ProcessVmRead | NativeMethods.ProcessVmWrite |
                 NativeMethods.ProcessQueryInformation, 0, (uint) processId);
 
-            var st = NativeMethods.NtdbgOk;
-
             uint nIOBytes = 0;
 
-            st = NativeMethods.NtDbgProcessMemCpy(handle
+            var st = NativeMethods.NtDbgProcessMemCpy(handle
                 , handle
                 , srcAddress
                 , dstAddress
@@ -207,9 +203,7 @@ namespace VSDebugCoreLib.Utils
                 NativeMethods.ProcessVmOperation | NativeMethods.ProcessVmRead | NativeMethods.ProcessVmWrite |
                 NativeMethods.ProcessQueryInformation, 0, (uint) processId);
 
-            ulong dwRet = 0;
-
-            dwRet = NativeMethods.NtDbgProcessAlloc(handle, (uint) size);
+            var dwRet = NativeMethods.NtDbgProcessAlloc(handle, (uint) size);
 
             NativeMethods.NtDbgCloseHandle(handle);
 
@@ -222,9 +216,7 @@ namespace VSDebugCoreLib.Utils
                 NativeMethods.ProcessVmOperation | NativeMethods.ProcessVmRead | NativeMethods.ProcessVmWrite |
                 NativeMethods.ProcessQueryInformation, 0, (uint) processId);
 
-            var st = NativeMethods.NtdbgOk;
-
-            st = NativeMethods.NtDbgProcessFree(handle, (ulong) address);
+            var st = NativeMethods.NtDbgProcessFree(handle, (ulong) address);
 
             NativeMethods.NtDbgCloseHandle(handle);
 
