@@ -12,6 +12,7 @@ using Microsoft.VisualStudio.Text;
 using Microsoft.VisualStudio.Text.Editor;
 using Microsoft.VisualStudio.TextManager.Interop;
 using Microsoft.VisualStudio.Utilities;
+using VSDebugCoreLib.Console;
 using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
 //scomponentmodel
 //editor
@@ -22,7 +23,7 @@ using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
 using IOleServiceProvider = Microsoft.VisualStudio.OLE.Interop.IServiceProvider;
 using UserControl = System.Windows.Controls.UserControl;
 
-namespace VSDebugCoreLib.Console
+namespace VSDebugCoreLib.UI.Tools
 {
     [Guid("4EC19E3D-EFB0-41D7-B08D-79B00BECF072")]
     public class ConsoleWindow : ToolWindowPane

@@ -8,6 +8,7 @@ using VSDebugCoreLib.Commands.Core;
 using VSDebugCoreLib.Commands.Memory;
 using VSDebugCoreLib.Commands.UI;
 using VSDebugCoreLib.Console;
+using VSDebugCoreLib.UI.Tools;
 
 namespace VSDebugCoreLib
 {

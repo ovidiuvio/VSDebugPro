@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
-using VSDebugCoreLib.Console;
+using VSDebugCoreLib.UI.Tools;
 
 namespace VSDebugCoreLib.Commands.UI
 {

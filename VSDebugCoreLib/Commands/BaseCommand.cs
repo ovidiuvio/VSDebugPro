@@ -2,10 +2,10 @@
 {
     public class BaseCommand : IConsoleCommand
     {
+        protected readonly string CommandStringId;
         protected string CommandDescription;
         protected string CommandHelpString;
         protected ECommandStatus CommandStatusFlag;
-        protected readonly string CommandStringId;
 
         public BaseCommand(VSDebugContext context, int cmdId, string strId)
         {

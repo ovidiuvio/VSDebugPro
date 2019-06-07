@@ -26,8 +26,7 @@ namespace VSDebugCoreLib.Console
 
         public IConsoleCommand FindCommand(string CommandString)
         {
-            IConsoleCommand command = null;
-            _commandsMap.TryGetValue(CommandString, out command);
+            _commandsMap.TryGetValue(CommandString, out var command);
 
             if (command == null)
             {

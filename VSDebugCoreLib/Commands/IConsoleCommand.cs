@@ -26,7 +26,7 @@
         string CommandHelp { get; }
 
         /// <summary>
-        /// Command description
+        ///     Command description
         /// </summary>
         string CommandInfo { get; }
 

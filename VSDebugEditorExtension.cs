@@ -18,7 +18,7 @@ using VSDebugCoreLib.Commands;
 //Text
 //EditorOperations
 
-namespace VSDebugPro.VSDebugScript
+namespace VSDebugPro
 {
     [Export(typeof(EditorFormatDefinition))]
     [Name("MarkerFormatDefinition/VSDHighlightWordFormatDefinition")]
@@ -64,6 +64,7 @@ namespace VSDebugPro.VSDebugScript
         internal static ContentTypeDefinition VSDContentType { get; set; }
     }
 
+    /// <inheritdoc />
     /// <summary>
     ///     Derive from TextMarkerTag, in case anyone wants to consume
     ///     just the HighlightWordTags by themselves.
@@ -75,6 +76,7 @@ namespace VSDebugPro.VSDebugScript
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     ///     Derive from TextMarkerTag, in case anyone wants to consume
     ///     just the HighlightActionTags by themselves.
@@ -86,13 +88,14 @@ namespace VSDebugPro.VSDebugScript
         }
     }
 
+    /// <inheritdoc />
     /// <summary>
     ///     This tagger will provide tags for every word in the buffer that
     ///     matches the word currently under the cursor.
     /// </summary>
     public class HighlightWordTagger : ITagger<HighlightWordTag>
     {
-        private readonly object updateLock = new object();
+        private readonly object _updateLock = new object();
 
         public HighlightWordTagger(ITextView view, ITextBuffer sourceBuffer, ITextSearchService textSearchService,
             ITextStructureNavigator textStructureNavigator)
@@ -138,9 +141,9 @@ namespace VSDebugPro.VSDebugScript
             UpdateAtCaretPosition(e.NewPosition);
         }
 
-        private void UpdateAtCaretPosition(CaretPosition caretPoisition)
+        private void UpdateAtCaretPosition(CaretPosition caretPosition)
         {
-            var point = caretPoisition.Point.GetPoint(SourceBuffer, caretPoisition.Affinity);
+            var point = caretPosition.Point.GetPoint(SourceBuffer, caretPosition.Affinity);
 
             if (!point.HasValue)
                 return;
@@ -236,7 +239,7 @@ namespace VSDebugPro.VSDebugScript
         private void SynchronousUpdate(SnapshotPoint currentRequest, NormalizedSnapshotSpanCollection newSpans,
             SnapshotSpan? newCurrentWord)
         {
-            lock (updateLock)
+            lock (_updateLock)
             {
                 if (currentRequest != RequestedPoint)
                     return;
@@ -321,13 +324,14 @@ namespace VSDebugPro.VSDebugScript
         #endregion ITaggerProvider Members
     }
 
+    /// <inheritdoc />
     /// <summary>
     ///     This tagger will provide tags for every word in the buffer that
     ///     matches the word currently under the cursor.
     /// </summary>
     public class HighlightActionTagger : ITagger<HighlightActionTag>
     {
-        private readonly object updateLock = new object();
+        private readonly object _updateLock = new object();
 
         public HighlightActionTagger(ITextView view, ITextBuffer sourceBuffer, ITextSearchService textSearchService,
             ITextStructureNavigator textStructureNavigator)
@@ -373,9 +377,9 @@ namespace VSDebugPro.VSDebugScript
             UpdateAtCaretPosition(e.NewPosition);
         }
 
-        private void UpdateAtCaretPosition(CaretPosition caretPoisition)
+        private void UpdateAtCaretPosition(CaretPosition caretPosition)
         {
-            var point = caretPoisition.Point.GetPoint(SourceBuffer, caretPoisition.Affinity);
+            var point = caretPosition.Point.GetPoint(SourceBuffer, caretPosition.Affinity);
 
             if (!point.HasValue)
                 return;
@@ -409,8 +413,8 @@ namespace VSDebugPro.VSDebugScript
                 var fileEndPos = -1;
                 var foundWord = false;
 
-                if ((fileStartPos = clickLineSelection.IndexOf("file://")) > 0 &&
-                    (fileEndPos = clickLineSelection.IndexOf(">")) > 0 &&
+                if ((fileStartPos = clickLineSelection.IndexOf("file://", StringComparison.Ordinal)) > 0 &&
+                    (fileEndPos = clickLineSelection.IndexOf(">", StringComparison.Ordinal)) > 0 &&
                     fileEndPos > fileStartPos && lineCaretPos > fileStartPos && lineCaretPos < fileEndPos &&
                     fileStartPos >= 0 && fileEndPos >= 0)
                 {
@@ -456,6 +460,7 @@ namespace VSDebugPro.VSDebugScript
             }
             catch (Exception)
             {
+                // ignored
             }
         }
 
@@ -473,7 +478,7 @@ namespace VSDebugPro.VSDebugScript
         private void SynchronousUpdate(SnapshotPoint currentRequest, NormalizedSnapshotSpanCollection newSpans,
             SnapshotSpan? newCurrentWord)
         {
-            lock (updateLock)
+            lock (_updateLock)
             {
                 if (currentRequest != RequestedPoint)
                     return;
