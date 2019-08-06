@@ -1,3 +1,8 @@
+VSDebugPro_3-3-0-1_2019-08-06
+
+	[*] Installer bugfix
+	[*] Updated copyright years
+
 VSDebugPro_3-3-0-0_2019-08-03
 
     [+] Enabled install for newever versions of VS2019
