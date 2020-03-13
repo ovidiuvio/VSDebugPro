@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using VSDebugCoreLib.UI;
 
 namespace VSDebugCoreLib.Commands.UI
@@ -17,9 +17,9 @@ namespace VSDebugCoreLib.Commands.UI
             new SettingsWindow(Context).ShowDialog();
         }
 
-        public override void Execute(string text)
+        public override void Execute(string[] args)
         {
-            base.Execute(text);
+            base.Execute(args);
 
             MenuCallback(this, EventArgs.Empty);
         }

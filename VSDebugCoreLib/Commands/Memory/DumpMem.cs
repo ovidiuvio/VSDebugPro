@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.IO;
 using VSDebugCoreLib.Utils;
@@ -42,25 +42,20 @@ namespace VSDebugCoreLib.Commands.Memory
             }
         }
 
-        public override void Execute(string text)
+        public override void Execute(string[] args)
         {
-            base.Execute(text);
+            base.Execute(args);
 
-            char[] sp = {' ', '\t'};
-            var argv = text.Split(sp, 2, StringSplitOptions.RemoveEmptyEntries);
-
-            if (argv.Length < 2)
+            if (args.Length < 2)
             {
                 Context.CONSOLE.Write(CommandHelp);
                 return;
             }
 
             // check for optional parameters
-            var strArgParam = argv[0];
-            var strArgFile = "";
-            var strArgSource = "";
-            var strArgSize = "";
+            var strArgParam = args[0];
             var chrFlag = '\0';
+            var paramShift = 0;
 
             if ('-' == strArgParam[0])
             {
@@ -68,6 +63,7 @@ namespace VSDebugCoreLib.Commands.Memory
                 if (2 == strArgParam.Length)
                 {
                     chrFlag = char.ToLower(strArgParam[1]);
+                    paramShift += 1;
                 }
                 else
                 {
@@ -76,18 +72,16 @@ namespace VSDebugCoreLib.Commands.Memory
                 }
             }
 
-            var reqNArg = '\0' == chrFlag ? 3 : 4;
-            argv = text.Split(sp, reqNArg, StringSplitOptions.RemoveEmptyEntries);
-
-            if (argv.Length != reqNArg)
+            if (args.Length != 3 + paramShift)
             {
                 Context.CONSOLE.Write(CommandHelp);
                 return;
             }
 
-            strArgFile = '\0' == chrFlag ? argv[0] : argv[1];
-            strArgSource = '\0' == chrFlag ? argv[1] : argv[2];
-            strArgSize = '\0' == chrFlag ? argv[2] : argv[3];
+
+            var strArgFile = args[0 + paramShift];
+            var strArgSource = args[2 + paramShift];
+            var strArgSize = args[1 + paramShift];
 
             // get file path
             var strPath = Path.GetDirectoryName(strArgFile);

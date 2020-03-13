@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using VSDebugCoreLib.Utils;
 
@@ -41,22 +41,19 @@ namespace VSDebugCoreLib.Commands.Memory
             }
         }
 
-        public override void Execute(string text)
+        public override void Execute(string[] args)
         {
-            base.Execute(text);
+            base.Execute(args);
 
-            char[] sp = {' ', '\t'};
-            var argv = text.Split(sp, 3, StringSplitOptions.RemoveEmptyEntries);
-
-            if (argv.Length != 3)
+            if (args.Length != 3)
             {
                 Context.CONSOLE.Write(CommandHelp);
                 return;
             }
 
-            var strArgDst = argv[0];
-            var strArgSize = argv[2];
-            var strArgSrc = argv[1];
+            var strArgDst = args[0];
+            var strArgSrc = args[1];
+            var strArgSize = args[2];
 
             var varArgDst = Context.IDE.Debugger.GetExpression(strArgDst, false, 100);
             var varArgSrc = Context.IDE.Debugger.GetExpression(strArgSrc, false, 100);

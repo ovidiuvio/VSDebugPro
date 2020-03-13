@@ -9,20 +9,20 @@
 //------------------------------------------------------------------------------
 
 namespace VSDebugCoreLib.Properties {
-    
-    
+
+
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     [global::System.CodeDom.Compiler.GeneratedCodeAttribute("Microsoft.VisualStudio.Editors.SettingsDesigner.SettingsSingleFileGenerator", "15.1.0.0")]
     internal sealed partial class Settings : global::System.Configuration.ApplicationSettingsBase {
-        
+
         private static Settings defaultInstance = ((Settings)(global::System.Configuration.ApplicationSettingsBase.Synchronized(new Settings())));
-        
+
         public static Settings Default {
             get {
                 return defaultInstance;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -34,7 +34,7 @@ namespace VSDebugCoreLib.Properties {
                 this["HexEditor"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -46,7 +46,7 @@ namespace VSDebugCoreLib.Properties {
                 this["TextEditor"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -58,7 +58,7 @@ namespace VSDebugCoreLib.Properties {
                 this["ImgEditor"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -70,7 +70,7 @@ namespace VSDebugCoreLib.Properties {
                 this["WorkingDirectory"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("")]
@@ -82,7 +82,7 @@ namespace VSDebugCoreLib.Properties {
                 this["DiffTool"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute(@"
@@ -119,12 +119,12 @@ namespace VSDebugCoreLib.Properties {
                 this["ExtensionsMap"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\r\n                    <CAliasMap xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-inst" +
-            "ance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n                        <Va" +
-            "lues />\r\n                    </CAliasMap>\r\n                ")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\n                    <CAliasMap xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-insta" +
+            "nce\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n                        <Valu" +
+            "es />\n                    </CAliasMap>\n                ")]
         public global::VSDebugCoreLib.CAliasMap AliasMap {
             get {
                 return ((global::VSDebugCoreLib.CAliasMap)(this["AliasMap"]));
@@ -133,18 +133,30 @@ namespace VSDebugCoreLib.Properties {
                 this["AliasMap"] = value;
             }
         }
-        
+
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("\r\n                    <CCmdHistory xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-in" +
-            "stance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\r\n                        <" +
-            "Values />\r\n                    </CCmdHistory>\r\n                ")]
+        [global::System.Configuration.DefaultSettingValueAttribute("\n                    <CCmdHistory xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-ins" +
+            "tance\" xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\">\n                        <Va" +
+            "lues />\n                    </CCmdHistory>\n                ")]
         public global::VSDebugCoreLib.CCmdHistory CmdHistory {
             get {
                 return ((global::VSDebugCoreLib.CCmdHistory)(this["CmdHistory"]));
             }
             set {
                 this["CmdHistory"] = value;
+            }
+        }
+
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("0")]
+        public int Version {
+            get {
+                return ((int)(this["Version"]));
+            }
+            set {
+                this["Version"] = value;
             }
         }
     }
