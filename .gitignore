@@ -7,3 +7,5 @@ TestResults
 /.vs/dtool/v15
 /Backup
 .vs
+packages/
+VSDebugCoreLib/Resources/*.txt
