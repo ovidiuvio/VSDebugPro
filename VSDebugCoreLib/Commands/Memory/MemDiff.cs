@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Diagnostics;
 using System.Globalization;
 using System.IO;
@@ -63,7 +63,6 @@ namespace VSDebugCoreLib.Commands.Memory
             var varArgAddr1 = Context.IDE.Debugger.GetExpression(strArgAddr1, false, 100);
             var varArgAddr2 = Context.IDE.Debugger.GetExpression(strArgAddr2, false, 100);
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
-            var processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgAddr1.IsValidValue)
             {
@@ -118,22 +117,23 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            var ntdbgStatus = NativeMethods.NtdbgOk;
-            if (NativeMethods.NtdbgOk !=
-                (ntdbgStatus = MemoryHelpers.WriteMemoryToFile(strFile1, processId, addr1, dataSize)))
+            if (!MemoryHelpers.WriteMemoryToFile(strFile1,
+                     Context.IDE.Debugger.CurrentStackFrame,
+                     addr1,
+                     dataSize
+                 ))
             {
                 Context.CONSOLE.Write("Failed to read data from address: " + NumberHelpers.ToHex(addr1) + "!");
-                Context.CONSOLE.Write("Error code:" + ntdbgStatus + " - " + NativeMethods.GetStatusString(ntdbgStatus) +
-                                      ".");
                 return;
             }
 
-            if (NativeMethods.NtdbgOk !=
-                (ntdbgStatus = MemoryHelpers.WriteMemoryToFile(strFile2, processId, addr2, dataSize)))
+            if (!MemoryHelpers.WriteMemoryToFile(strFile2,
+                    Context.IDE.Debugger.CurrentStackFrame,
+                    addr2,
+                    dataSize
+                ))
             {
                 Context.CONSOLE.Write("Failed to read data from address: " + NumberHelpers.ToHex(addr2) + "!");
-                Context.CONSOLE.Write("Error code:" + ntdbgStatus + " - " + NativeMethods.GetStatusString(ntdbgStatus) +
-                                      ".");
                 return;
             }
 

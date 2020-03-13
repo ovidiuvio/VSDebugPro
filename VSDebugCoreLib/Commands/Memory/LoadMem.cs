@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.IO;
 using VSDebugCoreLib.Utils;
@@ -74,7 +74,6 @@ namespace VSDebugCoreLib.Commands.Memory
 
             var varArgDst = Context.IDE.Debugger.GetExpression(strArgDst, false, 100);
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
-            var processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgDst.IsValidValue)
             {
@@ -116,13 +115,13 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            var ntdbgStatus = NativeMethods.NtdbgOk;
-            if (NativeMethods.NtdbgOk !=
-                (ntdbgStatus = MemoryHelpers.LoadFileToMemory(strArgFile, processId, startAddress, dataSize)))
+            if (!MemoryHelpers.LoadFileToMemory(strArgFile,
+                    Context.IDE.Debugger.CurrentStackFrame,
+                    startAddress,
+                    dataSize
+                ))
             {
                 Context.CONSOLE.Write("Couldn`t load memory to address:" + "0x" + startAddress.ToString("X") + " !");
-                Context.CONSOLE.Write("Error code:" + ntdbgStatus + " - " + NativeMethods.GetStatusString(ntdbgStatus) +
-                                      ".");
                 return;
             }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using VSDebugCoreLib.Utils;
 
@@ -61,7 +61,6 @@ namespace VSDebugCoreLib.Commands.Memory
             var varArgDst = Context.IDE.Debugger.GetExpression(strArgDst, false, 100);
             var varArgSrc = Context.IDE.Debugger.GetExpression(strArgSrc, false, 100);
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
-            var processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgDst.IsValidValue)
             {
@@ -105,14 +104,15 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            var ntdbgStatus = NativeMethods.NtdbgOk;
-            if (NativeMethods.NtdbgOk !=
-                (ntdbgStatus = MemoryHelpers.ProcMemoryCopy(processId, dstAddress, srcAddress, dataSize)))
+            if (!MemoryHelpers.ProcMemoryCopy(
+                   Context.IDE.Debugger.CurrentStackFrame,
+                   dstAddress,
+                   srcAddress,
+                   dataSize
+               ))
             {
                 Context.CONSOLE.Write("Memory copy src:" + NumberHelpers.ToHex(srcAddress) + " dst:" +
                                       NumberHelpers.ToHex(dstAddress) + " " + dataSize + " failed!");
-                Context.CONSOLE.Write("Error code:" + ntdbgStatus + " - " + NativeMethods.GetStatusString(ntdbgStatus) +
-                                      ".");
                 return;
             }
 

@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using VSDebugCoreLib.Utils;
 
@@ -55,7 +55,6 @@ namespace VSDebugCoreLib.Commands.Memory
             var strArgAddr = argv[0];
 
             var varArgAddr = Context.IDE.Debugger.GetExpression(strArgAddr, false, 100);
-            var processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgAddr.IsValidValue)
             {
@@ -78,14 +77,7 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            var ntdbgStatus = NativeMethods.NtdbgOk;
-            if (NativeMethods.NtdbgOk != (ntdbgStatus = MemoryHelpers.ProcFree(processId, lpAddress)))
-            {
-                Context.CONSOLE.Write("Failed to release memory!");
-                Context.CONSOLE.Write("Error code:" + ntdbgStatus + " - " + NativeMethods.GetStatusString(ntdbgStatus) +
-                                      ".");
-                return;
-            }
+            MemoryHelpers.ProcFree(Context.IDE.Debugger.CurrentStackFrame, lpAddress);
 
             Context.CONSOLE.Write("Released memory at address: " + NumberHelpers.ToHex(lpAddress));
         }

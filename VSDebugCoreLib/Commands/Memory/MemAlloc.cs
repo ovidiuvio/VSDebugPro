@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using VSDebugCoreLib.Utils;
 
@@ -55,7 +55,6 @@ namespace VSDebugCoreLib.Commands.Memory
             var strArgSize = argv[0];
 
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
-            var processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgSize.IsValidValue)
             {
@@ -78,8 +77,7 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            ulong qwPtr = 0;
-            qwPtr = MemoryHelpers.ProcAlloc(processId, dataSize);
+            ulong qwPtr = MemoryHelpers.ProcAlloc(Context.IDE.Debugger.CurrentStackFrame, dataSize);
 
             if (0 == qwPtr)
             {
