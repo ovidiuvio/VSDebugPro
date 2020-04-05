@@ -212,7 +212,6 @@
     <Compile Include="Utils\DebugHelpers.cs" />
     <Compile Include="Utils\DkmMethods.cs" />
     <Compile Include="Utils\MiscHelpers.cs" />
-    <Compile Include="Utils\NativeMethods.cs" />
     <Compile Include="Utils\MemoryHelpers.cs" />
     <Compile Include="Utils\NumberHelpers.cs" />
     <Compile Include="VSDebugCore.cs" />

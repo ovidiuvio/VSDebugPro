@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using VSDebugCoreLib.Utils;
 
@@ -61,7 +61,6 @@ namespace VSDebugCoreLib.Commands.Memory
             var varArgDst = Context.IDE.Debugger.GetExpression(strArgDst, false, 100);
             var varArgVal = Context.IDE.Debugger.GetExpression(strArgVal, false, 100);
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
-            var processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgDst.IsValidValue)
             {
@@ -105,14 +104,15 @@ namespace VSDebugCoreLib.Commands.Memory
                 return;
             }
 
-            var ntdbgStatus = NativeMethods.NtdbgOk;
-            if (NativeMethods.NtdbgOk !=
-                (ntdbgStatus = MemoryHelpers.ProcMemset(processId, dstAddress, (byte) byteval, dataSize)))
+            if (!MemoryHelpers.ProcMemset(
+                    Context.IDE.Debugger.CurrentStackFrame,
+                    dstAddress,
+                    (byte)byteval,
+                    dataSize
+                ))
             {
-                Context.CONSOLE.Write("Memory set dst:" + NumberHelpers.ToHex(dstAddress) + " " + (byte) byteval + " " +
+                Context.CONSOLE.Write("Memory set dst:" + NumberHelpers.ToHex(dstAddress) + " " + (byte)byteval + " " +
                                       dataSize + " failed!");
-                Context.CONSOLE.Write("Error code:" + ntdbgStatus + " - " + NativeMethods.GetStatusString(ntdbgStatus) +
-                                      ".");
                 return;
             }
 

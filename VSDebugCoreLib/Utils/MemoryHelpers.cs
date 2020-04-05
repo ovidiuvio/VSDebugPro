@@ -1,4 +1,5 @@
-﻿using System;
+using EnvDTE;
+using System;
 using System.IO;
 using System.Runtime.Serialization;
 using System.Runtime.Serialization.Formatters.Binary;
@@ -8,219 +9,144 @@ namespace VSDebugCoreLib.Utils
 {
     public class MemoryHelpers
     {
-        public static int TryReadProcessMemory(byte[] buffer, int processId, long startAddress, long size)
+        private const int MAXIMUM_BLOCK_SIZE = 4096;
+
+        public static bool LoadFileToMemory(string fileName, StackFrame stackFrame, long fromAddress, long lengthToWrite)
         {
-            var handle = NativeMethods.NtDbgOpenProcess(
-                NativeMethods.ProcessVmRead | NativeMethods.ProcessQueryInformation, 0, (uint) processId);
-
-            uint nIOBytes = 0;
-
-            var st = NativeMethods.NtDbgReadProcessMemory(handle
-                , startAddress
-                , buffer
-                , (uint) Math.Min(size, buffer.Length)
-                , out nIOBytes
-            );
-
-            NativeMethods.NtDbgCloseHandle(handle);
-
-            return st;
-        }
-
-        public static int LoadFileToMemory(string fileName, int processId, long fromAddress, long lengthToWrite)
-        {
-            var handle = NativeMethods.NtDbgOpenProcess(
-                NativeMethods.ProcessVmOperation | NativeMethods.ProcessVmWrite |
-                NativeMethods.ProcessQueryInformation, 0, (uint) processId);
-
-            var st = NativeMethods.NtdbgOk;
+            var process = DkmMethods.GetDkmProcess(stackFrame);
 
             using (var fs = new FileStream(fileName, FileMode.Open))
             {
-                var buffer = new byte[4096];
-                int read;
-                for (long i = 0; i < lengthToWrite && NativeMethods.NtdbgOk == st; i += read)
+                var readBuffer = new byte[Math.Min(lengthToWrite, MAXIMUM_BLOCK_SIZE)];
+
+                while (lengthToWrite > 0)
                 {
-                    read = fs.Read(buffer, 0, (int) Math.Min(lengthToWrite - i, buffer.Length));
+                    var readBytes = fs.Read(readBuffer, 0, Math.Min((int)lengthToWrite, readBuffer.Length));
 
-                    uint nIOBytes = 0;
-                    st = NativeMethods.NtDbgWriteProcessMemory(handle
-                        , fromAddress + i
-                        , buffer
-                        , (uint) read
-                        , out nIOBytes
-                    );
-                }
-            }
-
-            NativeMethods.NtDbgCloseHandle(handle);
-
-            return st;
-        }
-
-        public static bool LoadFileToMemory(string fileName, DkmProcess process, long fromAddress, long lengthToWrite)
-        {
-            var bRes = false;
-
-            using (var fs = new FileStream(fileName, FileMode.Open))
-            {
-                var bufferSize = 4096;
-                var buffer = new byte[bufferSize];
-                int read;
-                long i = 0;
-                for (i = 0; i < lengthToWrite; i += read)
-                {
-                    read = fs.Read(buffer, 0, (int) Math.Min(lengthToWrite - i, buffer.Length));
-
-                    if (read != bufferSize)
+                    if (0 == readBytes)
                     {
-                        var tmp = new byte[read];
-                        Buffer.BlockCopy(buffer, 0, tmp, 0, read);
-
-                        process.WriteMemory((ulong) (fromAddress + i), tmp);
+                        return false;
                     }
-                    else
+
+                    var writeBuffer = readBuffer;
+
+                    if (readBytes != readBuffer.Length)
                     {
-                        process.WriteMemory((ulong) (fromAddress + i), buffer);
+                        writeBuffer = new byte[readBytes];
+                        Buffer.BlockCopy(readBuffer, 0, writeBuffer, 0, readBytes);
                     }
-                }
 
-                if (i == lengthToWrite)
-                    bRes = true;
-            }
-
-            return bRes;
-        }
-
-        public static int WriteMemoryToFile(string fileName, int processId, long fromAddress, long lengthToRead,
-            FileMode fileMode = FileMode.Create)
-        {
-            var handle = NativeMethods.NtDbgOpenProcess(
-                NativeMethods.ProcessVmRead | NativeMethods.ProcessQueryInformation, 0, (uint) processId);
-
-            var st = NativeMethods.NtdbgOk;
-
-            using (var fs = new FileStream(fileName, fileMode))
-            {
-                var buffer = new byte[4096];
-                uint nIOBytes = 0;
-
-                for (long i = 0; i < lengthToRead && NativeMethods.NtdbgOk == st; i += nIOBytes)
-                {
-                    st = NativeMethods.NtDbgReadProcessMemory(handle
-                        , fromAddress + i
-                        , buffer
-                        , (uint) Math.Min(lengthToRead - i, buffer.Length)
-                        , out nIOBytes
-                    );
-
-                    if (st == NativeMethods.NtdbgOk)
-                        fs.Write(buffer, 0, (int) nIOBytes);
+                    process.WriteMemory((ulong)fromAddress, writeBuffer);
+                    fromAddress += writeBuffer.Length;
+                    lengthToWrite -= writeBuffer.Length;
                 }
             }
 
-            NativeMethods.NtDbgCloseHandle(handle);
-
-            return st;
+            return true;
         }
 
-        public static unsafe bool WriteMemoryToFile(string fileName, DkmProcess process, long fromAddress,
+        public static bool WriteMemoryToFile(string fileName, StackFrame stackFrame, long fromAddress,
             long lengthToRead, FileMode fileMode = FileMode.Create)
         {
-            var bRes = false;
+            var process = DkmMethods.GetDkmProcess(stackFrame);
 
             using (var fs = new FileStream(fileName, fileMode))
             {
-                var buffer = new byte[4096];
-                var nIOBytes = 0;
+                var buffer = new byte[Math.Min(lengthToRead, 4096)];
 
-                long i = 0;
-
-                for (i = 0; i < lengthToRead; i += nIOBytes)
+                while (lengthToRead > 0)
                 {
-                    fixed (void* pBuffer = buffer)
+                    if (buffer.Length > lengthToRead)
                     {
-                        nIOBytes = process.ReadMemory((ulong) (fromAddress + i), DkmReadMemoryFlags.None, pBuffer,
-                            (int) Math.Min(lengthToRead - i, buffer.Length));
+                        Array.Resize(ref buffer, (int)lengthToRead);
                     }
 
-                    fs.Write(buffer, 0, nIOBytes);
-                }
+                    var byteCount = process.ReadMemory((ulong)fromAddress, DkmReadMemoryFlags.None, buffer);
+                    if (buffer.Length != byteCount)
+                    {
+                        return false;
+                    }
 
-                if (i == lengthToRead)
-                    bRes = true;
+                    fs.Write(buffer, 0, byteCount);
+                    fromAddress += byteCount;
+                    lengthToRead -= byteCount;
+                }
             }
 
-            return bRes;
+            return 0 == lengthToRead;
         }
 
-        public static int ProcMemoryCopy(int processId, long dstAddress, long srcAddress, long length)
+        public static bool ProcMemoryCopy(StackFrame stackFrame, long dstAddress, long srcAddress, long length)
         {
-            var handle = NativeMethods.NtDbgOpenProcess(
-                NativeMethods.ProcessVmOperation | NativeMethods.ProcessVmRead | NativeMethods.ProcessVmWrite |
-                NativeMethods.ProcessQueryInformation, 0, (uint) processId);
+            var process = DkmMethods.GetDkmProcess(stackFrame);
+            var buffer = new byte[Math.Min(length, 4096)];
 
-            uint nIOBytes = 0;
+            while (length > 0)
+            {
+                if (buffer.Length > length)
+                {
+                    Array.Resize(ref buffer, (int)length);
+                }
 
-            var st = NativeMethods.NtDbgProcessMemCpy(handle
-                , handle
-                , srcAddress
-                , dstAddress
-                , (uint) length
-                , out nIOBytes
+                var byteCount = process.ReadMemory((ulong)srcAddress, DkmReadMemoryFlags.None, buffer);
+                if (buffer.Length != byteCount)
+                {
+                    return false;
+                }
+
+                process.WriteMemory((ulong)dstAddress, buffer);
+
+                srcAddress += byteCount;
+                dstAddress += byteCount;
+                length -= byteCount;
+            }
+
+            return true;
+        }
+
+        public static bool ProcMemset(StackFrame stackFrame, long dstAddress, byte val, long length)
+        {
+            var process = DkmMethods.GetDkmProcess(stackFrame);
+            var buffer = new byte[Math.Min(length, 4096)];
+            for (int i = 0; i < buffer.Length; ++i)
+            {
+                buffer[i] = val;
+            }
+
+            while (length > 0)
+            {
+                if (buffer.Length > length)
+                {
+                    Array.Resize(ref buffer, (int)length);
+                }
+                process.WriteMemory((ulong)dstAddress, buffer);
+                length -= buffer.Length;
+                dstAddress += buffer.Length;
+            }
+
+            return 0 == length;
+        }
+
+        public static ulong ProcAlloc(StackFrame stackFrame, long size)
+        {
+            var process = DkmMethods.GetDkmProcess(stackFrame);
+
+            return process.AllocateVirtualMemory(0,
+                (int)size,
+                0x3000, // MEM_COMMIT | MEM_RESERVE
+                0x04    // PAGE_READWRITE
             );
-
-            NativeMethods.NtDbgCloseHandle(handle);
-
-            return st;
         }
 
-        public static int ProcMemset(int processId, long dstAddress, byte val, long length)
+        public static void ProcFree(StackFrame stackFrame, long address)
         {
-            var handle = NativeMethods.NtDbgOpenProcess(
-                NativeMethods.ProcessVmOperation | NativeMethods.ProcessVmRead | NativeMethods.ProcessVmWrite |
-                NativeMethods.ProcessQueryInformation, 0, (uint) processId);
+            var process = DkmMethods.GetDkmProcess(stackFrame);
 
-            var st = NativeMethods.NtdbgOk;
-
-            uint nIOBytes = 0;
-
-            st = NativeMethods.NtDbgProcessMemSet(handle
-                , dstAddress
-                , val
-                , (uint) length
-                , out nIOBytes
+            process.FreeVirtualMemory(
+                (ulong)address,
+                0,
+                0x8000  // MEM_RELEASE 
             );
-
-            NativeMethods.NtDbgCloseHandle(handle);
-
-            return st;
-        }
-
-        public static ulong ProcAlloc(int processId, long size)
-        {
-            var handle = NativeMethods.NtDbgOpenProcess(
-                NativeMethods.ProcessVmOperation | NativeMethods.ProcessVmRead | NativeMethods.ProcessVmWrite |
-                NativeMethods.ProcessQueryInformation, 0, (uint) processId);
-
-            var dwRet = NativeMethods.NtDbgProcessAlloc(handle, (uint) size);
-
-            NativeMethods.NtDbgCloseHandle(handle);
-
-            return dwRet;
-        }
-
-        public static int ProcFree(int processId, long address)
-        {
-            var handle = NativeMethods.NtDbgOpenProcess(
-                NativeMethods.ProcessVmOperation | NativeMethods.ProcessVmRead | NativeMethods.ProcessVmWrite |
-                NativeMethods.ProcessQueryInformation, 0, (uint) processId);
-
-            var st = NativeMethods.NtDbgProcessFree(handle, (ulong) address);
-
-            NativeMethods.NtDbgCloseHandle(handle);
-
-            return st;
         }
 
         public static MemoryStream SerializeToStream(object o)

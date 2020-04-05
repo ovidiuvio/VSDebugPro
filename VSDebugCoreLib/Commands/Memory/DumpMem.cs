@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Globalization;
 using System.IO;
 using VSDebugCoreLib.Utils;
@@ -119,7 +119,6 @@ namespace VSDebugCoreLib.Commands.Memory
 
             var varArgSource = Context.IDE.Debugger.GetExpression(strArgSource, false, 100);
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
-            var processId = Context.IDE.Debugger.CurrentProcess.ProcessID;
 
             if (!varArgSource.IsValidValue)
             {
@@ -158,32 +157,15 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (TknAppend == chrFlag && File.Exists(strArgFile)) fileMode = FileMode.Append;
 
-            if (!DebugHelpers.IsMiniDumpProcess(Context.IDE.Debugger.CurrentProcess))
+            if (!MemoryHelpers.WriteMemoryToFile(strArgFile,
+                     Context.IDE.Debugger.CurrentStackFrame,
+                     startAddress,
+                     dataSize,
+                     fileMode
+                 ))
             {
-                var ntdbgStatus = NativeMethods.NtdbgOk;
-                if (NativeMethods.NtdbgOk != (ntdbgStatus =
-                        MemoryHelpers.WriteMemoryToFile(strArgFile, processId, startAddress, dataSize, fileMode)))
-                {
-                    File.Delete(strArgFile);
-
-                    Context.CONSOLE.Write("Couldn`t dump memory to file!");
-                    Context.CONSOLE.Write("Error code:" + ntdbgStatus + " - " +
-                                          NativeMethods.GetStatusString(ntdbgStatus) + ".");
-                    return;
-                }
-            }
-            else
-            {
-                bRet = MemoryHelpers.WriteMemoryToFile(strArgFile,
-                    DkmMethods.GetDkmProcess(Context.IDE.Debugger.CurrentStackFrame),
-                    startAddress,
-                    dataSize,
-                    fileMode);
-                if (!bRet)
-                {
-                    Context.CONSOLE.Write("Couldn`t dump memory to file!");
-                    return;
-                }
+                Context.CONSOLE.Write("Couldn`t dump memory to file!");
+                return;
             }
 
             Context.CONSOLE.Write("Wrote: " + dataSize + " bytes to: " + MiscHelpers.GetClickableFileName(strArgFile));
