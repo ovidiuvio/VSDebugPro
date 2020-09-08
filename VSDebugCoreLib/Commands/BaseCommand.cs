@@ -1,4 +1,6 @@
-﻿namespace VSDebugCoreLib.Commands
+using System.Collections.Generic;
+
+namespace VSDebugCoreLib.Commands
 {
     public class BaseCommand : IConsoleCommand
     {
@@ -6,6 +8,7 @@
         protected string CommandDescription;
         protected string CommandHelpString;
         protected ECommandStatus CommandStatusFlag;
+        protected string[] CommandArguments;
 
         public BaseCommand(VSDebugContext context, int cmdId, string strId)
         {
@@ -24,7 +27,7 @@
         public string CommandInfo => CommandDescription;
         public virtual ECommandStatus CommandStatus => CommandStatusFlag;
 
-        public virtual void Execute(string text)
+        public virtual void Execute(string[] args)
         {
         }
     }

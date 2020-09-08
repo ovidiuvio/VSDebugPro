@@ -1,8 +1,9 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using Microsoft.VisualStudio.Text;
 using VSDebugCoreLib.Commands;
+using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Console
 {
@@ -39,35 +40,38 @@ namespace VSDebugCoreLib.Console
         {
             try
             {
-                char[] sp = {' ', '\t'};
-                var argv = text.Split(sp, 2, StringSplitOptions.RemoveEmptyEntries);
-                string alias = null;
+                var args = MiscHelpers.ParseCommand(text);
 
-                if (argv.Length == 0)
+                if (args.Length == 0)
                     return;
 
-                // replace first argument with alias value
-                if (null != (alias = Context.Settings.Alias.FindAliasValue(argv[0])))
-                {
-                    if (2 == argv.Length)
-                        text = alias + " " + argv[1];
-                    else if (1 == argv.Length) text = alias;
+                var commandStr = args[0];
+                var argv = MiscHelpers.ShiftArray(args);
 
-                    argv = text.Split(sp, 2, StringSplitOptions.RemoveEmptyEntries);
+                string alias;
+                if (null != (alias = Context.Settings.Alias.FindAliasCommand(commandStr)))
+                {
+                    var aliasArgs = Context.Settings.Alias.FindAliasArguments(commandStr);
+                    commandStr = alias;
+
+                    var newArgv = new string[argv.Length + aliasArgs.Length];
+                    // first saved args, then additional ones
+                    Array.Copy(aliasArgs, newArgv, aliasArgs.Length);
+                    Array.Copy(argv, 0, newArgv, aliasArgs.Length, argv.Length);
+                    argv = newArgv;
                 }
 
-                var command = FindCommand(argv[0]);
-
+                var command = FindCommand(commandStr);
                 if (command == null)
                 {
-                    var strError = "Command: " + "<" + argv[0] + ">" + " is not valid.";
+                    var strError = "Command: " + "<" + commandStr + ">" + " is not valid.";
                     Write(strError);
                     return;
                 }
 
                 if (ECommandStatus.CommandStatusDisabled == command.CommandStatus)
                 {
-                    var strError = "Command: " + "<" + argv[0] + ">" + " is only available while debugging.";
+                    var strError = "Command: " + "<" + commandStr + ">" + " is only available while debugging.";
                     Write(strError);
 
                     return;
@@ -75,16 +79,13 @@ namespace VSDebugCoreLib.Console
 
                 if (ECommandStatus.CommandStatusNaMiniDump == command.CommandStatus)
                 {
-                    var strError = "Command: " + "<" + argv[0] + ">" + " is not available for minidumps.";
+                    var strError = "Command: " + "<" + commandStr + ">" + " is not available for minidumps.";
                     Write(strError);
 
                     return;
                 }
 
-                if (argv.Length > 1)
-                    command.Execute(argv[1]);
-                else
-                    command.Execute("");
+                command.Execute(argv);
             }
             catch (Exception e)
             {
