@@ -1,4 +1,11 @@
 VSDebugPro_3-3-0-1_2019-08-06
+    
+    [+] The extension is now using Visual Studio debugger api
+    [+] Remote debugging 
+    [+] Improved arguments parsing for commands
+    [*] Updated copyright
+
+VSDebugPro_3-3-0-1_2019-08-06
 
 	[*] Installer bugfix
 	[*] Updated copyright years

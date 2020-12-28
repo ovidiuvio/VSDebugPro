@@ -19,7 +19,7 @@ namespace VSDebugCoreLib {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "15.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -79,24 +79,27 @@ namespace VSDebugCoreLib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VSDebugPro_3-2-0-0_2018-08-22
+        ///   Looks up a localized string similar to VSDebugPro_3-3-0-1_2019-08-06
+        ///    
+        ///    [+] The extension is now using Visual Studio debugger api
+        ///    [+] Remote debugging 
+        ///    [+] Improved arguments parsing for commands
+        ///    [*] Updated copyright
+        ///
+        ///VSDebugPro_3-3-0-1_2019-08-06
+        ///
+        ///	[*] Installer bugfix
+        ///	[*] Updated copyright years
+        ///
+        ///VSDebugPro_3-3-0-0_2019-08-03
+        ///
+        ///    [+] Enabled install for newever versions of VS2019
+        ///	[*] Code refactoring and fixes
+        ///
+        ///VSDebugPro_3-2-0-1_2019-03-23
         ///
         ///    [+] Enabled install for VS2019
-        ///	[*] Updated AddEntry method for the commands history buffer
-        ///
-        ///VSDebugPro_3-2-0-0_2018-08-22
-        ///
-        ///    [+] Added DkmProcess internal apis
-        ///    [+] Added minidump status message for commands
-        ///    [+] Added minidump support for dumpmem command
-        ///
-        ///VSDebugPro_3-1-0-3_2018-08-12
-        ///
-        ///    [+] Changed calling convention for libntdbg
-        ///    [+] Added memory access check for Read / Write memory
-        ///    [+] Working directory will now default to Temp
-        ///
-        ///VSDeb [rest of string was truncated]&quot;;.
+        ///	[*] Updated AddEntry meth [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string changelog {
             get {
@@ -335,7 +338,7 @@ namespace VSDebugCoreLib {
         /// * 
         /// * 
         /// * MIT License
-        /// * Copyright (c) 2018 Ovidiu Ionescu
+        /// * Copyright (c) 2021 Ovidiu Ionescu
         /// * http://www.vsdebug.pro
         /// *
         /// * Permission is hereby granted, free of charge, to any person obtaining a copy
@@ -351,7 +354,7 @@ namespace VSDebugCoreLib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to © Copyright 2012 - 2019 Ovidiu Ionescu.
+        ///   Looks up a localized string similar to © Copyright Ovidiu Ionescu.
         /// </summary>
         internal static string ProductCopyright {
             get {

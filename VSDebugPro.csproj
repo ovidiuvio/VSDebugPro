@@ -230,10 +230,6 @@
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
     <Resource Include="changelog.txt" />
-    <Content Include="lib\wow64ext.dll">
-      <IncludeInVSIX>true</IncludeInVSIX>
-      <VSIXSubPath>/</VSIXSubPath>
-    </Content>
     <Content Include="Resources\vsdt_screenshot.jpg">
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
@@ -245,6 +241,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="source.extension.vsixmanifest" />
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="lib\" />
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
