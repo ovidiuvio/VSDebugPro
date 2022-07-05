@@ -9,7 +9,7 @@ namespace VSDebugCoreLib.Utils
 {
     public class MemoryHelpers
     {
-        private const int MAXIMUM_BLOCK_SIZE = 4096;
+        private const int MAXIMUM_BLOCK_SIZE = (1 << 16);
 
         public static bool LoadFileToMemory(string fileName, StackFrame stackFrame, long fromAddress, long lengthToWrite)
         {
@@ -52,7 +52,7 @@ namespace VSDebugCoreLib.Utils
 
             using (var fs = new FileStream(fileName, fileMode))
             {
-                var buffer = new byte[Math.Min(lengthToRead, 4096)];
+                var buffer = new byte[Math.Min(lengthToRead, MAXIMUM_BLOCK_SIZE)];
 
                 while (lengthToRead > 0)
                 {
@@ -79,7 +79,7 @@ namespace VSDebugCoreLib.Utils
         public static bool ProcMemoryCopy(StackFrame stackFrame, long dstAddress, long srcAddress, long length)
         {
             var process = DkmMethods.GetDkmProcess(stackFrame);
-            var buffer = new byte[Math.Min(length, 4096)];
+            var buffer = new byte[Math.Min(length, MAXIMUM_BLOCK_SIZE)];
 
             while (length > 0)
             {
@@ -107,7 +107,7 @@ namespace VSDebugCoreLib.Utils
         public static bool ProcMemset(StackFrame stackFrame, long dstAddress, byte val, long length)
         {
             var process = DkmMethods.GetDkmProcess(stackFrame);
-            var buffer = new byte[Math.Min(length, 4096)];
+            var buffer = new byte[Math.Min(length, MAXIMUM_BLOCK_SIZE)];
             for (int i = 0; i < buffer.Length; ++i)
             {
                 buffer[i] = val;

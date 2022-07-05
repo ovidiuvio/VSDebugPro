@@ -1,6 +1,7 @@
 VSDebugPro_3-4-0-0_2022-05-07
     [+] Always use debugger api
     [+] Memory operations for remote debugging
+    [*] Memory ops buffer increased to 64k
     [*] Cleanup
     [*] Updated copyright
 
