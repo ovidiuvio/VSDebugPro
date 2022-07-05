@@ -1,11 +1,8 @@
-using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
-using System.Diagnostics;
 using System.IO;
 using VSDebugCoreLib.Properties;
-using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib
 {
@@ -44,16 +41,14 @@ namespace VSDebugCoreLib
         {
         }
 
-        public CAliasMapElement(string alias, string val, string[] arguments)
+        public CAliasMapElement(string alias, string val)
         {
             Alias = alias;
             Value = val;
-            Arguments = arguments;
         }
 
         public string Alias { get; set; }
         public string Value { get; set; }
-        public string[] Arguments { get; set; }
     }
 
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
@@ -228,13 +223,13 @@ namespace VSDebugCoreLib
 
         public CAliasMap AliasList { get; set; }
 
-        public bool AddAlias(string alias, string value, string[] args)
+        public bool AddAlias(string alias, string value)
         {
             var res = false;
 
             if (null == FindAlias(alias))
             {
-                AliasList.Values.Add(new CAliasMapElement(alias, value, args));
+                AliasList.Values.Add(new CAliasMapElement(alias, value));
                 res = true;
             }
 
@@ -251,24 +246,13 @@ namespace VSDebugCoreLib
             return res;
         }
 
-        public string FindAliasCommand(string alias)
+        public string FindAliasValue(string alias)
         {
             string res = null;
             var item = FindAlias(alias);
 
             if (null != item)
                 res = item.Value;
-
-            return res;
-        }
-
-        public string[] FindAliasArguments(string alias)
-        {
-            string[] res = null;
-            var item = FindAlias(alias);
-
-            if (null != item)
-                res = item.Arguments;
 
             return res;
         }
@@ -340,16 +324,10 @@ namespace VSDebugCoreLib
             VSDSettings.GeneralSettings.Tools.ExtensionsMap = Settings.Default.ExtensionsMap;
             VSDSettings.Alias.AliasList = Settings.Default.AliasMap;
             VSDSettings.CmdHistory = Settings.Default.CmdHistory;
-
-            if (0 == Settings.Default.Version)
-            {
-                UpgradeV0toV1();
-            }
         }
 
         public void SaveSettings()
         {
-            Settings.Default.Version = 1;
             Settings.Default.WorkingDirectory = VSDSettings.GeneralSettings.WorkingDirectory;
             Settings.Default.DiffTool = VSDSettings.GeneralSettings.DiffTool;
             Settings.Default.HexEditor = VSDSettings.GeneralSettings.HexEditor;
@@ -358,30 +336,8 @@ namespace VSDebugCoreLib
             Settings.Default.ExtensionsMap = VSDSettings.GeneralSettings.Tools.ExtensionsMap;
             Settings.Default.AliasMap = VSDSettings.Alias.AliasList;
             Settings.Default.CmdHistory = VSDSettings.CmdHistory;
-            Settings.Default.Save();
-        }
 
-        private void UpgradeV0toV1()
-        {
-            var aliases = new CAliasMap();
-            foreach (var alias in VSDSettings.Alias.AliasList.Values)
-            {
-                if (null == alias.Arguments)
-                {
-                    try
-                    {
-                        var args = MiscHelpers.ParseCommand(alias.Value);
-                        alias.Value = args[0];
-                        alias.Arguments = MiscHelpers.ShiftArray(args);
-                        aliases.Values.Add(alias);
-                    }
-                    catch (Exception e)
-                    {
-                        Debugger.Log(3, "Warning", "Failed to convert alias <" + alias.Alias + ">: " + e.Message);
-                    }
-                }
-            }
-            VSDSettings.Alias.AliasList = aliases;
+            Settings.Default.Save();
         }
     }
 }

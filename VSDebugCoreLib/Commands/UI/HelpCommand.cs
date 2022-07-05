@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.UI
@@ -16,11 +16,14 @@ namespace VSDebugCoreLib.Commands.UI
             MiscHelpers.LaunchLink(@"http://" + Resources.HelpWebsite);
         }
 
-        public override void Execute(string[] args)
+        public override void Execute(string text)
         {
-            base.Execute(args);
+            base.Execute(text);
 
-            if (0 == args.Length)
+            char[] sp = {' ', '\t'};
+            var argv = text.Split(sp, 2);
+
+            if (1 == argv.Length && argv[0] == string.Empty)
             {
                 Context.CONSOLE.Write("For more information on a specific command, type help command-name");
                 Context.CONSOLE.WriteSeparator();
@@ -32,9 +35,9 @@ namespace VSDebugCoreLib.Commands.UI
 
                 Context.CONSOLE.WriteSeparator();
             }
-            else
+            else if (argv.Length >= 1 && argv[0] != string.Empty)
             {
-                var command = Context.CONSOLE.FindCommand(args[0]);
+                var command = Context.CONSOLE.FindCommand(argv[0]);
 
                 if (null != command)
                 {
@@ -52,7 +55,7 @@ namespace VSDebugCoreLib.Commands.UI
                 }
                 else
                 {
-                    Context.CONSOLE.Write("Command: " + "<" + args[0] + ">" + " is not valid.");
+                    Context.CONSOLE.Write("Command: " + "<" + argv[0] + ">" + " is not valid.");
                 }
             }
         }

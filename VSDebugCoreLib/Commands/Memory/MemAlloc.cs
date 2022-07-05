@@ -39,17 +39,20 @@ namespace VSDebugCoreLib.Commands.Memory
             }
         }
 
-        public override void Execute(string[] args)
+        public override void Execute(string text)
         {
-            base.Execute(args);
+            base.Execute(text);
 
-            if (args.Length != 1)
+            char[] sp = {' ', '\t'};
+            var argv = text.Split(sp, 1, StringSplitOptions.RemoveEmptyEntries);
+
+            if (argv.Length != 1)
             {
                 Context.CONSOLE.Write(CommandHelp);
                 return;
             }
 
-            var strArgSize = args[0];
+            var strArgSize = argv[0];
 
             var varArgSize = Context.IDE.Debugger.GetExpression(strArgSize, false, 100);
 

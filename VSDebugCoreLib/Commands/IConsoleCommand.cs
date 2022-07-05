@@ -1,4 +1,4 @@
-namespace VSDebugCoreLib.Commands
+﻿namespace VSDebugCoreLib.Commands
 {
     /// <summary>
     ///     Command status
@@ -38,6 +38,6 @@ namespace VSDebugCoreLib.Commands
         /// <summary>
         ///     Execute function
         /// </summary>
-        void Execute(string[] args);
+        void Execute(string text);
     }
 }
