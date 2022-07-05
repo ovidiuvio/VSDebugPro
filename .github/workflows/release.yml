@@ -20,10 +20,6 @@ jobs:
     steps:
     - name: Checkout repository
       uses: actions/checkout@v2   
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: '4.5.x'
     - name: Setup MSBuild.exe
       uses: microsoft/setup-msbuild@v1.0.2
       id: MsBuildSetup
