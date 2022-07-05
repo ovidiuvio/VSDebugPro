@@ -25,6 +25,17 @@ jobs:
       id: MsBuildSetup
     - name: Restore NuGet Packages
       run: nuget restore $env:SolutionPath
+    - name: Calculate next version
+      uses: cezarypiatek/NextVersionGeneratorAction@0.4
+      with:
+        minor-pattern: '\bAdd\b'
+        patch-pattern: '.*'
+        output-to-env-variable: 'Version'
+    - name: Set version for Visual Studio Extension
+      uses: cezarypiatek/VsixVersionAction@1.0
+      with:
+        version: ${{ env.Version }} 
+        vsix-manifest-file: ${{ env.VsixManifestPath }}
     - name: Build extension
       run: msbuild $env:SolutionPath /t:Rebuild
       env: 
