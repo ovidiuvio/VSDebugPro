@@ -1,7 +1,10 @@
-VSDebugPro_3-4-0-2_2024-05-14
-    [*] Updated to support VS2022
+VSDebugPro_4-0-0-0
+    [+] Added support for VS2022
+    [+] Moved to NET 4.8
+    [-] Dropped support for older vs versions
     [*] Cleaned up assembly references
     [*] Converted assembly references to package references
+
 
 VSDebugPro_3-4-0-1_2022-05-07
     [+] Always use debugger api

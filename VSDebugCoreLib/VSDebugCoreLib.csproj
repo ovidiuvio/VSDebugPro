@@ -207,16 +207,16 @@
       <Version>17.8.1101801</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Debugger.Interop.11.0">
-      <Version>17.0.31902.203</Version>
+      <Version>17.5.33428.366</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Debugger.InteropA">
-      <Version>17.0.31902.203</Version>
+      <Version>17.9.37000</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Editor">
       <Version>17.9.187</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Interop">
-      <Version>17.0.31902.203</Version>
+      <Version>17.9.37000</Version>
     </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.OLE.Interop">
       <Version>17.9.37000</Version>
