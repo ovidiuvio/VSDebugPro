@@ -78,10 +78,12 @@ namespace VSDebugCoreLib
     {
         public CToolsSettings()
         {
-            Values = new List<string>();
-            Values.Add("Text Editor");
-            Values.Add("Hex Editor");
-            Values.Add("Image Editor");
+            Values = new List<string>
+            {
+                "Text Editor",
+                "Hex Editor",
+                "Image Editor"
+            };
             Selected = "Hex Editor";
 
             ExtensionsMap = new CExtensionsMap();
