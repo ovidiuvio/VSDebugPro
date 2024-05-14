@@ -99,9 +99,7 @@ namespace VSDebugCoreLib
 
         public void OnPropertyChanged(string propName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(
-                    this, new PropertyChangedEventArgs(propName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
         #endregion INotifyPropertyChanged Members
@@ -206,9 +204,7 @@ namespace VSDebugCoreLib
 
         private void OnPropertyChanged(string propName)
         {
-            if (PropertyChanged != null)
-                PropertyChanged(
-                    this, new PropertyChangedEventArgs(propName));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propName));
         }
 
         #endregion INotifyPropertyChanged Members
