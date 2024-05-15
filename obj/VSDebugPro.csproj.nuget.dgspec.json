@@ -1,0 +1,222 @@
+{
+  "format": 1,
+  "restore": {
+    "D:\\a\\VSDebugPro\\VSDebugPro\\VSDebugPro.csproj": {}
+  },
+  "projects": {
+    "D:\\a\\VSDebugPro\\VSDebugPro\\VSDebugCoreLib\\VSDebugCoreLib.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\a\\VSDebugPro\\VSDebugPro\\VSDebugCoreLib\\VSDebugCoreLib.csproj",
+        "projectName": "VSDebugCoreLib",
+        "projectPath": "D:\\a\\VSDebugPro\\VSDebugPro\\VSDebugCoreLib\\VSDebugCoreLib.csproj",
+        "packagesPath": "C:\\Users\\runneradmin\\.nuget\\packages\\",
+        "outputPath": "D:\\a\\VSDebugPro\\VSDebugPro\\VSDebugCoreLib\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\runneradmin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "projectReferences": {}
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "dependencies": {
+            "Microsoft.VisualStudio.Composition": {
+              "target": "Package",
+              "version": "[17.7.40, )"
+            },
+            "Microsoft.VisualStudio.Debugger.Engine": {
+              "target": "Package",
+              "version": "[17.8.1101801, )"
+            },
+            "Microsoft.VisualStudio.Debugger.Interop.11.0": {
+              "target": "Package",
+              "version": "[17.5.33428.366, )"
+            },
+            "Microsoft.VisualStudio.Debugger.InteropA": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.Editor": {
+              "target": "Package",
+              "version": "[17.9.187, )"
+            },
+            "Microsoft.VisualStudio.Interop": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.OLE.Interop": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.Shell.15.0": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.Shell.Framework": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.Shell.Interop": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.Text.Data": {
+              "target": "Package",
+              "version": "[17.9.187, )"
+            },
+            "Microsoft.VisualStudio.Utilities": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-arm64": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    },
+    "D:\\a\\VSDebugPro\\VSDebugPro\\VSDebugPro.csproj": {
+      "version": "1.0.0",
+      "restore": {
+        "projectUniqueName": "D:\\a\\VSDebugPro\\VSDebugPro\\VSDebugPro.csproj",
+        "projectName": "VSDebugPro",
+        "projectPath": "D:\\a\\VSDebugPro\\VSDebugPro\\VSDebugPro.csproj",
+        "packagesPath": "C:\\Users\\runneradmin\\.nuget\\packages\\",
+        "outputPath": "D:\\a\\VSDebugPro\\VSDebugPro\\obj\\",
+        "projectStyle": "PackageReference",
+        "skipContentFileWrite": true,
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
+        "configFilePaths": [
+          "C:\\Users\\runneradmin\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
+        ],
+        "originalTargetFrameworks": [
+          "net48"
+        ],
+        "sources": {
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
+          "https://api.nuget.org/v3/index.json": {}
+        },
+        "frameworks": {
+          "net48": {
+            "projectReferences": {
+              "D:\\a\\VSDebugPro\\VSDebugPro\\VSDebugCoreLib\\VSDebugCoreLib.csproj": {
+                "projectPath": "D:\\a\\VSDebugPro\\VSDebugPro\\VSDebugCoreLib\\VSDebugCoreLib.csproj"
+              }
+            }
+          }
+        },
+        "restoreAuditProperties": {
+          "enableAudit": "true",
+          "auditLevel": "low",
+          "auditMode": "direct"
+        }
+      },
+      "frameworks": {
+        "net48": {
+          "dependencies": {
+            "Microsoft.VisualStudio.Composition": {
+              "target": "Package",
+              "version": "[17.7.40, )"
+            },
+            "Microsoft.VisualStudio.Debugger.Engine": {
+              "target": "Package",
+              "version": "[17.8.1101801, )"
+            },
+            "Microsoft.VisualStudio.Debugger.Interop.11.0": {
+              "target": "Package",
+              "version": "[17.5.33428.366, )"
+            },
+            "Microsoft.VisualStudio.Debugger.InteropA": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.Editor": {
+              "target": "Package",
+              "version": "[17.9.187, )"
+            },
+            "Microsoft.VisualStudio.Interop": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.OLE.Interop": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.Shell.15.0": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.Shell.Framework": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.Shell.Interop": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            },
+            "Microsoft.VisualStudio.Text.Data": {
+              "target": "Package",
+              "version": "[17.9.187, )"
+            },
+            "Microsoft.VisualStudio.Utilities": {
+              "target": "Package",
+              "version": "[17.9.37000, )"
+            }
+          }
+        }
+      },
+      "runtimes": {
+        "win": {
+          "#import": []
+        },
+        "win-arm64": {
+          "#import": []
+        },
+        "win-x64": {
+          "#import": []
+        },
+        "win-x86": {
+          "#import": []
+        }
+      }
+    }
+  }
+}
