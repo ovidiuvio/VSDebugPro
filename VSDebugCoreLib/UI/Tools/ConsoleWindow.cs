@@ -91,50 +91,51 @@ namespace VSDebugCoreLib.UI.Tools
             base.Initialize();
 
             var compMod = GetService(typeof(SComponentModel)) as IComponentModel;
-            var bufferFactory = compMod.GetService<ITextBufferFactoryService>();
-            var editorFactory = compMod.GetService<ITextEditorFactoryService>();
-            var adapterFactory = compMod.GetService<IVsEditorAdaptersFactoryService>();
-            var registryService = compMod.GetService<IContentTypeRegistryService>();
-
-            //completionBroker = compMod.GetService<ICompletionBroker>();
-
-            textView = adapterFactory.CreateVsTextViewAdapter(
-                GetService(typeof(IOleServiceProvider)) as IOleServiceProvider);
-            var textBuffer =
-                adapterFactory.CreateVsTextBufferAdapter(
-                    GetService(typeof(IOleServiceProvider)) as IOleServiceProvider);
-            var textViewInitFlags = (uint) TextViewInitFlags.VIF_DEFAULT |
-                                    (uint) TextViewInitFlags.VIF_HSCROLL |
-                                    (uint) TextViewInitFlags.VIF_VSCROLL;
-            textBuffer.InitializeContent("", 0);
-            textView.Initialize(textBuffer as IVsTextLines, IntPtr.Zero, textViewInitFlags, null);
-
-            // Create Dev10 objects
-            _textView = adapterFactory.GetWpfTextView(textView);
-            mefTextBuffer = adapterFactory.GetDataBuffer(textBuffer);
-
-            var userData = textView as IVsUserData;
-            if (userData != null)
+            if (compMod != null)
             {
-                var g = DefGuidList.guidIWpfTextViewHost;
-                object obj;
-                var hr = userData.GetData(ref g, out obj);
-                if (hr == VSConstants.S_OK) _textViewHost = obj as IWpfTextViewHost;
+                var adapterFactory = compMod.GetService<IVsEditorAdaptersFactoryService>();
+                var registryService = compMod.GetService<IContentTypeRegistryService>();
+
+                //completionBroker = compMod.GetService<ICompletionBroker>();
+
+                textView = adapterFactory.CreateVsTextViewAdapter(
+                    GetService(typeof(IOleServiceProvider)) as IOleServiceProvider);
+                var textBuffer =
+                    adapterFactory.CreateVsTextBufferAdapter(
+                        GetService(typeof(IOleServiceProvider)) as IOleServiceProvider);
+                var textViewInitFlags = (uint) TextViewInitFlags.VIF_DEFAULT |
+                                        (uint) TextViewInitFlags.VIF_HSCROLL |
+                                        (uint) TextViewInitFlags.VIF_VSCROLL;
+                textBuffer.InitializeContent("", 0);
+                textView.Initialize(textBuffer as IVsTextLines, IntPtr.Zero, textViewInitFlags, null);
+
+                // Create Dev10 objects
+                _textView = adapterFactory.GetWpfTextView(textView);
+                mefTextBuffer = adapterFactory.GetDataBuffer(textBuffer);
+
+                var userData = textView as IVsUserData;
+                if (userData != null)
+                {
+                    var g = DefGuidList.guidIWpfTextViewHost;
+                    object obj;
+                    var hr = userData.GetData(ref g, out obj);
+                    if (hr == VSConstants.S_OK) _textViewHost = obj as IWpfTextViewHost;
+                }
+
+                // disable zoom view
+                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.ZoomControlId, false);
+
+                //Initialize the history
+                if (null == history)
+                    history = new HistoryBuffer();
+
+                adapterFactory.GetWpfTextView(textView).Caret.MoveTo(new SnapshotPoint(mefTextBuffer.CurrentSnapshot,
+                    mefTextBuffer.CurrentSnapshot.Length));
+
+                var ivsdContentType = registryService.GetContentType(VSDContentTypeDefinition.ContentType);
+
+                mefTextBuffer.ChangeContentType(ivsdContentType, null);
             }
-
-            // disable zoom view
-            _textView.Options.SetOptionValue(DefaultTextViewHostOptions.ZoomControlId, false);
-
-            //Initialize the history
-            if (null == history)
-                history = new HistoryBuffer();
-
-            adapterFactory.GetWpfTextView(textView).Caret.MoveTo(new SnapshotPoint(mefTextBuffer.CurrentSnapshot,
-                mefTextBuffer.CurrentSnapshot.Length));
-
-            var ivsdContentType = registryService.GetContentType(VSDContentTypeDefinition.ContentType);
-
-            mefTextBuffer.ChangeContentType(ivsdContentType, null);
 
             // init console input
             WriteConsoleInputSymbol();
