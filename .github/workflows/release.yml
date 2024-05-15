@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - 'push-action/**'
     paths:
       - '*/**'
 jobs:
@@ -50,12 +49,11 @@ jobs:
         git add ./Properties/AssemblyInfo.cs
         git add ./VSDebugCoreLib/Properties/AssemblyInfo.cs
         git add ./source.extension.vsixmanifest
-        git commit -m "VSDebugPro ${{ env.Version }}"
-    - name: Pushing to the protected branch 'protected'
-      uses: CasperWA/push-protected@v2
+    - name: Commit and Push to master
+      uses: fabriziocacicia/commit-and-push-to-protected-branch-action@v0.1.0
       with:
-        token: ${{ secrets.FORCE_PUSH_TOKEN }}
-        branch: master
+        temp_branch_prefix: push-action/
+        commit_message: "VSDebugPro ${{ env.Version }}"
     - name: Build extension
       run: msbuild $env:SolutionPath /t:Rebuild
       env: 
