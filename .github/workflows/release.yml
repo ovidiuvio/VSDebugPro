@@ -51,6 +51,8 @@ jobs:
         git add ./source.extension.vsixmanifest
     - name: Commit and Push to master
       uses: fabriziocacicia/commit-and-push-to-protected-branch-action@v0.1.0
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         temp_branch_prefix: push-action/
         commit_message: "VSDebugPro ${{ env.Version }}"
