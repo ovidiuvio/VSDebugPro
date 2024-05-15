@@ -1,0 +1,82 @@
+name: release
+on:
+  push:
+    branches:
+      - master
+    paths:
+      - '*/**'
+jobs:
+  build-extension:
+    runs-on: windows-2022
+    env: 
+        RepositoryUrl: 'https://github.com/${{ github.repository }}'
+        RepositoryBranch: '${{ github.ref }}'
+        SourceRevisionId: '${{ github.sha }}'
+        Configuration: Release
+        SolutionPath: VSDebugPro.sln
+        VsixManifestPath: source.extension.vsixmanifest
+        VsixPath: bin\Release\VSDebugPro.vsix
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v2   
+    - name: Setup MSBuild.exe
+      uses: microsoft/setup-msbuild@v2
+      id: MsBuildSetup
+    - name: Restore NuGet Packages
+      run: nuget restore $env:SolutionPath
+    - name: Calculate next version
+      uses: ovidiuvio/NextVersionGeneratorAction@1.0
+      with:
+        major-pattern: '\bMajor\b'
+        minor-pattern: '\bAdd\b'
+        patch-pattern: '.*'
+        output-to-env-variable: 'Version'
+    - name: Set version for Visual Studio Extension
+      uses: cezarypiatek/VsixVersionAction@1.2
+      with:
+        version: ${{ env.Version }} 
+        vsix-manifest-file: ${{ env.VsixManifestPath }}
+    - name: Set Assembly version
+      uses: vers-one/dotnet-project-version-updater@v1.6
+      with:
+        file: |
+          "Properties/AssemblyInfo.cs", "VSDebugCoreLib/Properties/AssemblyInfo.cs"
+        version: ${{ env.Version }}
+    - name: Commit Version
+      run: |
+        git config user.name "release-extension"
+        git config user.email "release-extension@users.noreply.github.com"
+        git add ./Properties/AssemblyInfo.cs
+        git add ./VSDebugCoreLib/Properties/AssemblyInfo.cs
+        git add ./source.extension.vsixmanifest
+        git commit -m "VSDebugPro ${{ env.Version }}"
+        git push
+    - name: Build extension
+      run: msbuild $env:SolutionPath /t:Rebuild
+      env: 
+        DeployExtension: False
+    - name: Tag Release
+      run: |
+          git config user.name "release-extension"
+          git config user.email "release-extension@users.noreply.github.com"
+          git tag -a ${{ env.Version }} -m "VSDebugPro  ${{ env.Version }}"
+          git push origin tag ${{ env.Version }}
+    - name: Create Github Release
+      id: create_release
+      uses: actions/create-release@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        tag_name: ${{ env.Version }}
+        release_name:  ${{ env.Version }}
+        draft: false
+        prerelease: false
+    - name: Upload Release Asset - VSIX
+      uses: actions/upload-release-asset@v1
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      with:
+        upload_url: ${{ steps.create_release.outputs.upload_url }}
+        asset_path: ${{ env.VsixPath }}
+        asset_name: VSDebugPro.vsix
+        asset_content_type: binary/octet-stream
