@@ -48,6 +48,7 @@ jobs:
         git config user.email "release-extension@users.noreply.github.com"
         git add ./Properties/AssemblyInfo.cs
         git add ./VSDebugCoreLib/Properties/AssemblyInfo.cs
+        git add ./source.extension.vsixmanifest
         git commit -m "VSDebugPro ${{ env.Version }}"
         git push
     - name: Build extension
