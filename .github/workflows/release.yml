@@ -42,10 +42,23 @@ jobs:
         file: |
           "Properties/AssemblyInfo.cs", "VSDebugCoreLib/Properties/AssemblyInfo.cs"
         version: ${{ env.Version }}
+    - name: Commit Version
+      run: |
+        git config user.name "release-extension"
+        git config user.email "release-extension@users.noreply.github.com"
+        git add .
+        git commit -m "Updated VSDebugPro version to ${{ env.Version }}"
+        git push
     - name: Build extension
       run: msbuild $env:SolutionPath /t:Rebuild
       env: 
         DeployExtension: False
+    - name: Tag Release
+      run: |
+          git config user.name "release-extension"
+          git config user.email "release-extension@users.noreply.github.com"
+          git tag -a ${{ env.Version }} -m "VSDebugPro  ${{ env.Version }}"
+          git push origin tag ${{ env.Version }}
     - name: Create Github Release
       id: create_release
       uses: actions/create-release@v1
