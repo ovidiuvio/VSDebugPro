@@ -2,7 +2,8 @@ name: release
 on:
   push:
     branches:
-      - release
+      - master
+      - 'push-action/**'
     paths:
       - '*/**'
 jobs:
@@ -44,13 +45,17 @@ jobs:
         version: ${{ env.Version }}
     - name: Commit Version
       run: |
-        git config user.name "release-extension"
-        git config user.email "release-extension@users.noreply.github.com"
+        git config user.name "release-bot"
+        git config user.email "release-bot@users.noreply.github.com"
         git add ./Properties/AssemblyInfo.cs
         git add ./VSDebugCoreLib/Properties/AssemblyInfo.cs
         git add ./source.extension.vsixmanifest
         git commit -m "VSDebugPro ${{ env.Version }}"
-        git push
+    - name: Pushing to the protected branch 'protected'
+      uses: CasperWA/push-protected@v2
+      with:
+        token: ${{ secrets.FORCE_PUSH_TOKEN }}
+        branch: master
     - name: Build extension
       run: msbuild $env:SolutionPath /t:Rebuild
       env: 
