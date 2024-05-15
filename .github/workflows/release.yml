@@ -36,6 +36,12 @@ jobs:
       with:
         version: ${{ env.Version }} 
         vsix-manifest-file: ${{ env.VsixManifestPath }}
+    - name: Set Assembly version
+      uses: vers-one/dotnet-project-version-updater@v1.6
+      with:
+        file: |
+          "Properties/AssemblyInfo.cs", "VSDebugCoreLib/Properties/AssemblyInfo.cs"
+        version: ${{ env.Version }}
     - name: Build extension
       run: msbuild $env:SolutionPath /t:Rebuild
       env: 
