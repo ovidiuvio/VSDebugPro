@@ -8,7 +8,7 @@ on:
       - '*/**'
 jobs:
   build-extension:
-    runs-on: windows-2019
+    runs-on: windows-2022
     env: 
         RepositoryUrl: 'https://github.com/${{ github.repository }}'
         RepositoryBranch: '${{ github.ref }}'
@@ -21,7 +21,7 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v2   
     - name: Setup MSBuild.exe
-      uses: microsoft/setup-msbuild@v1.0.2
+      uses: microsoft/setup-msbuild@v2
       id: MsBuildSetup
     - name: Restore NuGet Packages
       run: nuget restore $env:SolutionPath
@@ -32,7 +32,7 @@ jobs:
         patch-pattern: '.*'
         output-to-env-variable: 'Version'
     - name: Set version for Visual Studio Extension
-      uses: cezarypiatek/VsixVersionAction@1.0
+      uses: cezarypiatek/VsixVersionAction@1.2
       with:
         version: ${{ env.Version }} 
         vsix-manifest-file: ${{ env.VsixManifestPath }}
