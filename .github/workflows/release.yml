@@ -3,7 +3,6 @@ on:
   push:
     branches:
       - master
-      - ci-cd
     paths:
       - '*/**'
 jobs:
@@ -28,6 +27,7 @@ jobs:
     - name: Calculate next version
       uses: ovidiuvio/NextVersionGeneratorAction@1.0
       with:
+        major-pattern: '\bMajor\b'
         minor-pattern: '\bAdd\b'
         patch-pattern: '.*'
         output-to-env-variable: 'Version'
@@ -69,8 +69,8 @@ jobs:
       with:
         tag_name: ${{ env.Version }}
         release_name:  ${{ env.Version }}
-        draft: true
-        prerelease: true
+        draft: false
+        prerelease: false
     - name: Upload Release Asset - VSIX
       uses: actions/upload-release-asset@v1
       env:
