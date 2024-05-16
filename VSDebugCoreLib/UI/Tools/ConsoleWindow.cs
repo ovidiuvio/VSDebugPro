@@ -302,7 +302,7 @@ namespace VSDebugCoreLib.UI.Tools
             return !mefTextBuffer.IsReadOnly(_textView.Caret.Position.BufferPosition.Position);
         }
 
-        public string TextOfLine(int line, int endColumn, bool skipReadOnly)
+        public string TextOfLine(int line, int endColumn)
         {
             var mefLine = mefTextBuffer.CurrentSnapshot.GetLineFromLineNumber(line);
             var start = 0;
