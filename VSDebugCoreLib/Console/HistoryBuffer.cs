@@ -33,7 +33,7 @@ namespace VSDebugCoreLib.Console
         /// </summary>
         public HistoryBuffer(int bufferSize)
         {
-            if (bufferSize <= 0) throw new ArgumentOutOfRangeException("bufferSize");
+            if (bufferSize <= 0) throw new ArgumentOutOfRangeException(nameof(bufferSize));
             Cmds = new List<string>(bufferSize);
         }
 
