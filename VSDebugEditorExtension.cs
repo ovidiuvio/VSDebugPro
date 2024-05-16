@@ -465,14 +465,6 @@ namespace VSDebugPro
         }
 
         /// <summary>
-        ///     Determine if a given "word" should be highlighted
-        /// </summary>
-        private static bool WordExtentIsValid(SnapshotPoint currentRequest, TextExtent word)
-        {
-            return false;
-        }
-
-        /// <summary>
         ///     Perform a synchronous update, in case multiple background threads are running
         /// </summary>
         private void SynchronousUpdate(SnapshotPoint currentRequest, NormalizedSnapshotSpanCollection newSpans,
