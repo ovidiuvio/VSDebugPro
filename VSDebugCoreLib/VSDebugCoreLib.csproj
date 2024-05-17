@@ -86,8 +86,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Commands\Core\Alias.cs" />
-    <Compile Include="Commands\Memory\DumpMem.cs" />
-    <Compile Include="Commands\Memory\LoadMem.cs" />
+    <Compile Include="Commands\MemoryCommandBase.cs" />
+    <Compile Include="Commands\Memory\MemDump.cs" />
+    <Compile Include="Commands\Memory\MemLoad.cs" />
     <Compile Include="Commands\Memory\MemAlloc.cs" />
     <Compile Include="Commands\Memory\MemCpy.cs" />
     <Compile Include="Commands\Memory\MemDiff.cs" />

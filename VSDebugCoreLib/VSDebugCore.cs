@@ -142,8 +142,8 @@ namespace VSDebugCoreLib
                 RegisterConsoleCommand(new AliasCommand(this));
                 RegisterConsoleCommand(new OpenConsoleCommand(this));
                 RegisterConsoleCommand(new SettingsCommand(this));
-                RegisterConsoleCommand(new DumpMem(this));
-                RegisterConsoleCommand(new LoadMem(this));
+                RegisterConsoleCommand(new MemDump(this));
+                RegisterConsoleCommand(new MemLoad(this));
                 RegisterConsoleCommand(new MemCpy(this));
                 RegisterConsoleCommand(new MemSet(this));
                 RegisterConsoleCommand(new MemDiff(this));

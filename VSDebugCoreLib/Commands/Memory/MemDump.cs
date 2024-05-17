@@ -5,12 +5,12 @@ using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
-    internal class DumpMem : BaseCommand
+    internal class MemDump : MemoryCommandBase
     {
         private const char TknForce = 'f';
         private const char TknAppend = 'a';
 
-        public DumpMem(VSDebugContext context)
+        public MemDump(VSDebugContext context)
             : base(context, (int) PkgCmdIDList.CmdIDAbout, Resources.DumpMemString)
         {
             CommandDescription = Resources.CmdDumpMemDesc;

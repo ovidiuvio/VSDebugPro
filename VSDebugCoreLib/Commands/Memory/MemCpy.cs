@@ -4,7 +4,7 @@ using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.Memory
 {
-    internal class MemCpy : BaseCommand
+    internal class MemCpy : MemoryCommandBase
     {
         public MemCpy(VSDebugContext context)
             : base(context, (int) PkgCmdIDList.CmdIDAbout, Resources.CmdMemCpyString)
@@ -18,27 +18,6 @@ namespace VSDebugCoreLib.Commands.Memory
                                 "\t<size> - size in bytes\n";
 
             CommandStatusFlag = ECommandStatus.CommandStatusDisabled;
-        }
-
-        public override ECommandStatus CommandStatus
-        {
-            get
-            {
-                if (null != Context.IDE.Debugger && null != Context.IDE.Debugger.DebuggedProcesses &&
-                    Context.IDE.Debugger.DebuggedProcesses.Count > 0)
-                {
-                    if (DebugHelpers.IsMiniDumpProcess(Context.IDE.Debugger.CurrentProcess))
-                        CommandStatusFlag = ECommandStatus.CommandStatusNaMiniDump;
-                    else
-                        CommandStatusFlag = ECommandStatus.CommandStatusEnabled;
-                }
-                else
-                {
-                    CommandStatusFlag = ECommandStatus.CommandStatusDisabled;
-                }
-
-                return CommandStatusFlag;
-            }
         }
 
         public override void Execute(string text)
