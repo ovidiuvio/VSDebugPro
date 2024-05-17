@@ -1,0 +1,1 @@
+Get-ChildItem -Path . -Include "*.cs" , "*.csproj", "*.xaml"  -Recurse | Get-Content | Out-File source-blob.txt
