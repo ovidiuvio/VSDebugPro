@@ -124,14 +124,17 @@ namespace VSDebugCoreLib.UI.Tools
 
                 // disable some view properties
                 _textView.Options.SetOptionValue(DefaultTextViewHostOptions.ZoomControlId, false);
-                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.ShowErrorsOptionId, false);
-                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.ShowChangeTrackingMarginOptionId, false);
-                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.LineNumberMarginId, false);
-                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.LineEndingMarginOptionId, false);
+                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.GlyphMarginId, false);
+                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.SuggestionMarginId, false);
                 _textView.Options.SetOptionValue(DefaultTextViewHostOptions.ChangeTrackingId, false);
+                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.LineNumberMarginId, false);
+                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.ShowErrorsOptionId, false);
+                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.LineEndingMarginOptionId, false);
+                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.ShowChangeTrackingMarginOptionId, false);
+                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.IndentationCharacterMarginOptionId, false);
                 _textView.Options.SetOptionValue(DefaultTextViewHostOptions.EnableFileHealthIndicatorOptionId, false);
                 _textView.Options.SetOptionValue(DefaultTextViewHostOptions.RowColMarginOptionId, false);
-                _textView.Options.SetOptionValue(DefaultTextViewHostOptions.IndentationCharacterMarginOptionId, false);
+                
 
                 //Initialize the history
                 if (null == history)
