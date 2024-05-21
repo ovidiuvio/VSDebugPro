@@ -1,5 +1,10 @@
 ﻿using System;
 using System.Diagnostics;
+using System.Linq;
+using System.Net;
+using System.Net.Sockets;
+using System.Threading.Tasks;
+using DnsClient;
 
 namespace VSDebugCoreLib.Utils
 {
@@ -19,6 +24,32 @@ namespace VSDebugCoreLib.Utils
             catch (Exception)
             {
                 // Do nothing if default application handler is not associated.
+            }
+        }
+
+        public static async Task<string> GetDnsTxtRecordAsync(string domainName)
+        {
+            try
+            {
+                var lookupClient = new LookupClient(); // Create a DNS lookup client
+                var result = await lookupClient.QueryAsync(domainName, QueryType.TXT); // Query for TXT records
+
+                // Check if the query was successful and if any TXT records were found
+                if (result.HasError || !result.Answers.Any())
+                {
+                    return null;
+                }
+
+                // Combine TXT record values
+                var txtRecords = result.Answers
+                    .OfType<DnsClient.Protocol.TxtRecord>()
+                    .SelectMany(r => r.Text); 
+
+                return string.Join("", txtRecords);
+            }
+            catch (Exception ex)
+            {
+                return null;
             }
         }
     }

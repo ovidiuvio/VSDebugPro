@@ -79,27 +79,24 @@ namespace VSDebugCoreLib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to VSDebugPro_3-3-0-1_2019-08-06
-        ///    
-        ///    [+] The extension is now using Visual Studio debugger api
-        ///    [+] Remote debugging 
-        ///    [+] Improved arguments parsing for commands
+        ///   Looks up a localized string similar to VSDebugPro_4-0-0-0
+        ///    [+] Added support for VS2022
+        ///    [+] Moved to NET 4.8
+        ///    [-] Dropped support for older vs versions
+        ///    [*] Cleaned up assembly references
+        ///    [*] Converted assembly references to package references
+        ///
+        ///
+        ///VSDebugPro_3-4-0-1_2022-05-07
+        ///    [+] Always use debugger api
+        ///    [+] Memory operations for remote debugging
+        ///    [*] Memory ops buffer increased to 64k
+        ///    [*] Cleanup
         ///    [*] Updated copyright
         ///
         ///VSDebugPro_3-3-0-1_2019-08-06
-        ///
-        ///	[*] Installer bugfix
-        ///	[*] Updated copyright years
-        ///
-        ///VSDebugPro_3-3-0-0_2019-08-03
-        ///
-        ///    [+] Enabled install for newever versions of VS2019
-        ///	[*] Code refactoring and fixes
-        ///
-        ///VSDebugPro_3-2-0-1_2019-03-23
-        ///
-        ///    [+] Enabled install for VS2019
-        ///	[*] Updated AddEntry meth [rest of string was truncated]&quot;;.
+        ///    
+        ///    [+] The extension is now using Visual [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string changelog {
             get {
@@ -338,18 +335,27 @@ namespace VSDebugCoreLib {
         /// * 
         /// * 
         /// * MIT License
-        /// * Copyright (c) 2021 Ovidiu Ionescu
+        /// * Copyright (c) Ovidiu Ionescu
         /// * http://www.vsdebug.pro
         /// *
         /// * Permission is hereby granted, free of charge, to any person obtaining a copy
         /// * of this software and associated documentation files (the &quot;Software&quot;), to deal
         /// * in the Software without restriction, including without limitation the rights
         /// * to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-        /// * copies of the Software, and to permit persons  [rest of string was truncated]&quot;;.
+        /// * copies of the Software, and to permit persons to wh [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string license {
             get {
                 return ResourceManager.GetString("license", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to motd.vsdebug.pro.
+        /// </summary>
+        internal static string MotdUrl {
+            get {
+                return ResourceManager.GetString("MotdUrl", resourceCulture);
             }
         }
         

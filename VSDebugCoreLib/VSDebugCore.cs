@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading.Tasks;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using VSDebugCoreLib.Commands;
@@ -9,6 +10,7 @@ using VSDebugCoreLib.Commands.Memory;
 using VSDebugCoreLib.Commands.UI;
 using VSDebugCoreLib.Console;
 using VSDebugCoreLib.UI.Tools;
+using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib
 {
