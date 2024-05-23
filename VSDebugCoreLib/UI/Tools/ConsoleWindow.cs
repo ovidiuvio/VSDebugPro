@@ -102,8 +102,6 @@ namespace VSDebugCoreLib.UI.Tools
                 var adapterFactory = compMod.GetService<IVsEditorAdaptersFactoryService>();
                 var registryService = compMod.GetService<IContentTypeRegistryService>();
 
-                //completionBroker = compMod.GetService<ICompletionBroker>();
-
                 textView = adapterFactory.CreateVsTextViewAdapter(
                     GetService(typeof(IOleServiceProvider)) as IOleServiceProvider);
                 var textBuffer =
