@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 using System.Windows.Forms;
 using VSDebugCoreLib.Properties;
@@ -89,7 +90,7 @@ namespace VSDebugCoreLib.UI
             {
                 var bAdd = true;
                 foreach (var item in m_generalSettings.Tools.ExtensionsMap.Values)
-                    if (item.Extension == tboxExtension.Text)
+                    if (item.Item1 == tboxExtension.Text)
                         bAdd = false;
 
                 if (!Path.HasExtension(tboxExtension.Text))
@@ -98,7 +99,7 @@ namespace VSDebugCoreLib.UI
                 if (bAdd)
                 {
                     m_generalSettings.Tools.ExtensionsMap.Values.Add(
-                        new CExtensionMapElement(tboxExtension.Text, m_generalSettings.Tools.Selected));
+                        new Tuple<string, string>(tboxExtension.Text, m_generalSettings.Tools.Selected));
                     m_generalSettings.Tools.OnPropertyChanged("ExtensionsMap");
                     m_generalSettings.Tools.OnPropertyChanged("Tool");
                     m_generalSettings.Tools.OnPropertyChanged("Extension");
@@ -112,7 +113,7 @@ namespace VSDebugCoreLib.UI
             if (datagExtensionsMap.SelectedIndex >= 0)
             {
                 m_generalSettings.Tools.ExtensionsMap.Values.Remove(
-                    datagExtensionsMap.SelectedValue as CExtensionMapElement);
+                    datagExtensionsMap.SelectedValue as Tuple<string,string>);
                 m_generalSettings.Tools.OnPropertyChanged("ExtensionsMap");
                 m_generalSettings.Tools.OnPropertyChanged("Tool");
                 m_generalSettings.Tools.OnPropertyChanged("Extension");

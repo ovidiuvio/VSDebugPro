@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Reflection;
-using System.Threading.Tasks;
 using EnvDTE80;
 using Microsoft.VisualStudio.Shell;
 using VSDebugCoreLib.Commands;
@@ -91,7 +91,10 @@ namespace VSDebugCoreLib
         public Assembly VSDAssembly { get; }
 
         public void Initialize()
-        {
+        {   
+            // Initialize app data
+            InitAppData();
+
             // Initialize settings manager & load settings
             InitSettings();
 
@@ -99,7 +102,14 @@ namespace VSDebugCoreLib
             InitConsoleTool();
 
             // Register commands
-            RegisterCommands();
+            InitCommands();
+        }
+
+        private void InitAppData() 
+        {
+            // Check if we need to create app folder
+            if (!Directory.Exists(MiscHelpers.GetApplicationDataPath()))
+                Directory.CreateDirectory(MiscHelpers.GetApplicationDataPath());
         }
 
         private void InitSettings()
@@ -130,7 +140,7 @@ namespace VSDebugCoreLib
             _commands.Add(cmd);
         }
 
-        private void RegisterCommands()
+        private void InitCommands()
         {
             var menuService = MenuCommandService;
             if (menuService != null)

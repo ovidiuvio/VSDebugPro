@@ -150,10 +150,10 @@
                           HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="4">
                     <DataGrid.Columns>
                         <DataGridTextColumn
-                            Binding="{Binding Path=Extension, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                            Binding="{Binding Path=Item1, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                             ClipboardContentBinding="{x:Null}" Header="Ext" MinWidth="100" />
                         <DataGridTextColumn
-                            Binding="{Binding Path=Tool, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
+                            Binding="{Binding Path=Item2, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                             ClipboardContentBinding="{x:Null}" Header="Tool" MinWidth="200" />
                     </DataGrid.Columns>
                 </DataGrid>

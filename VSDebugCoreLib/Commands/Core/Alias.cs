@@ -45,7 +45,7 @@ namespace VSDebugCoreLib.Commands.Core
                             Context.CONSOLE.WriteSeparator();
 
                             foreach (var item in Context.Settings.Alias.AliasList.Values)
-                                Context.CONSOLE.Write(string.Format("{0,15}\t{1}", item.Alias, item.Value));
+                                Context.CONSOLE.Write(string.Format("{0,15}\t{1}", item.Item1, item.Item2));
                         }
                     }
                     else

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using System.IO;
 using System.Linq;
 using System.Net;
 using System.Net.Sockets;
@@ -51,6 +52,11 @@ namespace VSDebugCoreLib.Utils
             {
                 return null;
             }
+        }
+
+        public static string GetApplicationDataPath()
+        {
+            return Environment.GetFolderPath(Environment.SpecialFolder.ApplicationData)+ "\\VSDebugPro\\";
         }
     }
 }

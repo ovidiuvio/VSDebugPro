@@ -1,54 +1,24 @@
-﻿using System.Collections.Generic;
+﻿using Newtonsoft.Json;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Configuration;
 using System.IO;
+using System.Runtime;
 using VSDebugCoreLib.Properties;
+using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib
 {
-    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
-    public class CExtensionMapElement
-    {
-        public CExtensionMapElement()
-        {
-        }
-
-        public CExtensionMapElement(string ext, string tool)
-        {
-            Extension = ext;
-            Tool = tool;
-        }
-
-        public string Extension { get; set; }
-        public string Tool { get; set; }
-    }
-
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CExtensionsMap
     {
         public CExtensionsMap()
         {
-            Values = new List<CExtensionMapElement>();
+            Values = new List<Tuple<string,string>>();
         }
 
-        public List<CExtensionMapElement> Values { get; set; }
-    }
-
-    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
-    public class CAliasMapElement
-    {
-        public CAliasMapElement()
-        {
-        }
-
-        public CAliasMapElement(string alias, string val)
-        {
-            Alias = alias;
-            Value = val;
-        }
-
-        public string Alias { get; set; }
-        public string Value { get; set; }
+        public List<Tuple<string, string>> Values { get; set; }
     }
 
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
@@ -56,10 +26,10 @@ namespace VSDebugCoreLib
     {
         public CAliasMap()
         {
-            Values = new List<CAliasMapElement>();
+            Values = new List<Tuple<string, string>>();
         }
 
-        public List<CAliasMapElement> Values { get; set; }
+        public List<Tuple<string, string>> Values { get; set; }
     }
 
     [SettingsSerializeAs(SettingsSerializeAs.Xml)]
@@ -192,9 +162,7 @@ namespace VSDebugCoreLib
 
             foreach (var pair in settings.Tools.ExtensionsMap.Values)
             {
-                var newPair = new CExtensionMapElement();
-                newPair.Extension = pair.Extension;
-                newPair.Tool = pair.Tool;
+                var newPair = new Tuple<string, string>(pair.Item1, pair.Item2);
 
                 Tools.ExtensionsMap.Values.Add(newPair);
             }
@@ -227,7 +195,7 @@ namespace VSDebugCoreLib
 
             if (null == FindAlias(alias))
             {
-                AliasList.Values.Add(new CAliasMapElement(alias, value));
+                AliasList.Values.Add(new Tuple<string, string>(alias, value));
                 res = true;
             }
 
@@ -250,17 +218,17 @@ namespace VSDebugCoreLib
             var item = FindAlias(alias);
 
             if (null != item)
-                res = item.Value;
+                res = item.Item2;
 
             return res;
         }
 
-        public CAliasMapElement FindAlias(string alias)
+        public Tuple<string, string> FindAlias(string alias)
         {
-            CAliasMapElement res = null;
+            Tuple<string, string> res = null;
 
             foreach (var item in AliasList.Values)
-                if (item.Alias == alias)
+                if (item.Item1 == alias)
                 {
                     res = item;
                     break;
@@ -286,8 +254,8 @@ namespace VSDebugCoreLib
         public string GetAssignedTool(string extension)
         {
             foreach (var item in GeneralSettings.Tools.ExtensionsMap.Values)
-                if (item.Extension == extension)
-                    switch (item.Tool)
+                if (item.Item1 == extension)
+                    switch (item.Item2)
                     {
                         case "Text Editor":
                             return GeneralSettings.TextEditor;
@@ -314,28 +282,48 @@ namespace VSDebugCoreLib
 
         public void LoadSettings()
         {
-            VSDSettings.GeneralSettings.WorkingDirectory = Settings.Default.WorkingDirectory;
-            VSDSettings.GeneralSettings.DiffTool = Settings.Default.DiffTool;
-            VSDSettings.GeneralSettings.HexEditor = Settings.Default.HexEditor;
-            VSDSettings.GeneralSettings.TextEditor = Settings.Default.TextEditor;
-            VSDSettings.GeneralSettings.ImgEditor = Settings.Default.ImgEditor;
-            VSDSettings.GeneralSettings.Tools.ExtensionsMap = Settings.Default.ExtensionsMap;
-            VSDSettings.Alias.AliasList = Settings.Default.AliasMap;
-            VSDSettings.CmdHistory = Settings.Default.CmdHistory;
+            if (File.Exists(MiscHelpers.GetApplicationDataPath() + "settings.json"))
+            {
+                Dictionary<string, object> settings;
+                JsonSerializer serializer = new JsonSerializer();
+                using (StreamReader sr = new StreamReader(MiscHelpers.GetApplicationDataPath() + "settings.json"))
+                using (JsonReader reader = new JsonTextReader(sr))
+                {
+                    settings = serializer.Deserialize<Dictionary<string, object>>(reader);
+                }
+
+                VSDSettings.GeneralSettings.WorkingDirectory = settings["WorkingDirectory"].ToString();
+                VSDSettings.GeneralSettings.DiffTool = settings["DiffTool"].ToString();
+                VSDSettings.GeneralSettings.HexEditor = settings["HexEditor"].ToString();
+                VSDSettings.GeneralSettings.TextEditor = settings["TextEditor"].ToString();
+                VSDSettings.GeneralSettings.ImgEditor = settings["ImageEditor"].ToString();
+                string extJson = settings["ExtensionsMap"].ToString();
+                VSDSettings.GeneralSettings.Tools.ExtensionsMap.Values = JsonConvert.DeserializeObject<List<Tuple<string, string>>>(extJson);
+                string aliasJson = settings["AliasMap"].ToString();
+                VSDSettings.Alias.AliasList.Values = JsonConvert.DeserializeObject<List<Tuple<string, string>>>(aliasJson);
+                string historyJson = settings["CmdHistory"].ToString();
+                VSDSettings.CmdHistory.Values = JsonConvert.DeserializeObject<List<string>>(historyJson);
+            }
         }
 
         public void SaveSettings()
         {
-            Settings.Default.WorkingDirectory = VSDSettings.GeneralSettings.WorkingDirectory;
-            Settings.Default.DiffTool = VSDSettings.GeneralSettings.DiffTool;
-            Settings.Default.HexEditor = VSDSettings.GeneralSettings.HexEditor;
-            Settings.Default.TextEditor = VSDSettings.GeneralSettings.TextEditor;
-            Settings.Default.ImgEditor = VSDSettings.GeneralSettings.ImgEditor;
-            Settings.Default.ExtensionsMap = VSDSettings.GeneralSettings.Tools.ExtensionsMap;
-            Settings.Default.AliasMap = VSDSettings.Alias.AliasList;
-            Settings.Default.CmdHistory = VSDSettings.CmdHistory;
+            var settings = new Dictionary<string, object>();
+            settings["WorkingDirectory"] = VSDSettings.GeneralSettings.WorkingDirectory;
+            settings["DiffTool"] = VSDSettings.GeneralSettings.DiffTool;
+            settings["HexEditor"] = VSDSettings.GeneralSettings.HexEditor;
+            settings["TextEditor"] = VSDSettings.GeneralSettings.TextEditor;
+            settings["ImageEditor"] = VSDSettings.GeneralSettings.ImgEditor;
+            settings["ExtensionsMap"] = VSDSettings.GeneralSettings.Tools.ExtensionsMap.Values;
+            settings["AliasMap"] = VSDSettings.Alias.AliasList.Values;
+            settings["CmdHistory"] = VSDSettings.CmdHistory.Values;
 
-            Settings.Default.Save();
+            JsonSerializer serializer = new JsonSerializer();
+            using (StreamWriter sw = new StreamWriter(MiscHelpers.GetApplicationDataPath() + "settings.json"))
+            using (JsonWriter writer = new JsonTextWriter(sw))
+            {
+                serializer.Serialize(writer, settings);
+            }
         }
     }
 }

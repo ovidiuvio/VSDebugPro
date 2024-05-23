@@ -240,6 +240,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Utilities">
       <Version>17.9.37000</Version>
     </PackageReference>
+    <PackageReference Include="Newtonsoft.Json">
+      <Version>13.0.3</Version>
+    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
