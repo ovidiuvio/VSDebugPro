@@ -35,6 +35,7 @@ namespace VSDebugCoreLib.UI.Tools
     public class ConsoleWindow : ToolWindowPane
     {
         private ConsoleEngine _engine;
+        private VSDebugContext _context;
 
         private IWpfTextView _textView;
         private IWpfTextViewHost _textViewHost;
@@ -76,6 +77,12 @@ namespace VSDebugCoreLib.UI.Tools
                 _engine = value;
                 _engine.StdOut = mefTextBuffer;
             }
+        }
+
+        public VSDebugContext Context
+        {
+            get => _context;
+            set => _context = value;
         }
 
         public override object Content
@@ -485,24 +492,10 @@ namespace VSDebugCoreLib.UI.Tools
 
         /// <summary>
         ///     Command handler for the RETURN command.
-        ///     It is called when the user presses the ENTER key inside the console window and
-        ///     is used to execute the text as an IronPython expression.
+        ///     It is called when the user presses the ENTER key inside the console window
         /// </summary>
         private void OnReturn(object sender, EventArgs e)
         {
-            //if (!completionBroker.IsCompletionActive(_textView))
-            //{
-            //    // If the user is not on the input line, then this should be a no-action.
-            //    if (!IsCurrentLineInputLine())
-            //    {
-            //        return;
-            //    }
-
-            //    ExecuteUserInput();
-
-            //    SetCursorAtEndOfBuffer();
-            //}
-
             ExecuteUserInput();
 
             AfterConsoleExecute();
@@ -517,7 +510,12 @@ namespace VSDebugCoreLib.UI.Tools
 
             if (_engine != null) _engine.Execute(strInput);
 
-            if (strInput != string.Empty) history.AddEntry(strInput);
+            if (strInput != string.Empty)
+            {
+                history.AddEntry(strInput);
+                SaveHistory(Context.Settings.CmdHistory);
+                Context.SettingsManager.SaveSettings();
+            }
         }
 
         private void WriteConsoleInputSymbol()

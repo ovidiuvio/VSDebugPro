@@ -87,13 +87,8 @@ namespace VSDebugCoreLib
         public Package PACKAGE { get; }
 
         public CSettings Settings => _settingsManager.VSDSettings;
+        public SettingsManager SettingsManager => _settingsManager;
         public Assembly VSDAssembly { get; }
-
-        ~VSDebugContext()
-        {
-            _console.SaveHistory(_settingsManager.VSDSettings.CmdHistory);
-            _settingsManager.SaveSettings();
-        }
 
         public void Initialize()
         {
@@ -127,6 +122,7 @@ namespace VSDebugCoreLib
             _consoleEngine = new ConsoleEngine(this, _commands);
 
             _console.Engine = _consoleEngine;
+            _console.Context = this;
         }
 
         private void RegisterBaseCommand(BaseCommand cmd)

@@ -129,7 +129,7 @@ namespace VSDebugCoreLib.UI
         {
             Context.Settings.GeneralSettings.Import(m_generalSettings);
 
-            Settings.Default.Save();
+            Context.SettingsManager.SaveSettings();
 
             Close();
         }
