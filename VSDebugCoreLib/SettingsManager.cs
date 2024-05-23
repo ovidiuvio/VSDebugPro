@@ -5,12 +5,10 @@ using System.ComponentModel;
 using System.Configuration;
 using System.IO;
 using System.Runtime;
-using VSDebugCoreLib.Properties;
 using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib
 {
-    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CExtensionsMap
     {
         public CExtensionsMap()
@@ -21,7 +19,6 @@ namespace VSDebugCoreLib
         public List<Tuple<string, string>> Values { get; set; }
     }
 
-    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CAliasMap
     {
         public CAliasMap()
@@ -32,7 +29,6 @@ namespace VSDebugCoreLib
         public List<Tuple<string, string>> Values { get; set; }
     }
 
-    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CCmdHistory
     {
         public CCmdHistory()
@@ -43,7 +39,6 @@ namespace VSDebugCoreLib
         public List<string> Values { get; set; }
     }
 
-    [SettingsSerializeAs(SettingsSerializeAs.Xml)]
     public class CToolsSettings : INotifyPropertyChanged
     {
         public CToolsSettings()

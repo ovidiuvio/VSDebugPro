@@ -2,7 +2,6 @@
 using System.IO;
 using System.Windows;
 using System.Windows.Forms;
-using VSDebugCoreLib.Properties;
 
 namespace VSDebugCoreLib.UI
 {
