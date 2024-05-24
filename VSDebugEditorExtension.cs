@@ -409,29 +409,48 @@ namespace VSDebugPro
                 var lineStartPos = SourceBuffer.CurrentSnapshot.GetLineFromPosition(RequestedPoint).Start.Position;
                 var lineCaretPos = RequestedPoint.Position - lineStartPos;
 
-                var fileStartPos = -1;
-                var fileEndPos = -1;
+                var token = clickLineSelection.IndexOf("file://", StringComparison.Ordinal) > 0 ?
+                            "file://" :
+                            clickLineSelection.IndexOf("https://", StringComparison.Ordinal) > 0 ?
+                            "https://" :
+                            null;
+
+                var tokenStartPos = -1;
+                var tokenEndPos = -1;
                 var foundWord = false;
 
-                if ((fileStartPos = clickLineSelection.IndexOf("file://", StringComparison.Ordinal)) > 0 &&
-                    (fileEndPos = clickLineSelection.IndexOf(">", StringComparison.Ordinal)) > 0 &&
-                    fileEndPos > fileStartPos && lineCaretPos > fileStartPos && lineCaretPos < fileEndPos &&
-                    fileStartPos >= 0 && fileEndPos >= 0)
+                if ((token != null) &&
+                    (tokenStartPos = clickLineSelection.IndexOf(token, StringComparison.Ordinal)) > 0 &&
+                    (tokenEndPos = clickLineSelection.IndexOf(">", StringComparison.Ordinal)) > 0 &&
+                    tokenEndPos > tokenStartPos && lineCaretPos > tokenStartPos && lineCaretPos < tokenEndPos &&
+                    tokenStartPos >= 0 && tokenEndPos >= 0)
                 {
-                    fileStartPos += "file://".Length;
+                    foundWord = true;
 
-                    var strFilePath = clickLineSelection.Substring(fileStartPos, fileEndPos - fileStartPos);
-
-                    if (File.Exists(strFilePath))
+                    switch (token)
                     {
-                        var strExt = Path.GetExtension(strFilePath);
+                        case "file://":
+                            {
+                                tokenStartPos += token.Length;
+                                var strFilePath = clickLineSelection.Substring(tokenStartPos, tokenEndPos - tokenStartPos);
+                                if (File.Exists(strFilePath))
+                                {
+                                    var strExt = Path.GetExtension(strFilePath);
 
-                        foundWord = true;
+                                    var editorTool = VSDebugProPackage.Context.Settings.GetAssignedTool(strExt);
 
-                        var editorTool = VSDebugProPackage.Context.Settings.GetAssignedTool(strExt);
-
-                        if (editorTool != string.Empty) Process.Start(editorTool, strFilePath);
+                                    if (editorTool != string.Empty) Process.Start(editorTool, strFilePath);
+                                }
+                            }
+                            break;
+                        case "https://":
+                            {
+                                var strUrl = clickLineSelection.Substring(tokenStartPos, tokenEndPos - tokenStartPos);
+                                Process.Start(strUrl);
+                            }
+                            break;
                     }
+         
                 }
 
                 if (!foundWord)
@@ -442,8 +461,8 @@ namespace VSDebugPro
                 }
 
                 var currentWord = new SnapshotSpan(
-                    new SnapshotPoint(SourceBuffer.CurrentSnapshot, lineStartPos + fileStartPos),
-                    new SnapshotPoint(SourceBuffer.CurrentSnapshot, lineStartPos + fileEndPos));
+                    new SnapshotPoint(SourceBuffer.CurrentSnapshot, lineStartPos + tokenStartPos),
+                    new SnapshotPoint(SourceBuffer.CurrentSnapshot, lineStartPos + tokenEndPos));
 
                 // If this is the same word we currently have, we're done (e.g. caret moved within a word).
                 if (CurrentWord.HasValue && currentWord == CurrentWord)
