@@ -7,5 +7,5 @@ Enhanced debugging for C/C++. Dump blocks of data, load data in memory and more.
 
 **[www.vsdebug.pro](http://www.vsdebug.pro)**
 
-![VSDebugPro Console](assets/console.png)
+<img src="/assets/console.png" width="70%"/>
 
