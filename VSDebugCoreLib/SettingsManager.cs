@@ -299,6 +299,17 @@ namespace VSDebugCoreLib
                 string historyJson = settings["CmdHistory"].ToString();
                 VSDSettings.CmdHistory.Values = JsonConvert.DeserializeObject<List<string>>(historyJson);
             }
+            // fill default ext map
+            else
+            {
+                VSDSettings.GeneralSettings.Tools.ExtensionsMap.Values = new List<Tuple<string, string>>
+                {
+                    new Tuple<string, string>(".bin", "Hex Editor"),
+                    new Tuple<string, string>(".dmp", "Hex Editor"),
+                    new Tuple<string, string>(".hex", "Hex Editor"),
+                    new Tuple<string, string>(".txt", "Text Editor")
+                };
+            }
         }
 
         public void SaveSettings()
