@@ -7,7 +7,7 @@
         mc:Ignorable="d"
         Title="VSDebugPro Settings" ResizeMode="NoResize" ShowInTaskbar="False" Topmost="True"
         WindowStartupLocation="CenterScreen" Foreground="#FF5F574F" Background="#FFE6E7E8" BorderBrush="#FF5F574F"
-        SizeToContent="WidthAndHeight" FontFamily="Consolas" Width="512"
+        SizeToContent="WidthAndHeight" Width="512"
         Icon="/VSDebugCoreLib;component/Resources/Package.ico">
     <Grid Background="#FFE7E8EC" ScrollViewer.CanContentScroll="True">
         <Grid.RowDefinitions>
@@ -66,9 +66,9 @@
                 <TextBox x:Name="tboxWorkingDir" TextWrapping="Wrap"
                          Text="{Binding Path=WorkingDirectory, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"
                          Grid.Column="1" Margin="2" VerticalContentAlignment="Center" />
-                <Button Style="{StaticResource ButtonFolderStyle}" HorizontalAlignment="Left" Height="24"
+                <Button Style="{StaticResource ButtonFolderStyle}" Height="24"
                         VerticalAlignment="Center" Width="34" ToolTip="Click to browse." Grid.Column="2" Margin="2"
-                        Click="Browse_WorkingDirectory" />
+                        Click="Browse_WorkingDirectory" HorizontalAlignment="Left" />
 
                 <Label Content="Text Editor:" HorizontalAlignment="Left" VerticalAlignment="Top"
                        ToolTip="External text editor. Invoked when a filename with a matching extension is clicked in VSDConsole."
@@ -89,7 +89,7 @@
                 <Button Style="{StaticResource ButtonFolderStyle}" HorizontalAlignment="Left" Height="24"
                         VerticalAlignment="Center" Width="34" ToolTip="Click to browse." Grid.Column="2" Grid.Row="3"
                         Margin="2" Click="Browse_HexEditor" />
-                <Label Content="Image Editor:" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top"
+                <Label Content="Image Viewer:" HorizontalAlignment="Left" Height="24" VerticalAlignment="Top"
                        Width="125"
                        ToolTip="External image viewer. Invoked when a filename with a matching extension is clicked in VSDConsole."
                        Grid.Row="4" VerticalContentAlignment="Center" />
@@ -100,7 +100,7 @@
                         VerticalAlignment="Center" Width="34" ToolTip="Click to browse." Grid.Column="2" Grid.Row="4"
                         Margin="2" Click="Browse_ImgEditor" />
 
-                <Label Content="Diff Tool:" HorizontalAlignment="Left" VerticalAlignment="Top"
+                <Label Content="Merge Tool:" HorizontalAlignment="Left" VerticalAlignment="Top"
                        ToolTip="External diff tool. Used by diff command to display differences." Grid.Row="5"
                        VerticalContentAlignment="Center" />
                 <TextBox x:Name="tboxDiffTool" TextWrapping="Wrap"
@@ -111,7 +111,7 @@
                         Margin="2" Click="Browse_DiffTool" />
             </Grid>
         </GroupBox>
-        <GroupBox x:Name="groupExtensionSettings" Grid.Row="1" Header="Tool/Ext Mapping"
+        <GroupBox x:Name="groupExtensionSettings" Grid.Row="1" Header="File Handlers"
                   ScrollViewer.VerticalScrollBarVisibility="Disabled" Margin="4">
             <Grid>
                 <Grid.RowDefinitions>
@@ -134,44 +134,42 @@
                     <Label Content="Tool:" HorizontalAlignment="Left" VerticalAlignment="Top" Grid.Column="1"
                            VerticalContentAlignment="Center" />
                     <TextBox x:Name="tboxExtension" TextWrapping="Wrap" Grid.Row="1" VerticalContentAlignment="Center"
-                             Margin="4,2,2,2" />
+                             Margin="2,2,2,2" />
                     <ComboBox ItemsSource="{Binding Path=Tools.Values}" SelectedValue="{Binding Path=Tools.Selected}"
                               Grid.Row="1" Grid.Column="1" Margin="2" VerticalContentAlignment="Center" />
-                    <Button Content="Add" Click="add_extension_map" HorizontalAlignment="Center" Height="24"
-                            VerticalAlignment="Center" Width="48" RenderTransformOrigin="1.528,0.884" Grid.Row="1"
-                            Grid.Column="2" Margin="1" HorizontalContentAlignment="Center" />
+                    <Button Content="Add" Click="add_extension_map" HorizontalAlignment="Right" Height="24"
+                            VerticalAlignment="Center" Width="48" Grid.Row="1"
+                            Grid.Column="2" Margin="2,2,2,2" HorizontalContentAlignment="Center" />
                     <Button Content="Remove" Click="remove_extension_map" Height="24" VerticalAlignment="Center"
-                            Width="48" Grid.Row="1" Grid.Column="3" Margin="1" HorizontalContentAlignment="Center"
-                            HorizontalAlignment="Center" />
+                            Width="48" Grid.Row="1" Grid.Column="3" Margin="2,2,2,2" HorizontalContentAlignment="Center" HorizontalAlignment="Right" />
                 </Grid>
                 <DataGrid x:Name="datagExtensionsMap"
                           ItemsSource="{Binding Path=Tools.ExtensionsMap.Values, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
                           AutoGenerateColumns="False" HorizontalScrollBarVisibility="Hidden" Grid.Row="1"
-                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="4">
+                          HorizontalContentAlignment="Center" VerticalContentAlignment="Center" Margin="2,2,2,2" CanUserReorderColumns="False" CanUserSortColumns="False" HeadersVisibility="None" GridLinesVisibility="None" MaxHeight="150">
                     <DataGrid.Columns>
                         <DataGridTextColumn
                             Binding="{Binding Path=Item1, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-                            ClipboardContentBinding="{x:Null}" Header="Ext" MinWidth="100" />
+                            ClipboardContentBinding="{x:Null}" Header="Ext" MinWidth="128" />
                         <DataGridTextColumn
                             Binding="{Binding Path=Item2, UpdateSourceTrigger=PropertyChanged, Mode=OneWay}"
-                            ClipboardContentBinding="{x:Null}" Header="Tool" MinWidth="200" />
+                            ClipboardContentBinding="{x:Null}" Header="Tool" MinWidth="250" />
                     </DataGrid.Columns>
                 </DataGrid>
             </Grid>
         </GroupBox>
 
-        <Grid Grid.Row="2" HorizontalAlignment="Right">
+        <Grid Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center" Margin="6,6,6,6">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
             </Grid.ColumnDefinitions>
 
-            <Button Content="Cancel" Height="28" Width="54
+            <Button Content="Cancel" Height="24" Width="48
                 " Click="btnCancel_Click"
-                    HorizontalAlignment="Right" Grid.Column="1" Margin="12" />
-            <Button Content="Ok" HorizontalAlignment="Right" Height="28" Width="54
-                "
-                    Click="btnOk_Click" Grid.Column="0" Margin="12,12,0,12" />
+                    HorizontalAlignment="Right" Grid.Column="1" Margin="2,2,2,2" VerticalAlignment="Center" />
+            <Button Content="Save" HorizontalAlignment="Right" Height="24" Width="48"
+                    Click="btnOk_Click" Grid.Column="0" Margin="2,2,2,2" VerticalAlignment="Center" />
         </Grid>
     </Grid>
 </Window>

@@ -275,40 +275,54 @@ namespace VSDebugCoreLib
 
         public CSettings VSDSettings { get; }
 
+        private static string GetKey(Dictionary<string, object> dict, string key)
+        {
+            return dict.ContainsKey(key) ? dict[key].ToString() : "";
+        }
+
         public void LoadSettings()
         {
-            if (File.Exists(MiscHelpers.GetApplicationDataPath() + "settings.json"))
+            try
             {
-                Dictionary<string, object> settings;
-                JsonSerializer serializer = new JsonSerializer();
-                using (StreamReader sr = new StreamReader(MiscHelpers.GetApplicationDataPath() + "settings.json"))
-                using (JsonReader reader = new JsonTextReader(sr))
+                if (File.Exists(MiscHelpers.GetApplicationDataPath() + "settings.json"))
                 {
-                    settings = serializer.Deserialize<Dictionary<string, object>>(reader);
-                }
+                    Dictionary<string, object> settings;
+                    JsonSerializer serializer = new JsonSerializer();
+                    using (StreamReader sr = new StreamReader(MiscHelpers.GetApplicationDataPath() + "settings.json"))
+                    using (JsonReader reader = new JsonTextReader(sr))
+                    {
+                        settings = serializer.Deserialize<Dictionary<string, object>>(reader);
+                    }
 
-                VSDSettings.GeneralSettings.WorkingDirectory = settings["WorkingDirectory"].ToString();
-                VSDSettings.GeneralSettings.DiffTool = settings["DiffTool"].ToString();
-                VSDSettings.GeneralSettings.HexEditor = settings["HexEditor"].ToString();
-                VSDSettings.GeneralSettings.TextEditor = settings["TextEditor"].ToString();
-                VSDSettings.GeneralSettings.ImgEditor = settings["ImageEditor"].ToString();
-                string extJson = settings["ExtensionsMap"].ToString();
-                VSDSettings.GeneralSettings.Tools.ExtensionsMap.Values = JsonConvert.DeserializeObject<List<Tuple<string, string>>>(extJson);
-                string aliasJson = settings["AliasMap"].ToString();
-                VSDSettings.Alias.AliasList.Values = JsonConvert.DeserializeObject<List<Tuple<string, string>>>(aliasJson);
-                string historyJson = settings["CmdHistory"].ToString();
-                VSDSettings.CmdHistory.Values = JsonConvert.DeserializeObject<List<string>>(historyJson);
-            }
-            // fill default ext map
-            else
-            {
-                VSDSettings.GeneralSettings.Tools.ExtensionsMap.Values = new List<Tuple<string, string>>
+                    VSDSettings.GeneralSettings.WorkingDirectory = GetKey(settings, "WorkingDirectory");
+                    VSDSettings.GeneralSettings.DiffTool = GetKey(settings, "DiffTool");
+                    VSDSettings.GeneralSettings.HexEditor = GetKey(settings, "HexEditor");
+                    VSDSettings.GeneralSettings.TextEditor = GetKey(settings, "TextEditor");
+                    VSDSettings.GeneralSettings.ImgEditor = GetKey(settings, "ImageEditor");
+                    string extJson = GetKey(settings, "ExtensionsMap");
+                    VSDSettings.GeneralSettings.Tools.ExtensionsMap.Values = JsonConvert.DeserializeObject<List<Tuple<string, string>>>(extJson);
+                    string aliasJson = GetKey(settings, "AliasMap");
+                    VSDSettings.Alias.AliasList.Values = JsonConvert.DeserializeObject<List<Tuple<string, string>>>(aliasJson);
+                    string historyJson = GetKey(settings, "CmdHistory");
+                    VSDSettings.CmdHistory.Values = JsonConvert.DeserializeObject<List<string>>(historyJson);
+                }
+                // fill default ext map
+                else
                 {
-                    new Tuple<string, string>(".bin", "Hex Editor"),
-                    new Tuple<string, string>(".dmp", "Hex Editor"),
-                    new Tuple<string, string>(".hex", "Hex Editor"),
-                    new Tuple<string, string>(".txt", "Text Editor")
-                };
+                    VSDSettings.GeneralSettings.Tools.ExtensionsMap.Values = new List<Tuple<string, string>>
+                    {
+                        new Tuple<string, string>(".bin", "Hex Editor"),
+                        new Tuple<string, string>(".dmp", "Hex Editor"),
+                        new Tuple<string, string>(".hex", "Hex Editor"),
+                        new Tuple<string, string>(".txt", "Text Editor")
+                    };
+                }
+            }
+            catch (Exception)
+            {
+                // settings file corrupted, delete it
+                if (File.Exists(MiscHelpers.GetApplicationDataPath() + "settings.json"))
+                    File.Delete(MiscHelpers.GetApplicationDataPath() + "settings.json");
             }
         }
 
@@ -326,7 +340,7 @@ namespace VSDebugCoreLib
 
             JsonSerializer serializer = new JsonSerializer();
             using (StreamWriter sw = new StreamWriter(MiscHelpers.GetApplicationDataPath() + "settings.json"))
-            using (JsonWriter writer = new JsonTextWriter(sw))
+            using (JsonWriter writer = new JsonTextWriter(sw) { Formatting = Formatting.Indented })
             {
                 serializer.Serialize(writer, settings);
             }
