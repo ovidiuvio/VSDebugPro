@@ -1,3 +1,18 @@
+VSDebugPro_4-1-0-0
+    [+] Added Arm64 install target
+    [+] Dumping, writing memory of C# / .NET in preview
+    [+] New settings backend. All user settings are now stored in AppData
+    [+] MOTD messages via DNS
+    [+] Added handling of https:// in console
+    [+] New Logo
+    [*] Updated settings ui
+    [*] Fixed the look of console window bottom bar
+    [*] Fixed saving of settings, aliases, command history
+    [*] Code cleanup, refactoring
+
+VSDebugPro_4-0-1-0
+    [*] Code cleanup, refactoring, small fixes
+
 VSDebugPro_4-0-0-0
     [+] Added support for VS2022
     [+] Moved to NET 4.8
