@@ -158,7 +158,7 @@ namespace VSDebugCoreLib.UI.Tools
 
             // Fetch motd
             var jtf = new JoinableTaskFactory(ThreadHelper.JoinableTaskContext);
-            async Task UpdateMotdAsync()
+            async System.Threading.Tasks.Task UpdateMotdAsync()
             {
                 string txtRecord = await MiscHelpers.GetDnsTxtRecordAsync(Resources.MotdUrl);
 

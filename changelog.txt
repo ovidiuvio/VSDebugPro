@@ -1,3 +1,6 @@
+VSDebugPro_4-1-1-0
+    [+] VS2019 compatibility
+
 VSDebugPro_4-1-0-0
     [+] Added Arm64 install target
     [+] Dumping, writing memory of C# / .NET in preview
@@ -37,19 +40,19 @@ VSDebugPro_3-3-0-1_2019-08-06
 
 VSDebugPro_3-3-0-1_2019-08-06
 
-	[*] Installer bugfix
-	[*] Updated copyright years
+    [*] Installer bugfix
+    [*] Updated copyright years
 
 VSDebugPro_3-3-0-0_2019-08-03
 
     [+] Enabled install for newever versions of VS2019
-	[*] Code refactoring and fixes
+    [*] Code refactoring and fixes
 
 VSDebugPro_3-2-0-1_2019-03-23
 
     [+] Enabled install for VS2019
-	[*] Updated AddEntry method for the commands history buffer
-	[*] Updated copyright
+    [*] Updated AddEntry method for the commands history buffer
+    [*] Updated copyright
 
 VSDebugPro_3-2-0-0_2018-08-22
 
