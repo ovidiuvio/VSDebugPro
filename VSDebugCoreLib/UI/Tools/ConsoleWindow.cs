@@ -2,9 +2,7 @@
 using System.ComponentModel.Design;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
-using System.Windows.Controls;
 using System.Windows.Forms;
-using System.Windows.Threading;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.ComponentModelHost;
 using Microsoft.VisualStudio.Editor;
@@ -18,7 +16,6 @@ using Microsoft.VisualStudio.Threading;
 using Microsoft.VisualStudio.Utilities;
 using VSDebugCoreLib.Console;
 using VSDebugCoreLib.Utils;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 using DefGuidList = Microsoft.VisualStudio.Editor.DefGuidList;
 //scomponentmodel
 //editor
