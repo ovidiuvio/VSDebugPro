@@ -105,7 +105,7 @@ namespace VSDebugCoreLib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Opens product about window..
+        ///   Looks up a localized string similar to Opens the about window..
         /// </summary>
         internal static string CmdAboutDesc {
             get {
@@ -132,7 +132,7 @@ namespace VSDebugCoreLib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Dump memory utility..
+        ///   Looks up a localized string similar to Memory dump utility..
         /// </summary>
         internal static string CmdDumpMemDesc {
             get {
@@ -285,7 +285,7 @@ namespace VSDebugCoreLib {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to support@vsdebug.pro.
+        ///   Looks up a localized string similar to ovidiu@vsdebug.pro.
         /// </summary>
         internal static string ContactInfo {
             get {

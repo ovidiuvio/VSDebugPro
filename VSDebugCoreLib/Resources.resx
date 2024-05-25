@@ -128,7 +128,7 @@
     <value>Resources\changelog.txt;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
   <data name="CmdAboutDesc" xml:space="preserve">
-    <value>Opens product about window.</value>
+    <value>Opens the about window.</value>
   </data>
   <data name="CmdAliasDesc" xml:space="preserve">
     <value>Alias allows a more familiar command or name to execute a long string</value>
@@ -137,7 +137,7 @@
     <value>alias</value>
   </data>
   <data name="CmdDumpMemDesc" xml:space="preserve">
-    <value>Dump memory utility.</value>
+    <value>Memory dump utility.</value>
   </data>
   <data name="CmdHelpDesc" xml:space="preserve">
     <value>Provides help information for commands.</value>
@@ -188,7 +188,7 @@
     <value>settings</value>
   </data>
   <data name="ContactInfo" xml:space="preserve">
-    <value>support@vsdebug.pro</value>
+    <value>ovidiu@vsdebug.pro</value>
   </data>
   <data name="DumpMemString" xml:space="preserve">
     <value>dumpmem</value>
