@@ -26,7 +26,7 @@ jobs:
       uses: ovidiuvio/NextVersionGeneratorAction@1.0
       with:
         major-pattern: '\bMajor\b'
-        minor-pattern: '\bAdd\b'
+        minor-pattern: '\bMinor\b'
         patch-pattern: '.*'
         output-to-env-variable: 'Version'
     - name: Set version for Visual Studio Extension
