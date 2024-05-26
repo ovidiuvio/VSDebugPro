@@ -1,45 +1,45 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
-    <Metadata>
-        <Identity Publisher="Ovidiu Ionescu" Version="4.1.0.0" Id="89964642-1cad-4344-9ed3-e3997f19687f" Language="en-US"/>
-        <DisplayName>VSDebugPro</DisplayName>
-        <Description xml:space="preserve">VSDebugPro is an open-source Visual Studio extension that streamlines C/C++, C# debugging workflows. It empowers developers with a suite of memory manipulation tools, accessible directly from the integrated console.</Description>
-        <MoreInfo>http://www.vsdebug.pro/</MoreInfo>
-        <License>LICENSE.txt</License>
-        <Icon>Resources\vsdpro.png</Icon>
-        <PreviewImage>Resources\vsdt_screenshot.jpg</PreviewImage>
-        <Tags>memory, memory-dump, memdump, writemem, readmem, memory-write, read memory, dump memory, debugger, debug, debug-tools, malloc, memcpy</Tags>
-    </Metadata>
-    <Installation>
-        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
-            <ProductArchitecture>amd64</ProductArchitecture>
-        </InstallationTarget>
-        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
-            <ProductArchitecture>arm64</ProductArchitecture>
-        </InstallationTarget>
-        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
-            <ProductArchitecture>amd64</ProductArchitecture>
-        </InstallationTarget>
-        <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
-            <ProductArchitecture>arm64</ProductArchitecture>
-        </InstallationTarget>
-        <InstallationTarget Version="[16.9,17.0)" Id="Microsoft.VisualStudio.Community">
-            <ProductArchitecture>x86</ProductArchitecture>
-        </InstallationTarget>
-        <InstallationTarget Version="[16.9,17.0)" Id="Microsoft.VisualStudio.Pro">
-            <ProductArchitecture>x86</ProductArchitecture>
-        </InstallationTarget>
-    </Installation>
-    <Dependencies>
-        <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.8,)"/>
-        <Dependency Id="Microsoft.VisualStudio.MPF" DisplayName="Visual Studio MPF" d:Source="Installed" Version="[11.0,12.0)"/>
-    </Dependencies>
-    <Assets>
-        <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|"/>
-        <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="VSDebugCoreLib" Path="|VSDebugCoreLib|" AssemblyName="|VSDebugCoreLib;AssemblyName|"/>
-        <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|"/>
-    </Assets>
-    <Prerequisites>
-        <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,18.0)" DisplayName="Visual Studio core editor" />
-    </Prerequisites>
+  <Metadata>
+    <Identity Publisher="Ovidiu Ionescu" Version="4.1.1.0" Id="89964642-1cad-4344-9ed3-e3997f19687f" Language="en-US"/>
+    <DisplayName>VSDebugPro</DisplayName>
+    <Description xml:space="preserve">VSDebugPro is an open-source Visual Studio extension that streamlines C/C++, C# debugging workflows. It empowers developers with a suite of memory manipulation tools, accessible directly from the integrated console.</Description>
+    <MoreInfo>http://www.vsdebug.pro/</MoreInfo>
+    <License>LICENSE.txt</License>
+    <Icon>Resources\vsdpro.png</Icon>
+    <PreviewImage>Resources\vsdt_screenshot.jpg</PreviewImage>
+    <Tags>memory, memory-dump, memdump, writemem, readmem, memory-write, read memory, dump memory, debugger, debug, debug-tools, malloc, memcpy</Tags>
+  </Metadata>
+  <Installation>
+    <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Community">
+      <ProductArchitecture>arm64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
+      <ProductArchitecture>amd64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Version="[17.0,18.0)" Id="Microsoft.VisualStudio.Pro">
+      <ProductArchitecture>arm64</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Version="[16.9,17.0)" Id="Microsoft.VisualStudio.Community">
+      <ProductArchitecture>x86</ProductArchitecture>
+    </InstallationTarget>
+    <InstallationTarget Version="[16.9,17.0)" Id="Microsoft.VisualStudio.Pro">
+      <ProductArchitecture>x86</ProductArchitecture>
+    </InstallationTarget>
+  </Installation>
+  <Dependencies>
+    <Dependency Id="Microsoft.Framework.NDP" DisplayName="Microsoft .NET Framework" d:Source="Manual" Version="[4.8,)"/>
+    <Dependency Id="Microsoft.VisualStudio.MPF" DisplayName="Visual Studio MPF" d:Source="Installed" Version="[11.0,12.0)"/>
+  </Dependencies>
+  <Assets>
+    <Asset Type="Microsoft.VisualStudio.VsPackage" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%;PkgdefProjectOutputGroup|"/>
+    <Asset Type="Microsoft.VisualStudio.Assembly" d:Source="Project" d:ProjectName="VSDebugCoreLib" Path="|VSDebugCoreLib|" AssemblyName="|VSDebugCoreLib;AssemblyName|"/>
+    <Asset Type="Microsoft.VisualStudio.MefComponent" d:Source="Project" d:ProjectName="%CurrentProject%" Path="|%CurrentProject%|"/>
+  </Assets>
+  <Prerequisites>
+    <Prerequisite Id="Microsoft.VisualStudio.Component.CoreEditor" Version="[16.0,18.0)" DisplayName="Visual Studio core editor"/>
+  </Prerequisites>
 </PackageManifest>
