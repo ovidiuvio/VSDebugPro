@@ -167,7 +167,7 @@
 
   <Symbols>
     <!-- This is the package guid. -->
-    <GuidSymbol name="GuidVSDebugProPkg" value="{BD397717-72D8-460A-B831-0AEB27E057D8}" />
+    <GuidSymbol name="GuidVSDebugProPkg" value="{89964642-1cad-4344-9ed3-e3997f19687f}" />
     
     <!-- Menu guids -->
     <GuidSymbol name="GuidVSDebugProMenuBaseGroup" value="{75CB598B-9D23-4FBC-BD3E-4F2B5C70AAEF}">

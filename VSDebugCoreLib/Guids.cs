@@ -8,7 +8,7 @@ namespace VSDebugCoreLib
     public static class GuidList
     {
         // Context guids
-        public const string GuidVSDebugProPkgString = "BD397717-72D8-460A-B831-0AEB27E057D8";
+        public const string GuidVSDebugProPkgString = "89964642-1cad-4344-9ed3-e3997f19687f";
 
         public static readonly Guid GuidVSDebugProPkg = new Guid(GuidVSDebugProPkgString);
 
