@@ -64,7 +64,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         tag_name: ${{ env.Version }}
-        release_name:  "VSDebugPro ${{ env.Version }} (VS2022)"
+        release_name:  "VSDebugPro ${{ env.Version }}"
         draft: false
         prerelease: false
     - name: Upload Release Asset - VSIX
