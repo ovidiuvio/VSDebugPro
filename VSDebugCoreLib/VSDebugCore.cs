@@ -64,7 +64,9 @@ namespace VSDebugCoreLib
 
         public ICollection<BaseCommand> Commands => _commands;
 
-        public ConsoleEngine CONSOLE => _consoleEngine;
+        public ConsoleEngine ConsoleEngine => _consoleEngine;
+
+        public ConsoleWindow Console => _console;
 
         /// <summary>
         ///     VS IDE that is executing this context.
@@ -158,6 +160,7 @@ namespace VSDebugCoreLib
                 RegisterConsoleCommand(new MemAlloc(this));
                 RegisterConsoleCommand(new MemFree(this));
                 RegisterBaseCommand(new ExploreWdCommand(this));
+                RegisterBaseCommand(new RepeatCommand(this));
             }
         }
 

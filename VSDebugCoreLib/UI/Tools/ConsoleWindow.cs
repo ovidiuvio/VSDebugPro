@@ -378,6 +378,25 @@ namespace VSDebugCoreLib.UI.Tools
             }
         }
 
+        public void ExecuteLast()
+        {
+            if (GetInputLine().Length == 0)
+            {
+                string strInput = _engine.LastValidInput;
+                if (strInput != null)
+                {
+                    mefTextBuffer.Insert(mefTextBuffer.CurrentSnapshot.Length, strInput);
+                    mefTextBuffer.Insert(mefTextBuffer.CurrentSnapshot.Length, "\n");
+                    if (_engine != null)
+                    {
+                        _engine.ExecuteLast();
+
+                        AfterConsoleExecute();
+                    }
+                }
+            }
+        }
+
         #region Command Handlers
 
         /// <summary>

@@ -31,7 +31,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (argv.Length != 3)
             {
-                Context.CONSOLE.Write(CommandHelp);
+                Context.ConsoleEngine.Write(CommandHelp);
                 return;
             }
 
@@ -45,19 +45,19 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!varArgAddr1.IsValidValue)
             {
-                Context.CONSOLE.Write("Argument <address>: " + strArgAddr1 + " is invalid!");
+                Context.ConsoleEngine.Write("Argument <address>: " + strArgAddr1 + " is invalid!");
                 return;
             }
 
             if (!varArgAddr2.IsValidValue)
             {
-                Context.CONSOLE.Write("Argument <address>: " + strArgAddr2 + " is invalid!");
+                Context.ConsoleEngine.Write("Argument <address>: " + strArgAddr2 + " is invalid!");
                 return;
             }
 
             if (!varArgSize.IsValidValue)
             {
-                Context.CONSOLE.Write("Argument <size>: " + strArgSize + " is invalid!");
+                Context.ConsoleEngine.Write("Argument <size>: " + strArgSize + " is invalid!");
                 return;
             }
 
@@ -81,7 +81,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!bRet)
             {
-                Context.CONSOLE.Write("Failed to evaluate command arguments!");
+                Context.ConsoleEngine.Write("Failed to evaluate command arguments!");
                 return;
             }
 
@@ -92,7 +92,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (string.Empty == strDiffTool)
             {
-                Context.CONSOLE.Write("Diff tool not set!");
+                Context.ConsoleEngine.Write("Diff tool not set!");
                 return;
             }
 
@@ -102,7 +102,7 @@ namespace VSDebugCoreLib.Commands.Memory
                      dataSize
                  ))
             {
-                Context.CONSOLE.Write("Failed to read data from address: " + NumberHelpers.ToHex(addr1) + "!");
+                Context.ConsoleEngine.Write("Failed to read data from address: " + NumberHelpers.ToHex(addr1) + "!");
                 return;
             }
 
@@ -112,7 +112,7 @@ namespace VSDebugCoreLib.Commands.Memory
                     dataSize
                 ))
             {
-                Context.CONSOLE.Write("Failed to read data from address: " + NumberHelpers.ToHex(addr2) + "!");
+                Context.ConsoleEngine.Write("Failed to read data from address: " + NumberHelpers.ToHex(addr2) + "!");
                 return;
             }
 

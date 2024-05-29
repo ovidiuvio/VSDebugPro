@@ -111,6 +111,14 @@
         </Strings>
       </Button>
 
+	  <Button guid="GuidVSDebugProRepeatCmd" id="CmdIDRepeatCmd" priority="0x0101" type="Button">
+		<Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" />
+		<Icon guid="guidImages" id="bmpRepeat" />
+		<Strings>
+		  <ButtonText>Repeat last command</ButtonText>
+		</Strings>
+	  </Button>
+
      
 
     </Buttons>
@@ -122,7 +130,7 @@
             bitmap strip containing the bitmaps and then there are the numeric ids of the elements used 
             inside a button definition. An important aspect of this declaration is that the element id 
             must be the actual index (1-based) of the bitmap inside the bitmap strip. -->
-      <Bitmap guid="guidImages" href="Resources\Images.png" usedList="bmpInfo, bmpHelp, bmpSet, bmpCon, bmpFolder"/>
+      <Bitmap guid="guidImages" href="Resources\toolbar.png" usedList="bmpInfo, bmpHelp, bmpSet, bmpCon, bmpFolder, bmpLog, bmpRepeat"/>
       
     </Bitmaps>
     
@@ -202,6 +210,9 @@
     <GuidSymbol name="GuidVSDebugProExploreWD" value="{D71DB7A7-6183-4D16-9018-747123D2DD39}">
       <IDSymbol name="CmdIDExploreWD" value="0x1105" />
     </GuidSymbol>
+	<GuidSymbol name="GuidVSDebugProRepeatCmd" value="{6DE4CA7A-EAD0-4819-B9D8-818FDC6BA7FD}">
+	  <IDSymbol name="CmdIDRepeatCmd" value="0x1106" />
+	</GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{3b9502c5-dedc-4e85-b9b3-40cc6794ed11}" >
       <IDSymbol name="bmpInfo" value="1" />
@@ -209,7 +220,8 @@
       <IDSymbol name="bmpSet" value="3" />
       <IDSymbol name="bmpCon" value="4" />
       <IDSymbol name="bmpFolder" value="5" />
-      <IDSymbol name="bmpPicStrikethrough" value="6" />
+	  <IDSymbol name="bmpLog" value="6" />
+	  <IDSymbol name="bmpRepeat" value="7" />
     </GuidSymbol>
   </Symbols>
 

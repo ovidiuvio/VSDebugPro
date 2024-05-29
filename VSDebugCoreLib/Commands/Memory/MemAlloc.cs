@@ -27,7 +27,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (argv.Length != 1)
             {
-                Context.CONSOLE.Write(CommandHelp);
+                Context.ConsoleEngine.Write(CommandHelp);
                 return;
             }
 
@@ -37,7 +37,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!varArgSize.IsValidValue)
             {
-                Context.CONSOLE.Write("Argument <size>: " + strArgSize + " is invalid!");
+                Context.ConsoleEngine.Write("Argument <size>: " + strArgSize + " is invalid!");
                 return;
             }
 
@@ -52,7 +52,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!bRet)
             {
-                Context.CONSOLE.Write("Failed to evaluate command arguments!");
+                Context.ConsoleEngine.Write("Failed to evaluate command arguments!");
                 return;
             }
 
@@ -60,11 +60,11 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (0 == qwPtr)
             {
-                Context.CONSOLE.Write("Failed to allocate memory!");
+                Context.ConsoleEngine.Write("Failed to allocate memory!");
                 return;
             }
 
-            Context.CONSOLE.Write("Allocated: " + dataSize + " bytes at address: " + NumberHelpers.ToHex((long) qwPtr));
+            Context.ConsoleEngine.Write("Allocated: " + dataSize + " bytes at address: " + NumberHelpers.ToHex((long) qwPtr));
         }
     }
 }

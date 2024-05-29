@@ -51,7 +51,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (argv.Length < 2)
             {
-                Context.CONSOLE.Write(CommandHelp);
+                Context.ConsoleEngine.Write(CommandHelp);
                 return;
             }
 
@@ -71,7 +71,7 @@ namespace VSDebugCoreLib.Commands.Memory
                 }
                 else
                 {
-                    Context.CONSOLE.Write("Specified flag: " + strArgParam + " is invalid!");
+                    Context.ConsoleEngine.Write("Specified flag: " + strArgParam + " is invalid!");
                     return;
                 }
             }
@@ -81,7 +81,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (argv.Length != reqNArg)
             {
-                Context.CONSOLE.Write(CommandHelp);
+                Context.ConsoleEngine.Write(CommandHelp);
                 return;
             }
 
@@ -112,8 +112,8 @@ namespace VSDebugCoreLib.Commands.Memory
             // if append or force is not specified, return error
             if (File.Exists(strArgFile) && !(TknForce == chrFlag || TknAppend == chrFlag))
             {
-                Context.CONSOLE.Write("Output file name: " + strArgFile + " is in use!");
-                Context.CONSOLE.Write("Use -" + TknForce + "/-" + TknAppend + " to overwrite/append");
+                Context.ConsoleEngine.Write("Output file name: " + strArgFile + " is in use!");
+                Context.ConsoleEngine.Write("Use -" + TknForce + "/-" + TknAppend + " to overwrite/append");
                 return;
             }
 
@@ -122,13 +122,13 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!varArgSource.IsValidValue)
             {
-                Context.CONSOLE.Write("Address: <" + strArgSource + "> is invalid!");
+                Context.ConsoleEngine.Write("Address: <" + strArgSource + "> is invalid!");
                 return;
             }
 
             if (!varArgSize.IsValidValue)
             {
-                Context.CONSOLE.Write("Size: <" + strArgSize + "> is invalid!");
+                Context.ConsoleEngine.Write("Size: <" + strArgSize + "> is invalid!");
                 return;
             }
 
@@ -147,7 +147,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!bRet)
             {
-                Context.CONSOLE.Write("Failed to evaluate command arguments!");
+                Context.ConsoleEngine.Write("Failed to evaluate command arguments!");
                 return;
             }
 
@@ -164,11 +164,11 @@ namespace VSDebugCoreLib.Commands.Memory
                      fileMode
                  ))
             {
-                Context.CONSOLE.Write("Couldn`t dump memory to file!");
+                Context.ConsoleEngine.Write("Couldn`t dump memory to file!");
                 return;
             }
 
-            Context.CONSOLE.Write("Wrote: " + dataSize + " bytes to: " + MiscHelpers.GetClickableFileName(strArgFile));
+            Context.ConsoleEngine.Write("Wrote: " + dataSize + " bytes to: " + MiscHelpers.GetClickableFileName(strArgFile));
         }
     }
 }

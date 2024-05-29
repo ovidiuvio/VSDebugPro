@@ -33,7 +33,7 @@ namespace VSDebugCoreLib.Commands.Core
             switch (argv.Length)
             {
                 case 0:
-                    Context.CONSOLE.Write(CommandHelp);
+                    Context.ConsoleEngine.Write(CommandHelp);
                     return;
 
                 case 1:
@@ -42,15 +42,15 @@ namespace VSDebugCoreLib.Commands.Core
                     {
                         if (Context.Settings.Alias.AliasList.Values.Count > 0)
                         {
-                            Context.CONSOLE.WriteSeparator();
+                            Context.ConsoleEngine.WriteSeparator();
 
                             foreach (var item in Context.Settings.Alias.AliasList.Values)
-                                Context.CONSOLE.Write(string.Format("{0,15}\t{1}", item.Item1, item.Item2));
+                                Context.ConsoleEngine.Write(string.Format("{0,15}\t{1}", item.Item1, item.Item2));
                         }
                     }
                     else
                     {
-                        Context.CONSOLE.Write(CommandHelp);
+                        Context.ConsoleEngine.Write(CommandHelp);
                     }
                 }
                     return;
@@ -65,16 +65,16 @@ namespace VSDebugCoreLib.Commands.Core
                         {
                             bRes = Context.Settings.Alias.DelAlias(alias);
                             if (bRes)
-                                Context.CONSOLE.Write("Deleted alias: " + alias + ".");
+                                Context.ConsoleEngine.Write("Deleted alias: " + alias + ".");
                         }
                         else
                         {
-                            Context.CONSOLE.Write("Alias: " + alias + " not found.");
+                            Context.ConsoleEngine.Write("Alias: " + alias + " not found.");
                         }
                     }
                     else
                     {
-                        Context.CONSOLE.Write(CommandHelp);
+                        Context.ConsoleEngine.Write(CommandHelp);
                     }
                 }
                     return;
@@ -90,16 +90,16 @@ namespace VSDebugCoreLib.Commands.Core
                     if ("add" == argv[0])
                     {
                         // prevent command hiding
-                        if (null != Context.CONSOLE.FindCommand(alias))
+                        if (null != Context.ConsoleEngine.FindCommand(alias))
                         {
-                            Context.CONSOLE.Write("Unable to alias: " + alias + "!");
+                            Context.ConsoleEngine.Write("Unable to alias: " + alias + "!");
                             break;
                         }
 
-                        if (null == Context.CONSOLE.FindCommand(aliascmd))
+                        if (null == Context.ConsoleEngine.FindCommand(aliascmd))
                         {
                             bRes = false;
-                            Context.CONSOLE.Write("Command: " + "<" + aliascmd + ">" + " is not valid.");
+                            Context.ConsoleEngine.Write("Command: " + "<" + aliascmd + ">" + " is not valid.");
                             break;
                         }
 
@@ -110,18 +110,18 @@ namespace VSDebugCoreLib.Commands.Core
                         else
                         {
                             bRes = false;
-                            Context.CONSOLE.Write("Alias: " + alias + " is already defined.");
+                            Context.ConsoleEngine.Write("Alias: " + alias + " is already defined.");
                             break;
                         }
 
                         if (bRes)
-                            Context.CONSOLE.Write("Added alias: " + alias + ".");
+                            Context.ConsoleEngine.Write("Added alias: " + alias + ".");
                         else
-                            Context.CONSOLE.Write("Unable to alias: " + alias + "!");
+                            Context.ConsoleEngine.Write("Unable to alias: " + alias + "!");
                     }
                     else
                     {
-                        Context.CONSOLE.Write(CommandHelp);
+                        Context.ConsoleEngine.Write(CommandHelp);
                     }
                 }
                     return;

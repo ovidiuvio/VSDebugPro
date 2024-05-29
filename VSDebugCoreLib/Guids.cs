@@ -27,5 +27,6 @@ namespace VSDebugCoreLib
         public static readonly Guid GuidVSDebugProSettings = new Guid("317DB7DB-D080-42B2-A298-404F42FFD60E");
 
         public static readonly Guid GuidVSDebugProExploreWD = new Guid("D71DB7A7-6183-4D16-9018-747123D2DD39");
+        public static readonly Guid GuidVSDebugProRepeatCmd = new Guid("6DE4CA7A-EAD0-4819-B9D8-818FDC6BA7FD");
     }
 }

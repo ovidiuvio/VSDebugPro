@@ -30,7 +30,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (argv.Length != 3)
             {
-                Context.CONSOLE.Write(CommandHelp);
+                Context.ConsoleEngine.Write(CommandHelp);
                 return;
             }
 
@@ -47,7 +47,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!File.Exists(strArgFile))
             {
-                Context.CONSOLE.Write("couldn`t open input file: " + strArgFile + " !");
+                Context.ConsoleEngine.Write("couldn`t open input file: " + strArgFile + " !");
                 return;
             }
 
@@ -56,13 +56,13 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!varArgDst.IsValidValue)
             {
-                Context.CONSOLE.Write("Argument <address>: " + strArgDst + " is invalid!");
+                Context.ConsoleEngine.Write("Argument <address>: " + strArgDst + " is invalid!");
                 return;
             }
 
             if (!varArgSize.IsValidValue)
             {
-                Context.CONSOLE.Write("Argument <size>: " + strArgSize + " is invalid!");
+                Context.ConsoleEngine.Write("Argument <size>: " + strArgSize + " is invalid!");
                 return;
             }
 
@@ -81,7 +81,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!bRet)
             {
-                Context.CONSOLE.Write("Failed to evaluate command arguments!");
+                Context.ConsoleEngine.Write("Failed to evaluate command arguments!");
                 return;
             }
 
@@ -89,7 +89,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (fileInfo.Length < dataSize)
             {
-                Context.CONSOLE.Write("Input file size:" + fileInfo.Length + " is less than the specified size:" +
+                Context.ConsoleEngine.Write("Input file size:" + fileInfo.Length + " is less than the specified size:" +
                                       dataSize + " !");
                 return;
             }
@@ -100,11 +100,11 @@ namespace VSDebugCoreLib.Commands.Memory
                     dataSize
                 ))
             {
-                Context.CONSOLE.Write("Couldn`t load memory to address:" + "0x" + startAddress.ToString("X") + " !");
+                Context.ConsoleEngine.Write("Couldn`t load memory to address:" + "0x" + startAddress.ToString("X") + " !");
                 return;
             }
 
-            Context.CONSOLE.Write("Wrote: " + dataSize + " bytes to address: " + "0x" + startAddress.ToString("X"));
+            Context.ConsoleEngine.Write("Wrote: " + dataSize + " bytes to address: " + "0x" + startAddress.ToString("X"));
         }
     }
 }

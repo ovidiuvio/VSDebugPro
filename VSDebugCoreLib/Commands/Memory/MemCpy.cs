@@ -29,7 +29,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (argv.Length != 3)
             {
-                Context.CONSOLE.Write(CommandHelp);
+                Context.ConsoleEngine.Write(CommandHelp);
                 return;
             }
 
@@ -43,19 +43,19 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!varArgDst.IsValidValue)
             {
-                Context.CONSOLE.Write("Argument <address>: " + strArgDst + " is invalid!");
+                Context.ConsoleEngine.Write("Argument <address>: " + strArgDst + " is invalid!");
                 return;
             }
 
             if (!varArgSrc.IsValidValue)
             {
-                Context.CONSOLE.Write("Argument <address>: " + strArgSrc + " is invalid!");
+                Context.ConsoleEngine.Write("Argument <address>: " + strArgSrc + " is invalid!");
                 return;
             }
 
             if (!varArgSize.IsValidValue)
             {
-                Context.CONSOLE.Write("Argument <size>: " + strArgSize + " is invalid!");
+                Context.ConsoleEngine.Write("Argument <size>: " + strArgSize + " is invalid!");
                 return;
             }
 
@@ -79,7 +79,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!bRet)
             {
-                Context.CONSOLE.Write("Failed to evaluate command arguments!");
+                Context.ConsoleEngine.Write("Failed to evaluate command arguments!");
                 return;
             }
 
@@ -90,12 +90,12 @@ namespace VSDebugCoreLib.Commands.Memory
                    dataSize
                ))
             {
-                Context.CONSOLE.Write("Memory copy src:" + NumberHelpers.ToHex(srcAddress) + " dst:" +
+                Context.ConsoleEngine.Write("Memory copy src:" + NumberHelpers.ToHex(srcAddress) + " dst:" +
                                       NumberHelpers.ToHex(dstAddress) + " " + dataSize + " failed!");
                 return;
             }
 
-            Context.CONSOLE.Write("Wrote: " + dataSize + " bytes to address: " + NumberHelpers.ToHex(dstAddress));
+            Context.ConsoleEngine.Write("Wrote: " + dataSize + " bytes to address: " + NumberHelpers.ToHex(dstAddress));
         }
     }
 }

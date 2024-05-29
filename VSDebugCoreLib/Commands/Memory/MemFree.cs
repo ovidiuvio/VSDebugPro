@@ -27,7 +27,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (argv.Length != 1)
             {
-                Context.CONSOLE.Write(CommandHelp);
+                Context.ConsoleEngine.Write(CommandHelp);
                 return;
             }
 
@@ -37,7 +37,7 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!varArgAddr.IsValidValue)
             {
-                Context.CONSOLE.Write("Argument <address>: " + strArgAddr + " is invalid!");
+                Context.ConsoleEngine.Write("Argument <address>: " + strArgAddr + " is invalid!");
                 return;
             }
 
@@ -52,13 +52,13 @@ namespace VSDebugCoreLib.Commands.Memory
 
             if (!bRet)
             {
-                Context.CONSOLE.Write("Failed to evaluate command arguments!");
+                Context.ConsoleEngine.Write("Failed to evaluate command arguments!");
                 return;
             }
 
             MemoryHelpers.ProcFree(Context.IDE.Debugger.CurrentStackFrame, lpAddress);
 
-            Context.CONSOLE.Write("Released memory at address: " + NumberHelpers.ToHex(lpAddress));
+            Context.ConsoleEngine.Write("Released memory at address: " + NumberHelpers.ToHex(lpAddress));
         }
     }
 }

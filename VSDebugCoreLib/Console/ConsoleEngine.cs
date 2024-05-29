@@ -16,9 +16,13 @@ namespace VSDebugCoreLib.Console
             _commands = commands;
         }
 
+        private string _lastValidInput;
+
         protected VSDebugContext Context { get; }
 
         private ICollection<BaseCommand> _commands { get; }
+
+        public string LastValidInput { get => _lastValidInput; }
 
         public ICollection<BaseCommand> Commands => _commands;
 
@@ -82,7 +86,10 @@ namespace VSDebugCoreLib.Console
                 }
 
                 if (argv.Length > 1)
+                {
                     command.Execute(argv[1]);
+                    _lastValidInput = text;
+                }
                 else
                     command.Execute("");
             }
@@ -99,6 +106,14 @@ namespace VSDebugCoreLib.Console
                 {
                     Debugger.Log(0, "Diag", ex.ToString());
                 }
+            }
+        }
+
+        public void ExecuteLast()
+        {
+            if (_lastValidInput != null)
+            {
+                Execute(_lastValidInput);
             }
         }
 
