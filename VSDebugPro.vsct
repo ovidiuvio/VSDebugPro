@@ -103,7 +103,7 @@
         </Strings>
       </Button>
 
-      <Button guid="GuidVSDebugProExploreWD" id="CmdIDExploreWD" priority="0x0101" type="Button">
+      <Button guid="GuidVSDebugProExploreWD" id="CmdIDExploreWD" priority="0x0102" type="Button">
         <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" />
         <Icon guid="guidImages" id="bmpFolder" />
         <Strings>
@@ -111,7 +111,7 @@
         </Strings>
       </Button>
 
-	  <Button guid="GuidVSDebugProRepeatCmd" id="CmdIDRepeatCmd" priority="0x0101" type="Button">
+	  <Button guid="GuidVSDebugProRepeatCmd" id="CmdIDRepeatCmd" priority="0x0103" type="Button">
 		<Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" />
 		<Icon guid="guidImages" id="bmpRepeat" />
 		<Strings>
@@ -168,7 +168,7 @@
     <CommandPlacement guid="guidVSStd97" id="cmdidClearPane" priority="0x100">
       <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp"/>
     </CommandPlacement>
-    <CommandPlacement guid="GuidVSDebugProSettings" id="CmdIDSettings" priority="0x110">
+    <CommandPlacement guid="GuidVSDebugProSettings" id="CmdIDSettings" priority="0x101">
       <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp"/>
     </CommandPlacement>
   </CommandPlacements>
