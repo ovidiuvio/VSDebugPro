@@ -142,12 +142,10 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\Package.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\toolbar.png" />
     <Content Include="Resources\vsdpro.png">
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
       <IncludeInVSIX>true</IncludeInVSIX>
@@ -157,7 +155,6 @@
       <IncludeInVSIX>true</IncludeInVSIX>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </Content>
-    <Resource Include="Resources\settings.ico" />
     <Content Include="license.txt">
       <IncludeInVSIX>true</IncludeInVSIX>
     </Content>
