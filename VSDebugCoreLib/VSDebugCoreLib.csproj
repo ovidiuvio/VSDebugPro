@@ -96,6 +96,7 @@
     <Compile Include="Commands\Memory\MemSet.cs" />
     <Compile Include="Commands\UI\AboutCommand.cs" />
     <Compile Include="Commands\UI\ConsoleCommand.cs" />
+    <Compile Include="Commands\UI\ExportHistoryCommand.cs" />
     <Compile Include="Commands\UI\RepeatCommand.cs" />
     <Compile Include="Commands\UI\ExploreWDCommand.cs" />
     <Compile Include="Commands\UI\HelpCommand.cs" />

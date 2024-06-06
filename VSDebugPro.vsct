@@ -111,12 +111,20 @@
         </Strings>
       </Button>
 
-	  <Button guid="GuidVSDebugProRepeatCmd" id="CmdIDRepeatCmd" priority="0x0103" type="Button">
-		<Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" />
-		<Icon guid="guidImages" id="bmpRepeat" />
-		<Strings>
-		  <ButtonText>Repeat last command</ButtonText>
-		</Strings>
+	  <Button guid="GuidVSDebugProExportHistory" id="CmdIDExportHistory" priority="0x0103" type="Button">
+	  	<Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" />
+	  	<Icon guid="guidImages" id="bmpRepeat" />
+	  	<Strings>
+	  	  <ButtonText>Export commands buffer</ButtonText>
+	  	</Strings>
+	  </Button>
+
+	  <Button guid="GuidVSDebugProRepeatCmd" id="CmdIDRepeatCmd" priority="0x0104" type="Button">
+	  	<Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" />
+	  	<Icon guid="guidImages" id="bmpRepeat" />
+	  	<Strings>
+	  	  <ButtonText>Repeat last command</ButtonText>
+	  	</Strings>
 	  </Button>
 
      
@@ -212,6 +220,9 @@
     </GuidSymbol>
 	<GuidSymbol name="GuidVSDebugProRepeatCmd" value="{6DE4CA7A-EAD0-4819-B9D8-818FDC6BA7FD}">
 	  <IDSymbol name="CmdIDRepeatCmd" value="0x1106" />
+	</GuidSymbol>
+	<GuidSymbol name="GuidVSDebugProExportHistory" value="{AB50D089-A426-4CA6-8958-E2C56CC4ABBC}">
+	  <IDSymbol name="CmdIDExportHistory" value="0x1107" />
 	</GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{3b9502c5-dedc-4e85-b9b3-40cc6794ed11}" >
