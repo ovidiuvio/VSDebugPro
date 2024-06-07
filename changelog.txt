@@ -1,3 +1,6 @@
+VSDebugPro_4-2-1-0
+    [*] Fix vsix dll includes
+	
 VSDebugPro_4-2-0-0
     [+] Added repeat last action command
     [+] Added a command to export the commands history buffer as yaml
