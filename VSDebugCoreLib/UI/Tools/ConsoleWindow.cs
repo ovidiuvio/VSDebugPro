@@ -397,6 +397,19 @@ namespace VSDebugCoreLib.UI.Tools
             }
         }
 
+        public void WriteInfo(string strInfo)
+        {
+            if (strInfo != null)
+            {
+                // write new line
+                mefTextBuffer.Insert(mefTextBuffer.CurrentSnapshot.Length, "\n");
+                mefTextBuffer.Insert(mefTextBuffer.CurrentSnapshot.Length, strInfo);
+                mefTextBuffer.Insert(mefTextBuffer.CurrentSnapshot.Length, "\n");
+
+                AfterConsoleExecute();
+            }
+        }
+
         #region Command Handlers
 
         /// <summary>
