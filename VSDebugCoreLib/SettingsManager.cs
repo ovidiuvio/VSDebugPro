@@ -314,7 +314,9 @@ namespace VSDebugCoreLib
                         new Tuple<string, string>(".bin", "Hex Editor"),
                         new Tuple<string, string>(".dmp", "Hex Editor"),
                         new Tuple<string, string>(".hex", "Hex Editor"),
-                        new Tuple<string, string>(".txt", "Text Editor")
+                        new Tuple<string, string>(".txt", "Text Editor"),
+                        new Tuple<string, string>(".json", "Text Editor"),
+                        new Tuple<string, string>(".yaml", "Text Editor")
                     };
                 }
             }
