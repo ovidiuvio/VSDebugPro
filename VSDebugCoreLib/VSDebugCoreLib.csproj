@@ -85,6 +85,7 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Commands\Console\ExecYamlCommand.cs" />
     <Compile Include="Commands\Core\Alias.cs" />
     <Compile Include="Commands\MemoryCommandBase.cs" />
     <Compile Include="Commands\Memory\MemDump.cs" />
@@ -239,6 +240,12 @@
     </PackageReference>
     <PackageReference Include="Newtonsoft.Json">
       <Version>13.0.3</Version>
+    </PackageReference>
+    <PackageReference Include="StrongNamer">
+      <Version>0.2.5</Version>
+    </PackageReference>
+    <PackageReference Include="Stubble.Core">
+      <Version>1.10.8</Version>
     </PackageReference>
     <PackageReference Include="YamlDotNet">
       <Version>15.1.6</Version>

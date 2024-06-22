@@ -159,9 +159,10 @@ namespace VSDebugCoreLib
                 RegisterConsoleCommand(new MemDiff(this));
                 RegisterConsoleCommand(new MemAlloc(this));
                 RegisterConsoleCommand(new MemFree(this));
+                RegisterConsoleCommand(new ExecuteYamlCommand(this));
                 RegisterBaseCommand(new ExploreWdCommand(this));
                 RegisterBaseCommand(new RepeatCommand(this));
-                RegisterBaseCommand(new ExportHistoryCommand(this));
+                RegisterBaseCommand(new ExportHistoryCommand(this));           
             }
         }
 

@@ -207,6 +207,9 @@
     <PackageReference Include="Microsoft.VisualStudio.Utilities">
       <Version>16.9.31024.71</Version>
     </PackageReference>
+    <PackageReference Include="StrongNamer">
+      <Version>0.2.5</Version>
+    </PackageReference>
   </ItemGroup>
   <PropertyGroup>
     <UseCodebase>true</UseCodebase>
@@ -215,11 +218,11 @@
   <Import Project="$(VSToolsPath)\VSSDK\Microsoft.VsSDK.targets" Condition="'$(VSToolsPath)' != ''" />
   <Target Name="IncludePackageReferenceDependencies" AfterTargets="GetVsixSourceItems">
     <ItemGroup>
-      <VSIXSourceItem Include="@(ReferencePath)" Condition="$([System.String]::new('%(ReferencePath.FusionName)').StartsWith('Microsoft.VisualStudio'))"/>
-	  <VSIXSourceItem Include="@(ReferencePath)" Condition="$([System.String]::new('%(ReferencePath.FusionName)').StartsWith('YamlDotNet'))"/>
-	  <VSIXSourceItem Include="@(ReferencePath)" Condition="$([System.String]::new('%(ReferencePath.FusionName)').StartsWith('DnsClient'))"/>
-	  <VSIXSourceItem Include="@(ReferencePath)" Condition="$([System.String]::new('%(ReferencePath.FusionName)').StartsWith('Newtonsoft.Json'))"/>
-	  <VSIXSourceItem Include="@(ReferencePath)" Condition="$([System.String]::new('%(ReferencePath.FusionName)').StartsWith('VSLangProj'))"/>
+      <VSIXSourceItem Include="@(ReferencePath)" Condition="$([System.String]::new('%(ReferencePath.FusionName)').StartsWith('Microsoft.VisualStudio'))" />
+      <VSIXSourceItem Include="@(ReferencePath)" Condition="$([System.String]::new('%(ReferencePath.FusionName)').StartsWith('YamlDotNet'))" />
+      <VSIXSourceItem Include="@(ReferencePath)" Condition="$([System.String]::new('%(ReferencePath.FusionName)').StartsWith('DnsClient'))" />
+      <VSIXSourceItem Include="@(ReferencePath)" Condition="$([System.String]::new('%(ReferencePath.FusionName)').StartsWith('Newtonsoft.Json'))" />
+      <VSIXSourceItem Include="@(ReferencePath)" Condition="$([System.String]::new('%(ReferencePath.FusionName)').StartsWith('VSLangProj'))" />
     </ItemGroup>
   </Target>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

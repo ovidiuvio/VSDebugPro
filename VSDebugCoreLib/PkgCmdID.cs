@@ -13,6 +13,7 @@ namespace VSDebugCoreLib
         public const uint cmdIDExploreWD = 0x1105;
         public const uint cmdIDRepeatCmd = 0x1106;
         public const uint cmdIDExportHistory = 0x1107;
+        public const uint cmdIDExecuteYaml = 0x1108;
         public const uint VSDConsoleContext = 0x2200;
         public const uint VSDConsoleTbar = 0x2220;
     }
