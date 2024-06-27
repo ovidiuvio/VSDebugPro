@@ -52,4 +52,6 @@
  *
  * VSDebugPro UI Element may contain fragments of work from Icon Scout
  * https://iconscout.com/licenses#simple_license
+ *
+ * VSDebugPro uses UI Elements from https://icons8.com/icons
  /

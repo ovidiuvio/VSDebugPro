@@ -37,7 +37,17 @@ namespace VSDebugCoreLib.Commands.Core
                 return;
             }
 
-            var yamlFilePath = argv[0];
+            var yamlFileName = argv[0];
+            string yamlFilePath;
+
+            if (Path.IsPathRooted(yamlFileName))
+            {
+                yamlFilePath = yamlFileName;
+            }
+            else
+            {
+                yamlFilePath = Path.Combine(Context.Settings.GeneralSettings.WorkingDirectory, yamlFileName);
+            }
 
             string[] args;
             if (argv.Length > 1)
@@ -91,8 +101,6 @@ namespace VSDebugCoreLib.Commands.Core
                     var commandText = $"{renderedArguments}";
                     Context.ConsoleEngine.Execute(commandText);
                 }
-
-                Context.ConsoleEngine.Write("Executed all commands from the YAML file.");
             }
             catch (Exception ex)
             {
