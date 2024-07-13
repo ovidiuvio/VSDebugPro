@@ -88,6 +88,7 @@
     <Compile Include="Commands\Console\ExecYamlCommand.cs" />
     <Compile Include="Commands\Core\Alias.cs" />
     <Compile Include="Commands\MemoryCommandBase.cs" />
+    <Compile Include="Commands\Memory\HexDump.cs" />
     <Compile Include="Commands\Memory\MemDump.cs" />
     <Compile Include="Commands\Memory\MemLoad.cs" />
     <Compile Include="Commands\Memory\MemAlloc.cs" />

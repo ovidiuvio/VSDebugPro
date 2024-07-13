@@ -76,6 +76,62 @@ namespace VSDebugCoreLib.Utils
             return 0 == lengthToRead;
         }
 
+        public static bool WriteHexDumpToFile(string fileName, StackFrame stackFrame, long fromAddress,
+            long lengthToRead, int columns, int bytesPerRow, FileMode fileMode = FileMode.Create)
+        {
+            var process = DkmMethods.GetDkmProcess(stackFrame);
+            var fs = new FileStream(fileName, fileMode);
+            using (var writer = new StreamWriter(fs))
+            {
+                var buffer = new byte[bytesPerRow];
+                long currentAddress = fromAddress;
+
+                while (lengthToRead > 0)
+                {
+                    if (buffer.Length > lengthToRead)
+                    {
+                        Array.Resize(ref buffer, (int)lengthToRead);
+                    }
+
+                    var byteCount = process.ReadMemory((ulong)currentAddress, DkmReadMemoryFlags.None, buffer);
+                    if (buffer.Length != byteCount)
+                    {
+                        return false;
+                    }
+
+                    writer.Write($"{currentAddress:X8}  ");
+
+                    for (var i = 0; i < byteCount; i++)
+                    {
+                        writer.Write($"{buffer[i]:X2} ");
+                        if ((i + 1) % columns == 0 && i != byteCount - 1)
+                            writer.Write(" ");
+                    }
+
+                    // Pad with spaces if less than bytesPerRow bytes were read
+                    for (var i = byteCount; i < buffer.Length; i++)
+                    {
+                        writer.Write("   ");
+                        if ((i + 1) % columns == 0 && i != buffer.Length - 1)
+                            writer.Write(" ");
+                    }
+
+                    writer.Write(" |");
+                    for (var i = 0; i < byteCount; i++)
+                    {
+                        writer.Write(char.IsControl((char)buffer[i]) ? '.' : (char)buffer[i]);
+                    }
+
+                    writer.WriteLine("|");
+
+                    currentAddress += byteCount;
+                    lengthToRead -= byteCount;
+                }
+            }
+
+            return true;
+        }
+
         public static bool ProcMemoryCopy(StackFrame stackFrame, long dstAddress, long srcAddress, long length)
         {
             var process = DkmMethods.GetDkmProcess(stackFrame);
