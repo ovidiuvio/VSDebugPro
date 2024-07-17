@@ -36,7 +36,7 @@ namespace VSDebugCoreLib.Commands.Debugging
 
             try
             {
-                string result = _evaluator.EvaluateAndExpandSymbol(expression);
+                string result = _evaluator.EvaluateExpression(expression);
                 Context.ConsoleEngine.Write(result);
             }
             catch (Exception ex)

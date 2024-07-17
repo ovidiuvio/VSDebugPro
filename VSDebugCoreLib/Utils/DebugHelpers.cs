@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -24,6 +25,8 @@ namespace VSDebugCoreLib.Utils
     public class DebuggerExpressionEvaluator
     {
         private readonly DTE2 _dte;
+        private const int MAX_DEPTH = 100;
+        private const int MAX_CONTAINER_ELEMENTS = 1000;
 
         public DebuggerExpressionEvaluator(DTE2 dte)
         {
@@ -51,28 +54,35 @@ namespace VSDebugCoreLib.Utils
 
                 if (IsCollectionType(expression))
                 {
-                    var sizeExpr = _dte.Debugger.GetExpression($"{currentExpression}.size()", false, 100);
-                    int size = sizeExpr.IsValidValue ? int.Parse(sizeExpr.Value) : 0;
-                    if (!sizeExpr.IsValidValue)
+                    if (expression.Type.Contains("std::map") || expression.Type.Contains("std::list"))
                     {
-                        Match match = Regex.Match(expression.Value, @"size=(\d+)");
-
-                        if (match.Success)
-                        {
-                            size = int.Parse(match.Groups[1].Value);
-                        }
+                        output.Append(FullyExpandExpression(expression));
                     }
-
-                    // Push collection elements onto the stack in reverse order for evaluation
-                    for (int i = size - 1; i >= 0; i--)
+                    else
                     {
-                        if (expression.Type.Contains("std::list"))
+                        var sizeExpr = _dte.Debugger.GetExpression($"{currentExpression}.size()", false, 100);
+                        int size = sizeExpr.IsValidValue ? int.Parse(sizeExpr.Value) : 0;
+                        if (!sizeExpr.IsValidValue)
                         {
-                            symbolsToEvaluate.Push(($"{currentSymbol}[{i}]", $"$LinkedListItem({currentExpression}._Mypair._Myval2._Myhead->_Next, {i}, _Next)->_Myval", currentIndent + "  "));
+                            Match match = Regex.Match(expression.Value, @"size=(\d+)");
+
+                            if (match.Success)
+                            {
+                                size = int.Parse(match.Groups[1].Value);
+                            }
                         }
-                        else
+
+                        // Push collection elements onto the stack in reverse order for evaluation
+                        for (int i = size - 1; i >= 0; i--)
                         {
-                            symbolsToEvaluate.Push(($"{currentSymbol}[{i}]", $"{currentExpression}[{i}]", currentIndent + "  "));
+                            if (expression.Type.Contains("std::list"))
+                            {
+                                symbolsToEvaluate.Push(($"{currentSymbol}[{i}]", $"$LinkedListItem({currentExpression}._Mypair._Myval2._Myhead->_Next, {i}, _Next)->_Myval", currentIndent + "  "));
+                            }
+                            else
+                            {
+                                symbolsToEvaluate.Push(($"{currentSymbol}[{i}]", $"{currentExpression}[{i}]", currentIndent + "  "));
+                            }
                         }
                     }
                 }
@@ -98,21 +108,14 @@ namespace VSDebugCoreLib.Utils
                    //(expression.Value is string && expression.Value.StartsWith("{") && expression.Value.EndsWith("}")); // For C# collections
         }
 
-        public string EvaluateExpression(string expression, bool fullyExpand = false)
+        public string EvaluateExpression(string expression)
         {
             if (_dte.Debugger.CurrentMode == dbgDebugMode.dbgBreakMode)
             {
-                Expression expr = _dte.Debugger.GetExpression(expression);
+                Expression expr = _dte.Debugger.GetExpression(expression, true, 100);
                 if (expr.IsValidValue)
                 {
-                    if (fullyExpand)
-                    {
-                        return FullyExpandExpression(expr);
-                    }
-                    else
-                    {
-                        return expr.Value;
-                    }
+                    return FullyExpandExpression(expr);
                 }
                 else
                 {
@@ -149,23 +152,16 @@ namespace VSDebugCoreLib.Utils
 
                 result.AppendLine($"{indent}{expr.Name} = {expr.Value}");
 
-                if (IsCollection(expr))
+                for (int i = expr.DataMembers.Count; i > 0; i--)
                 {
-                    ExpandCollection(expr, depth, path, stack);
-                }
-                else
-                {
-                    // Push children to stack in reverse order to maintain correct output order
-                    for (int i = expr.DataMembers.Count - 1; i >= 0; i--)
-                    {
-                        Expression childExpr = expr.DataMembers.Item(i + 1);
-                        string childPath = $"{path}.{childExpr.Name}";
+                    Expression childExpr = expr.DataMembers.Item(i);
+                    string childPath = $"{path}.{childExpr.Name}";
+                    if (!childExpr.Name.Contains("Raw View"))
                         stack.Push((childExpr, depth + 1, childPath));
-                    }
                 }
 
                 // Limit expansion depth to prevent potential issues
-                if (depth > 100)
+                if (depth > MAX_DEPTH)
                 {
                     result.AppendLine($"{indent}  <maximum depth reached>");
                     break;
@@ -173,6 +169,11 @@ namespace VSDebugCoreLib.Utils
             }
 
             return result.ToString();
+        }
+
+        private bool IsStdMap(Expression expr)
+        {
+            return expr.Type.Contains("std::map") || expr.Type.Contains("std::unordered_map");
         }
 
         private bool IsCollection(Expression expr)
@@ -196,6 +197,48 @@ namespace VSDebugCoreLib.Utils
                 string elementPath = $"{path}[{i}]";
                 stack.Push((element, depth + 1, elementPath));
             }
+        }
+
+        private void ExpandStdMap(Expression mapExpr, int depth, string path, Stack<(Expression, int, string)> stack)
+        {
+            int size = GetMapSize(mapExpr);
+            int elementsToShow = Math.Min(size, MAX_CONTAINER_ELEMENTS);
+
+            for (int i = 0; i < elementsToShow; i++)
+            {
+                string nodeExpr = $"{mapExpr.Name}._Mypair._Myval2._Myval2._Myhead->_Parent->_Left";
+                for (int j = 0; j < i; j++)
+                {
+                    nodeExpr = $"{nodeExpr}->_Parent";
+                }
+                Expression keyExpr = _dte.Debugger.GetExpression($"{nodeExpr}->_Myval.first");
+                Expression valueExpr = _dte.Debugger.GetExpression($"{nodeExpr}->_Myval.second");
+
+                string keyPath = $"{path}[{i}].key";
+                string valuePath = $"{path}[{i}].value";
+
+                stack.Push((valueExpr, depth + 2, valuePath));
+                stack.Push((keyExpr, depth + 2, keyPath));
+
+                Expression pairExpr = _dte.Debugger.GetExpression($"\"Pair {i}\"");
+                stack.Push((pairExpr, depth + 1, $"{path}[{i}]"));
+            }
+
+            if (size > MAX_CONTAINER_ELEMENTS)
+            {
+                Expression dummyExpr = _dte.Debugger.GetExpression($"\"... {size - MAX_CONTAINER_ELEMENTS} more elements ...\"");
+                stack.Push((dummyExpr, depth + 1, $"{path}[{MAX_CONTAINER_ELEMENTS}]"));
+            }
+        }
+
+        private int GetMapSize(Expression mapExpr)
+        {
+            Expression sizeExpr = _dte.Debugger.GetExpression($"{mapExpr.Name}._Mypair._Myval2._Myval2._Mysize");
+            if (sizeExpr.IsValidValue)
+            {
+                return int.Parse(sizeExpr.Value);
+            }
+            return 0;
         }
     }
 }
