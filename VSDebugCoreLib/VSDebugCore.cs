@@ -7,6 +7,7 @@ using Microsoft.VisualStudio.Shell;
 using VSDebugCoreLib.Commands;
 using VSDebugCoreLib.Commands.Core;
 using VSDebugCoreLib.Commands.Memory;
+using VSDebugCoreLib.Commands.Debugging;
 using VSDebugCoreLib.Commands.UI;
 using VSDebugCoreLib.Console;
 using VSDebugCoreLib.UI.Tools;
@@ -152,6 +153,7 @@ namespace VSDebugCoreLib
                 RegisterConsoleCommand(new AliasCommand(this));
                 RegisterConsoleCommand(new OpenConsoleCommand(this));
                 RegisterConsoleCommand(new SettingsCommand(this));
+                RegisterConsoleCommand(new StackWalk(this));
                 RegisterConsoleCommand(new MemDump(this));
                 RegisterConsoleCommand(new MemLoad(this));
                 RegisterConsoleCommand(new HexDump(this));

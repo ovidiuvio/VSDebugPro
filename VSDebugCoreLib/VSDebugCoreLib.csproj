@@ -96,6 +96,7 @@
     <Compile Include="Commands\Memory\MemDiff.cs" />
     <Compile Include="Commands\Memory\MemFree.cs" />
     <Compile Include="Commands\Memory\MemSet.cs" />
+    <Compile Include="Commands\Debugging\StackWalk.cs" />
     <Compile Include="Commands\UI\AboutCommand.cs" />
     <Compile Include="Commands\UI\ConsoleCommand.cs" />
     <Compile Include="Commands\UI\ExportHistoryCommand.cs" />
