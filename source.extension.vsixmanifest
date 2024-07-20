@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <PackageManifest Version="2.0.0" xmlns="http://schemas.microsoft.com/developer/vsx-schema/2011" xmlns:d="http://schemas.microsoft.com/developer/vsx-schema-design/2011">
   <Metadata>
-    <Identity Publisher="Ovidiu Ionescu" Version="4.2.3.0" Id="89964642-1cad-4344-9ed3-e3997f19687f" Language="en-US"/>
+    <Identity Publisher="Ovidiu Ionescu" Version="4.3.0.0" Id="89964642-1cad-4344-9ed3-e3997f19687f" Language="en-US"/>
     <DisplayName>VSDebugPro</DisplayName>
     <Description xml:space="preserve">VSDebugPro is an open-source Visual Studio extension that streamlines C/C++, C# debugging workflows. It empowers developers with a suite of memory manipulation tools, accessible directly from the integrated console.</Description>
     <MoreInfo>http://www.vsdebug.pro/</MoreInfo>
