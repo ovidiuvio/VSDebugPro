@@ -6,7 +6,7 @@ namespace VSDebugCoreLib.Commands.UI
     public class RepeatCommand : ShellCommand
     {
         public RepeatCommand(VSDebugContext context)
-            : base(context, GuidList.GuidVSDebugProRepeatCmd, (int) PkgCmdIDList.cmdIDRepeatCmd)
+            : base(context, GuidList.GuidVSDebugProRepeatCmd, (int) PkgCmdIDList.CmdIDRepeatCmd)
         {
             CommandDescription = "repeat last console command";
         }

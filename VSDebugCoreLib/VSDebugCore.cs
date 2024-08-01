@@ -167,7 +167,8 @@ namespace VSDebugCoreLib
                 RegisterConsoleCommand(new ExecuteYamlCommand(this));
                 RegisterBaseCommand(new ExploreWdCommand(this));
                 RegisterBaseCommand(new RepeatCommand(this));
-                RegisterBaseCommand(new ExportHistoryCommand(this));           
+                RegisterBaseCommand(new ExportHistoryCommand(this));
+                RegisterBaseCommand(new BreakpointActionCommand(this));
             }
         }
 

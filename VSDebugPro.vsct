@@ -20,6 +20,9 @@
   <!--This header contains the command ids for the menus provided by the shell. -->
   <Extern href="vsshlids.h"/>
 
+  <Extern href="VSDbgCmd.h"/>
+  <Extern href="VsDebugGuids.h"/>
+
 
 
 
@@ -103,13 +106,13 @@
         </Strings>
       </Button>
 
-      <Button guid="GuidVSDebugProExploreWD" id="CmdIDExploreWD" priority="0x0102" type="Button">
-        <Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" />
-        <Icon guid="guidImages" id="bmpFolder" />
-        <Strings>
-          <ButtonText>Open Working Directory</ButtonText>
-        </Strings>
-      </Button>
+	  <Button guid="GuidVSDebugProExploreWD" id="CmdIDExploreWD" priority="0x0102" type="Button">
+	  	<Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" />
+	  	<Icon guid="guidImages" id="bmpFolder" />
+	  	<Strings>
+	  		<ButtonText>Open Working Directory</ButtonText>
+	  	</Strings>
+	  </Button>
 
 	  <Button guid="GuidVSDebugProExportHistory" id="CmdIDExportHistory" priority="0x0103" type="Button">
 	  	<Parent guid="GuidVSDebugProConsoleMenu" id="VSDProConsoleToolbarGrp" />
@@ -124,6 +127,14 @@
 	  	<Icon guid="guidImages" id="bmpRepeat" />
 	  	<Strings>
 	  	  <ButtonText>Repeat last command</ButtonText>
+	  	</Strings>
+	  </Button>
+
+	  <Button guid="GuidVSDebugProBreakpointAction" id="CmdIDBreakpointAction" priority="0x0500" type="Button">
+	  	<Parent guid="guidVSDebugGroup" id="IDG_BREAKPOINT_CONTEXT_MODIFY" />
+	  	<Icon guid="guidImages" id="bmpCon" />
+	  	<Strings>
+	  		<ButtonText>Command...</ButtonText>
 	  	</Strings>
 	  </Button>
 
@@ -223,6 +234,9 @@
 	</GuidSymbol>
 	<GuidSymbol name="GuidVSDebugProExportHistory" value="{AB50D089-A426-4CA6-8958-E2C56CC4ABBC}">
 	  <IDSymbol name="CmdIDExportHistory" value="0x1107" />
+	</GuidSymbol>
+	<GuidSymbol name="GuidVSDebugProBreakpointAction" value="{1409C77F-2F4D-49D5-B0A5-75AA85F94E10}">
+	 <IDSymbol name="CmdIDBreakpointAction" value="0x1109" />
 	</GuidSymbol>
 
     <GuidSymbol name="guidImages" value="{3b9502c5-dedc-4e85-b9b3-40cc6794ed11}" >

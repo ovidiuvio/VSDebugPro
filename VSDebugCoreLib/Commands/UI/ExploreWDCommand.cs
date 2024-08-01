@@ -6,7 +6,7 @@ namespace VSDebugCoreLib.Commands.UI
     public class ExploreWdCommand : ShellCommand
     {
         public ExploreWdCommand(VSDebugContext context)
-            : base(context, GuidList.GuidVSDebugProExploreWD, (int) PkgCmdIDList.cmdIDExploreWD)
+            : base(context, GuidList.GuidVSDebugProExploreWD, (int) PkgCmdIDList.CmdIDExploreWD)
         {
             CommandDescription = Resources.CmdAboutDesc;
         }

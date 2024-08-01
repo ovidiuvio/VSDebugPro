@@ -10,7 +10,7 @@ namespace VSDebugCoreLib.Commands.UI
     public class ExportHistoryCommand : ShellCommand
     {
         public ExportHistoryCommand(VSDebugContext context)
-            : base(context, GuidList.GuidVSDebugProExportHistory, (int) PkgCmdIDList.cmdIDExportHistory)
+            : base(context, GuidList.GuidVSDebugProExportHistory, (int) PkgCmdIDList.CmdIDExportHistory)
         {
             CommandDescription = "Export command history as a YAML file.";
         }

@@ -16,7 +16,7 @@ namespace VSDebugCoreLib.Commands.Core
     internal class ExecuteYamlCommand : BaseCommand
     {
         public ExecuteYamlCommand(VSDebugContext context)
-            : base(context, (int)PkgCmdIDList.cmdIDExecuteYaml, "exec")
+            : base(context, (int)PkgCmdIDList.CmdIDExecuteYaml, "exec")
         {
             CommandDescription = "Executes commands from a specified YAML file with Mustache templating.";
             CommandHelpString = "Syntax: <" + CommandString + "> <yamlFilePath> <arg1> <arg2> ... <argN>\n" +

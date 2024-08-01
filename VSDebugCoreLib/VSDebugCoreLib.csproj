@@ -101,6 +101,7 @@
     <Compile Include="Commands\Debugging\StackWalk.cs" />
     <Compile Include="Commands\UI\AboutCommand.cs" />
     <Compile Include="Commands\UI\ConsoleCommand.cs" />
+    <Compile Include="Commands\Debugging\BreakpointAction.cs" />
     <Compile Include="Commands\UI\ExportHistoryCommand.cs" />
     <Compile Include="Commands\UI\RepeatCommand.cs" />
     <Compile Include="Commands\UI\ExploreWDCommand.cs" />
@@ -113,6 +114,9 @@
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
+    <Compile Include="UI\BreakpointActionWindow.xaml.cs">
+      <DependentUpon>BreakpointActionWindow.xaml</DependentUpon>
     </Compile>
     <Compile Include="UI\Tools\ConsoleWindow.cs" />
     <Compile Include="Console\HistoryBuffer.cs" />
@@ -149,6 +153,10 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="UI\BreakpointActionWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI\SettingsWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -198,6 +206,9 @@
     <Resource Include="Resources\FolderOpen_32x.png" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Community.VisualStudio.Toolkit.16">
+      <Version>16.0.507</Version>
+    </PackageReference>
     <PackageReference Include="DnsClient">
       <Version>1.7.0</Version>
     </PackageReference>

@@ -166,6 +166,9 @@
     <Folder Include="lib\" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Community.VisualStudio.Toolkit.16">
+      <Version>16.0.507</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.VisualStudio.Composition">
       <Version>16.9.20</Version>
     </PackageReference>
