@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using EnvDTE80;
+using EnvDTE;
 using Microsoft.VisualStudio.Shell;
 using VSDebugCoreLib.Commands;
 using VSDebugCoreLib.Commands.Core;
@@ -43,6 +44,11 @@ namespace VSDebugCoreLib
         private ConsoleEngine _consoleEngine;
 
         /// <summary>
+        ///     VSDebugTool breakpoints.
+        /// </summary>
+        private BreakpointCommandManager _breakpoints;
+
+        /// <summary>
         ///     VS IDE that is executing this context.
         /// </summary>
         private DTE2 _ide;
@@ -57,6 +63,11 @@ namespace VSDebugCoreLib
         /// </summary>
         private SettingsManager _settingsManager;
 
+        /// <summary>
+        ///     Debugger Events.
+        /// </summary>
+        private EnvDTE.DebuggerEvents _debuggerEvents;
+
         public VSDebugContext(Package package, Assembly assembly)
         {
             PACKAGE = package;
@@ -68,6 +79,8 @@ namespace VSDebugCoreLib
         public ConsoleEngine ConsoleEngine => _consoleEngine;
 
         public ConsoleWindow Console => _console;
+
+        public BreakpointCommandManager Breakpoints => _breakpoints;
 
         /// <summary>
         ///     VS IDE that is executing this context.
@@ -106,6 +119,11 @@ namespace VSDebugCoreLib
 
             // Register commands
             InitCommands();
+
+            // Register breakpoint handler
+            _breakpoints = new BreakpointCommandManager();
+            _debuggerEvents = IDE.Events.DebuggerEvents;
+            _debuggerEvents.OnEnterBreakMode += new _dispDebuggerEvents_OnEnterBreakModeEventHandler(OnEnterBreakMode);
         }
 
         private void InitAppData() 
@@ -136,6 +154,24 @@ namespace VSDebugCoreLib
 
             _console.Engine = _consoleEngine;
             _console.Context = this;
+        }
+
+        private void OnEnterBreakMode(dbgEventReason Reason, ref dbgExecutionAction ExecutionAction)
+        {
+            var breakpoint = IDE.Debugger.BreakpointLastHit;
+            if (breakpoint != null)
+            {
+                var breakpointSettings = _breakpoints.GetAssociation(breakpoint.File, breakpoint.FileLine);
+                if (breakpointSettings != null && breakpointSettings.Command != null && breakpointSettings.Enabled)
+                {
+                    _consoleEngine.Execute(breakpointSettings.Command);
+
+                    if (breakpointSettings.Continue)
+                    {
+                        ExecutionAction = dbgExecutionAction.dbgExecutionActionGo;
+                    }
+                }
+            }
         }
 
         private void RegisterBaseCommand(BaseCommand cmd)

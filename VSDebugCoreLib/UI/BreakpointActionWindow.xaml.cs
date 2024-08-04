@@ -1,4 +1,7 @@
-﻿using System;
+﻿using EnvDTE;
+using EnvDTE80;
+using EnvDTE90a;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -18,15 +21,45 @@ namespace VSDebugCoreLib.UI
     /// <summary>
     /// Interaction logic for BreakpointAction.xaml
     /// </summary>
-    public partial class BreakpointActionWindow : Window
+    public partial class BreakpointActionWindow : System.Windows.Window
     {
-        public BreakpointActionWindow(VSDebugContext package)
+        VSDebugContext _context;
+
+        public BreakpointActionWindow(VSDebugContext context)
         {
             InitializeComponent();
+
+            _context = context;
+
+            Document currentDocument = context.IDE.ActiveDocument;
+            EnvDTE.TextSelection selection = (currentDocument.Object("") as TextDocument).Selection;
+
+            var breakpoint = _context.Breakpoints.GetAssociation(currentDocument.FullName, selection.CurrentLine);
+
+            if (breakpoint != null)
+            {
+                enableCommand.IsChecked = breakpoint.Enabled;
+                textBoxCommandString.Text = breakpoint.Command;
+                enableContinue.IsChecked = breakpoint.Continue;
+            }
         }
 
         private void btnOk_Click(object sender, RoutedEventArgs e)
         {
+            Document currentDocument = _context.IDE.ActiveDocument;
+            EnvDTE.TextSelection selection = (currentDocument.Object("") as TextDocument).Selection;
+            var breakpoint = _context.Breakpoints.GetAssociation(currentDocument.FullName, selection.CurrentLine);
+
+            if (breakpoint != null)
+            {
+                breakpoint.Enabled = (bool)enableCommand.IsChecked;
+                breakpoint.Command = textBoxCommandString.Text;
+                breakpoint.Continue = (bool)enableContinue.IsChecked;
+            }
+            else if ((bool)enableCommand.IsChecked)
+            {
+                _context.Breakpoints.AddAssociation(currentDocument.FullName, selection.CurrentLine, textBoxCommandString.Text, (bool)enableContinue.IsChecked);
+            }
             Close();
         }
 
