@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
 using EnvDTE;
 using EnvDTE80;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 
 namespace VSDebugCoreLib.Utils
 {
@@ -27,104 +31,32 @@ namespace VSDebugCoreLib.Utils
         private readonly DTE2 _dte;
         private const int MAX_DEPTH = 100;
         private const int MAX_CONTAINER_ELEMENTS = 1000;
+        private static readonly string[] ExcludedMembers = { "Raw View", "[comparator]", "[allocator]", "[capacity]" };
 
         public DebuggerExpressionEvaluator(DTE2 dte)
         {
             _dte = dte;
         }
 
-        public string EvaluateAndExpandSymbol(string symbolName, string indent = "")
+        public string EvaluateExpression(string expression, bool jsonMode = true)
         {
-            var output = new StringBuilder();
-            var symbolsToEvaluate = new Stack<(string Symbol, string expression, string Indent)>();
-            symbolsToEvaluate.Push((symbolName, symbolName, indent));
-
-            while (symbolsToEvaluate.Count > 0)
+            if (_dte.Debugger.CurrentMode == EnvDTE.dbgDebugMode.dbgBreakMode)
             {
-                var (currentSymbol, currentExpression, currentIndent) = symbolsToEvaluate.Pop();
-
-                var expression = _dte.Debugger.GetExpression(currentExpression, true, 100);
-                if (!expression.IsValidValue)
-                {
-                    output.AppendLine($"{currentIndent}{currentSymbol} = <Invalid Expression>");
-                    continue; // Skip to the next symbol
-                }
-
-                output.AppendLine($"{currentIndent}{currentSymbol} = {expression.Value} ({expression.Type})");
-
-                if (IsCollectionType(expression))
-                {
-                    if (expression.Type.Contains("std::map") || expression.Type.Contains("std::list"))
-                    {
-                        output.Append(FullyExpandExpression(expression));
-                    }
-                    else
-                    {
-                        var sizeExpr = _dte.Debugger.GetExpression($"{currentExpression}.size()", false, 100);
-                        int size = sizeExpr.IsValidValue ? int.Parse(sizeExpr.Value) : 0;
-                        if (!sizeExpr.IsValidValue)
-                        {
-                            Match match = Regex.Match(expression.Value, @"size=(\d+)");
-
-                            if (match.Success)
-                            {
-                                size = int.Parse(match.Groups[1].Value);
-                            }
-                        }
-
-                        // Push collection elements onto the stack in reverse order for evaluation
-                        for (int i = size - 1; i >= 0; i--)
-                        {
-                            if (expression.Type.Contains("std::list"))
-                            {
-                                symbolsToEvaluate.Push(($"{currentSymbol}[{i}]", $"$LinkedListItem({currentExpression}._Mypair._Myval2._Myhead->_Next, {i}, _Next)->_Myval", currentIndent + "  "));
-                            }
-                            else
-                            {
-                                symbolsToEvaluate.Push(($"{currentSymbol}[{i}]", $"{currentExpression}[{i}]", currentIndent + "  "));
-                            }
-                        }
-                    }
-                }
-                else if (expression.DataMembers.Count > 0)
-                {
-                    for (int i = expression.DataMembers.Count - 1; i >= 0; i--)
-                    {
-                        var element = expression.DataMembers.Item(i + 1);
-                        symbolsToEvaluate.Push(($"{currentSymbol}.{element.Name}", $"{currentExpression}.{element.Name}", currentIndent + "  "));
-                    }
-                }
-            }
-
-            return output.ToString();
-        }
-
-        private bool IsCollectionType(Expression expression)
-        {
-            return expression.Type.Contains("std::vector") ||
-                   expression.Type.Contains("std::list") ||
-                   expression.Type.Contains("std::map") ||
-                   expression.Type.EndsWith("]");// || // For C# arrays
-                   //(expression.Value is string && expression.Value.StartsWith("{") && expression.Value.EndsWith("}")); // For C# collections
-        }
-
-        public string EvaluateExpression(string expression)
-        {
-            if (_dte.Debugger.CurrentMode == dbgDebugMode.dbgBreakMode)
-            {
-                Expression expr = _dte.Debugger.GetExpression(expression, true, 100);
+                EnvDTE.Expression expr = _dte.Debugger.GetExpression(expression, true, 100);
                 if (expr.IsValidValue)
                 {
-                    return FullyExpandExpression(expr);
+                    return jsonMode ? FullyExpandExpressionJson(expr) : FullyExpandExpression(expr);
                 }
                 else
                 {
-                    return $"Error evaluating expression: {expr.Value}";
+                    var error = new { Error = $"Error evaluating expression: {expr.Value}" };
+                    return jsonMode ? JsonConvert.SerializeObject(error, Formatting.Indented) : error.Error;
                 }
             }
             else
             {
-                return "Debugger is not in break mode. Cannot evaluate expression.";
+                var error = new { Error = "Debugger is not in break mode. Cannot evaluate expression." };
+                return jsonMode ? JsonConvert.SerializeObject(error, Formatting.Indented) : error.Error;
             }
         }
 
@@ -156,8 +88,10 @@ namespace VSDebugCoreLib.Utils
                 {
                     Expression childExpr = expr.DataMembers.Item(i);
                     string childPath = $"{path}.{childExpr.Name}";
-                    if (!childExpr.Name.Contains("Raw View"))
+                    if(!ExcludedMembers.Contains(childExpr.Name))
+                    {
                         stack.Push((childExpr, depth + 1, childPath));
+                    }
                 }
 
                 // Limit expansion depth to prevent potential issues
@@ -171,74 +105,186 @@ namespace VSDebugCoreLib.Utils
             return result.ToString();
         }
 
-        private bool IsStdMap(Expression expr)
+        private string FullyExpandExpressionJson(EnvDTE.Expression rootExpr)
         {
-            return expr.Type.Contains("std::map") || expr.Type.Contains("std::unordered_map");
+            return JsonConvert.SerializeObject(ExpandExpressionToObject(rootExpr), Formatting.Indented);
         }
 
-        private bool IsCollection(Expression expr)
+        private JToken ExpandExpressionToObject(EnvDTE.Expression rootExpr)
         {
-            return expr.Type.Contains("std::vector") ||
-                    expr.Type.Contains("std::list") ||
-                    expr.Type.Contains("std::map") ||
-                    expr.Type.EndsWith("]") || // For C# arrays
-                    (expr.Value is string && expr.Value.StartsWith("{") && expr.Value.EndsWith("}"));
-        }
+            var stack = new Stack<(EnvDTE.Expression Expr, int Depth, JToken Parent, string Key, string Path)>();
+            HashSet<string> visitedPaths = new HashSet<string>();
+            var root = new JObject();
 
-        private void ExpandCollection(Expression expr, int depth, string path, Stack<(Expression, int, string)> stack)
-        {
-            var sizeExpr = _dte.Debugger.GetExpression($"{expr.Name}.size()", false, 100);
-            int size = sizeExpr.IsValidValue ? int.Parse(sizeExpr.Value) : 0;
+            stack.Push((rootExpr, 0, root, rootExpr.Name, rootExpr.Name));
 
-            for (int i = size - 1; i >= 0; i--)
+            while (stack.Count > 0)
             {
-                string elementExpr = $"{expr.Name}[{i}]";
-                Expression element = _dte.Debugger.GetExpression(elementExpr, true, 100);
-                string elementPath = $"{path}[{i}]";
-                stack.Push((element, depth + 1, elementPath));
-            }
-        }
+                var (expr, depth, parent, key, path) = stack.Pop();
 
-        private void ExpandStdMap(Expression mapExpr, int depth, string path, Stack<(Expression, int, string)> stack)
-        {
-            int size = GetMapSize(mapExpr);
-            int elementsToShow = Math.Min(size, MAX_CONTAINER_ELEMENTS);
-
-            for (int i = 0; i < elementsToShow; i++)
-            {
-                string nodeExpr = $"{mapExpr.Name}._Mypair._Myval2._Myval2._Myhead->_Parent->_Left";
-                for (int j = 0; j < i; j++)
+                // Check for circular references
+                if (visitedPaths.Contains(path))
                 {
-                    nodeExpr = $"{nodeExpr}->_Parent";
+                    SetJsonValue(parent, key.Trim('"', '\''), new JValue("<circular reference>"));
+                    continue;
                 }
-                Expression keyExpr = _dte.Debugger.GetExpression($"{nodeExpr}->_Myval.first");
-                Expression valueExpr = _dte.Debugger.GetExpression($"{nodeExpr}->_Myval.second");
 
-                string keyPath = $"{path}[{i}].key";
-                string valuePath = $"{path}[{i}].value";
+                visitedPaths.Add(path);
 
-                stack.Push((valueExpr, depth + 2, valuePath));
-                stack.Push((keyExpr, depth + 2, keyPath));
+                if (IsPrimitiveType(expr))
+                {
+                    SetJsonValue(parent, key.Trim('"', '\''), new JValue(ParsePrimitiveValue(expr.Value)));
+                }
+                else
+                {
+                    var node = IsDictionary(expr) ? (JToken)new JObject() : new JArray();
+                    SetJsonValue(parent, key.Trim('"', '\''), node);
 
-                Expression pairExpr = _dte.Debugger.GetExpression($"\"Pair {i}\"");
-                stack.Push((pairExpr, depth + 1, $"{path}[{i}]"));
+                    for (int i = expr.DataMembers.Count; i > 0; i--)
+                    {
+                        Expression childExpr = expr.DataMembers.Item(i);
+                        string childPath = $"{path}.{childExpr.Name}";
+                        if (!ExcludedMembers.Contains(childExpr.Name))
+                        {
+                            stack.Push((childExpr, depth + 1, node, RemoveBrackets(childExpr.Name).Trim('"', '\''), childPath));
+                        }
+                    }
+                }
+
+                // Limit expansion depth to prevent potential issues
+                if (depth > MAX_DEPTH)
+                {
+                    SetJsonValue(parent, key.Trim('"', '\''), new JValue("<maximum depth reached>"));
+                    continue;
+                }
             }
 
-            if (size > MAX_CONTAINER_ELEMENTS)
+            return root[rootExpr.Name];
+        }
+
+        private bool IsPrimitiveType(EnvDTE.Expression expr)
+        {
+            if (expr.DataMembers.Count == 0) 
+                return true;
+
+            string[] primitiveTypes = { "int", "float", "double", "str", "bool", "char", "number", "string", "boolean" };
+            return primitiveTypes.Any(type => expr.Type.ToLower().Contains(type)) &&
+                   !expr.Type.ToLower().Contains("[]") &&
+                   !expr.Type.ToLower().Contains("list") &&
+                   !IsCollection(expr);
+        }
+
+        private object ParsePrimitiveValue(string value)
+        {
+            if (bool.TryParse(value, out bool boolResult))
+                return boolResult;
+            if (int.TryParse(value, out int intResult))
+                return intResult;
+            if (double.TryParse(value, out double doubleResult))
+                return doubleResult;
+            return value.Trim('"', '\'');
+        }
+
+        private bool IsCollection(EnvDTE.Expression expr)
+        {
+            string[] collectionTypes = { "array", "list", "set", "dictionary", "map", "tuple", "vector" };
+            return collectionTypes.Any(type => expr.Type.ToLower().Contains(type)) ||
+                   expr.Value.Trim().StartsWith("{") ||
+                   expr.Value.Trim().StartsWith("[") ||
+                   (expr.DataMembers.Count > 0 && expr.DataMembers.Item(1).Name == "[0]") ||
+                   Regex.IsMatch(expr.Value, @"^\{\s*size\s*=\s*\d+\s*\}$");
+        }
+
+        private bool IsDictionary(EnvDTE.Expression expr)
+        {
+      
+            string type = expr.Type.Trim();
+
+            // Use regex to match exact types or types with generic parameters
+            if (Regex.IsMatch(type, @"^(Dictionary|Map|dict|Hashtable)(<.*>)?$", RegexOptions.IgnoreCase) ||
+                Regex.IsMatch(type, @"^std::(unordered_)?map<.*>$", RegexOptions.IgnoreCase))
             {
-                Expression dummyExpr = _dte.Debugger.GetExpression($"\"... {size - MAX_CONTAINER_ELEMENTS} more elements ...\"");
-                stack.Push((dummyExpr, depth + 1, $"{path}[{MAX_CONTAINER_ELEMENTS}]"));
+                return true;
+            }
+
+            // Special case for JavaScript/TypeScript object
+            if (type.Equals("Object", StringComparison.OrdinalIgnoreCase) ||
+                (expr.Value.Trim().StartsWith("{") && expr.Value.Trim().EndsWith("}") && !Regex.IsMatch(expr.Value, @"^\{\s*size\s*=\s*\d+\s*\}$")))
+            {
+                return true;
+            }
+        
+            return false;
+        }
+
+        private void SetJsonValue(JToken parent, string key, JToken value)
+        {
+            if (parent is JObject jObj)
+            {
+                jObj[key] = value;
+            }
+            else if (parent is JArray jArr)
+            {
+                jArr.Add(value);
             }
         }
 
-        private int GetMapSize(Expression mapExpr)
+        private string RemoveBrackets(string input)
         {
-            Expression sizeExpr = _dte.Debugger.GetExpression($"{mapExpr.Name}._Mypair._Myval2._Myval2._Mysize");
-            if (sizeExpr.IsValidValue)
+            if (string.IsNullOrEmpty(input))
             {
-                return int.Parse(sizeExpr.Value);
+                return input;
             }
-            return 0;
+
+            // Remove leading and trailing whitespace
+            input = input.Trim();
+
+            // Check if the string starts with '[' and ends with ']'
+            if (input.StartsWith("[") && input.EndsWith("]"))
+            {
+                // Remove the first and last character
+                return input.Substring(1, input.Length - 2);
+            }
+
+            // If the input doesn't have brackets, return it as is
+            return input;
+        }
+
+        private string UnescapeCStyleString(string input)
+        {
+            if (string.IsNullOrEmpty(input))
+            {
+                return input;
+            }
+
+            // Remove surrounding quotes if present
+            input = input.Trim('"');
+
+            // Replace escaped characters
+            return Regex.Replace(input, @"\\([\\\""\'0abfnrtv]|x[0-9a-fA-F]{2}|u[0-9a-fA-F]{4})", m =>
+            {
+                string escaped = m.Groups[1].Value;
+                switch (escaped[0])
+                {
+                    case '\\': return "\\";
+                    case '"': return "\"";
+                    case '\'': return "'";
+                    case '0': return "\0";
+                    case 'a': return "\a";
+                    case 'b': return "\b";
+                    case 'f': return "\f";
+                    case 'n': return "\n";
+                    case 'r': return "\r";
+                    case 't': return "\t";
+                    case 'v': return "\v";
+                    case 'x':
+                    case 'u':
+                        int code = int.Parse(escaped.Substring(1), System.Globalization.NumberStyles.HexNumber);
+                        return char.ConvertFromUtf32(code);
+                    default:
+                        return m.Value; // Return the original value if not recognized
+                }
+            });
         }
     }
 }
