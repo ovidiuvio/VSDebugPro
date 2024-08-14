@@ -76,10 +76,6 @@ namespace VSDebugCoreLib.Commands.Core
 
                 var stubble = new StubbleBuilder().Build();
                 var templateDictionary = new Dictionary<string, object>();
-                foreach (var kvp in commandFile.Variables)
-                {
-                    templateDictionary.Add(kvp.Key, kvp.Value);
-                }
 
                 // Map command-line arguments to $1, $2, $3, etc.
                 for (int i = 0; i < args.Length; i++)
@@ -89,17 +85,28 @@ namespace VSDebugCoreLib.Commands.Core
 
                 // Render variables first
                 var renderedVariables = new Dictionary<string, string>();
-                foreach (var kvp in commandFile.Variables)
+                if (commandFile.Variables != null)
                 {
-                    renderedVariables[kvp.Key] = stubble.Render(kvp.Value, templateDictionary);
+                    foreach (var kvp in commandFile.Variables)
+                    {
+                        templateDictionary.Add(kvp.Key, kvp.Value);
+                    }
+
+                    foreach (var kvp in commandFile.Variables)
+                    {
+                        renderedVariables[kvp.Key] = stubble.Render(kvp.Value, templateDictionary);
+                    }
                 }
 
                 // Use the rendered variables for command templating
-                foreach (var commandEntry in commandFile.Commands)
+                if (commandFile.Commands != null)
                 {
-                    var renderedArguments = stubble.Render(commandEntry, renderedVariables);
-                    var commandText = $"{renderedArguments}";
-                    Context.ConsoleEngine.Execute(commandText);
+                    foreach (var commandEntry in commandFile.Commands)
+                    {
+                        var renderedArguments = stubble.Render(commandEntry, renderedVariables);
+                        var commandText = $"{renderedArguments}";
+                        Context.ConsoleEngine.Execute(commandText);
+                    }
                 }
             }
             catch (Exception ex)
