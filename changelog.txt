@@ -1,3 +1,6 @@
+VSDebugPro_4-3-1-0
+    [*] Fix empty variables crash in exec command
+
 VSDebugPro_4-3-0-0
     [+] Added stackwalk command
     [+] Added print command
