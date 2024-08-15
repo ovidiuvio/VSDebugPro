@@ -31,7 +31,7 @@ namespace VSDebugCoreLib.Utils
         private readonly DTE2 _dte;
         private const int MAX_DEPTH = 100;
         private const int MAX_CONTAINER_ELEMENTS = 1000;
-        private static readonly string[] ExcludedMembers = { "Raw View", "[comparator]", "[allocator]", "[capacity]" };
+        private static readonly string[] ExcludedMembers = { "[Raw View]", "Raw View", "[comparator]", "[allocator]", "[capacity]" };
 
         public DebuggerExpressionEvaluator(DTE2 dte)
         {
@@ -63,34 +63,23 @@ namespace VSDebugCoreLib.Utils
         private string FullyExpandExpression(Expression rootExpr)
         {
             StringBuilder result = new StringBuilder();
-            Stack<(Expression Expr, int Depth, string Path)> stack = new Stack<(Expression, int, string)>();
-            HashSet<string> visitedPaths = new HashSet<string>();
+            Stack<(Expression Expr, int Depth)> stack = new Stack<(Expression, int)>();
 
-            stack.Push((rootExpr, 0, rootExpr.Name));
+            stack.Push((rootExpr, 0));
 
             while (stack.Count > 0)
             {
-                var (expr, depth, path) = stack.Pop();
+                var (expr, depth) = stack.Pop();
                 string indent = new string(' ', depth * 2);
-
-                // Check for circular references
-                if (visitedPaths.Contains(path))
-                {
-                    result.AppendLine($"{indent}{expr.Name} = <circular reference>");
-                    continue;
-                }
-
-                visitedPaths.Add(path);
 
                 result.AppendLine($"{indent}{expr.Name} = {expr.Value}");
 
                 for (int i = expr.DataMembers.Count; i > 0; i--)
                 {
                     Expression childExpr = expr.DataMembers.Item(i);
-                    string childPath = $"{path}.{childExpr.Name}";
-                    if(!ExcludedMembers.Contains(childExpr.Name))
+                    if (!ExcludedMembers.Contains(childExpr.Name))
                     {
-                        stack.Push((childExpr, depth + 1, childPath));
+                        stack.Push((childExpr, depth + 1));
                     }
                 }
 
@@ -112,41 +101,74 @@ namespace VSDebugCoreLib.Utils
 
         private JToken ExpandExpressionToObject(EnvDTE.Expression rootExpr)
         {
-            var stack = new Stack<(EnvDTE.Expression Expr, int Depth, JToken Parent, string Key, string Path)>();
-            HashSet<string> visitedPaths = new HashSet<string>();
+            var stack = new Stack<(EnvDTE.Expression Expr, int Depth, JToken Parent, string Key)>();
             var root = new JObject();
 
-            stack.Push((rootExpr, 0, root, rootExpr.Name, rootExpr.Name));
+            stack.Push((rootExpr, 0, root, rootExpr.Name));
 
             while (stack.Count > 0)
             {
-                var (expr, depth, parent, key, path) = stack.Pop();
-
-                // Check for circular references
-                if (visitedPaths.Contains(path))
-                {
-                    SetJsonValue(parent, key.Trim('"', '\''), new JValue("<circular reference>"));
-                    continue;
-                }
-
-                visitedPaths.Add(path);
+                var (expr, depth, parent, key) = stack.Pop();
 
                 if (IsPrimitiveType(expr))
                 {
-                    SetJsonValue(parent, key.Trim('"', '\''), new JValue(ParsePrimitiveValue(expr.Value)));
+                    SetJsonValue(parent, TrimQuotes(key), new JValue(ParsePrimitiveValue(TrimQuotes(expr.Value))));
                 }
-                else
+                else if (IsDictionary(expr))
                 {
-                    var node = IsDictionary(expr) ? (JToken)new JObject() : new JArray();
-                    SetJsonValue(parent, key.Trim('"', '\''), node);
+                    var node = new JObject();
+                    SetJsonValue(parent, TrimQuotes(key), node);
 
                     for (int i = expr.DataMembers.Count; i > 0; i--)
                     {
                         Expression childExpr = expr.DataMembers.Item(i);
-                        string childPath = $"{path}.{childExpr.Name}";
-                        if (!ExcludedMembers.Contains(childExpr.Name))
+                        if (!FilterDataMember(expr, childExpr))
                         {
-                            stack.Push((childExpr, depth + 1, node, RemoveBrackets(childExpr.Name).Trim('"', '\''), childPath));
+                            if (childExpr.Name.StartsWith("[") && childExpr.Name.EndsWith("]"))
+                            {
+                                var keyExpr = childExpr.DataMembers.Item(1); // "first" member
+                                var valueExpr = childExpr.DataMembers.Item(2); // "second" member
+                                stack.Push((valueExpr, depth + 1, node, keyExpr.Value.Trim('"', '\'')));
+                            }
+                        }
+                    }
+                }
+                else if (IsCollection(expr))
+                {
+                    var node = new JArray();
+                    SetJsonValue(parent, TrimQuotes(key), node);
+
+                    for (int i = expr.DataMembers.Count; i > 0; i--)
+                    {
+                        Expression childExpr = expr.DataMembers.Item(i);
+                        if (!FilterDataMember(expr, childExpr))
+                        {
+                            stack.Push((childExpr, depth + 1, node, TrimQuotes(RemoveBrackets(childExpr.Name))));
+                        }
+                    }
+                }
+                else if (IsPair(expr))
+                {
+                    var node = new JObject();
+                    SetJsonValue(parent, TrimQuotes(key), node);
+
+                    if (expr.DataMembers.Count >= 2)
+                    {
+                        stack.Push((expr.DataMembers.Item(1), depth + 1, node, "first"));
+                        stack.Push((expr.DataMembers.Item(2), depth + 1, node, "second"));
+                    }
+                }
+                else // Custom object or other complex type
+                {
+                    var node = new JObject();
+                    SetJsonValue(parent, TrimQuotes(key), node);
+
+                    for (int i = 1; i <= expr.DataMembers.Count; i++)
+                    {
+                        Expression childExpr = expr.DataMembers.Item(i);
+                        if (!FilterDataMember(expr, childExpr))
+                        {
+                            stack.Push((childExpr, depth + 1, node, childExpr.Name));
                         }
                     }
                 }
@@ -154,7 +176,7 @@ namespace VSDebugCoreLib.Utils
                 // Limit expansion depth to prevent potential issues
                 if (depth > MAX_DEPTH)
                 {
-                    SetJsonValue(parent, key.Trim('"', '\''), new JValue("<maximum depth reached>"));
+                    SetJsonValue(parent, TrimQuotes(key), new JValue("<maximum depth reached>"));
                     continue;
                 }
             }
@@ -162,15 +184,37 @@ namespace VSDebugCoreLib.Utils
             return root[rootExpr.Name];
         }
 
+        private bool FilterDataMember(EnvDTE.Expression parent, EnvDTE.Expression child)
+        {
+            // filter banned nodes
+            if (ExcludedMembers.Contains(child.Name))
+            {
+                return true;
+            }
+
+            // C++ filter unordered_ natvis members
+            if (Regex.IsMatch(parent.Type, @"^std::unordered_(map|multimap|set|multiset)<.*>$", RegexOptions.IgnoreCase))
+            {
+                string[] ExcludeKeywords = { "[hash_function]", "[key_eq]" };
+                if (ExcludeKeywords.Contains(child.Name))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+        }
+
         private bool IsPrimitiveType(EnvDTE.Expression expr)
         {
-            if (expr.DataMembers.Count == 0) 
+            if (expr.DataMembers.Count == 0)
                 return true;
 
             string[] primitiveTypes = { "int", "float", "double", "str", "bool", "char", "number", "string", "boolean" };
             return primitiveTypes.Any(type => expr.Type.ToLower().Contains(type)) &&
                    !expr.Type.ToLower().Contains("[]") &&
                    !expr.Type.ToLower().Contains("list") &&
+                   !expr.Type.ToLower().Contains("<") && !expr.Type.ToLower().Contains(">") &&
                    !IsCollection(expr);
         }
 
@@ -185,11 +229,20 @@ namespace VSDebugCoreLib.Utils
             return value.Trim('"', '\'');
         }
 
+        private bool IsVector(EnvDTE.Expression expr)
+        {
+            return expr.Type.StartsWith("std::vector<") || expr.Type.StartsWith("vector<");
+        }
+
+        private bool IsPair(EnvDTE.Expression expr)
+        {
+            return expr.Type.StartsWith("std::pair<") || expr.Type.StartsWith("pair<");
+        }
+
         private bool IsCollection(EnvDTE.Expression expr)
         {
             string[] collectionTypes = { "array", "list", "set", "dictionary", "map", "tuple", "vector" };
             return collectionTypes.Any(type => expr.Type.ToLower().Contains(type)) ||
-                   expr.Value.Trim().StartsWith("{") ||
                    expr.Value.Trim().StartsWith("[") ||
                    (expr.DataMembers.Count > 0 && expr.DataMembers.Item(1).Name == "[0]") ||
                    Regex.IsMatch(expr.Value, @"^\{\s*size\s*=\s*\d+\s*\}$");
@@ -197,23 +250,17 @@ namespace VSDebugCoreLib.Utils
 
         private bool IsDictionary(EnvDTE.Expression expr)
         {
-      
+
             string type = expr.Type.Trim();
 
             // Use regex to match exact types or types with generic parameters
             if (Regex.IsMatch(type, @"^(Dictionary|Map|dict|Hashtable)(<.*>)?$", RegexOptions.IgnoreCase) ||
-                Regex.IsMatch(type, @"^std::(unordered_)?map<.*>$", RegexOptions.IgnoreCase))
+                Regex.IsMatch(type, @"^std::(unordered_)?map<.*>$", RegexOptions.IgnoreCase) ||
+                Regex.IsMatch(type, @"^std::(unordered_)?multimap<.*>$", RegexOptions.IgnoreCase))
             {
                 return true;
             }
 
-            // Special case for JavaScript/TypeScript object
-            if (type.Equals("Object", StringComparison.OrdinalIgnoreCase) ||
-                (expr.Value.Trim().StartsWith("{") && expr.Value.Trim().EndsWith("}") && !Regex.IsMatch(expr.Value, @"^\{\s*size\s*=\s*\d+\s*\}$")))
-            {
-                return true;
-            }
-        
             return false;
         }
 
@@ -248,6 +295,11 @@ namespace VSDebugCoreLib.Utils
 
             // If the input doesn't have brackets, return it as is
             return input;
+        }
+
+        private string TrimQuotes(string str)
+        {
+            return str.Trim('"', '\'');
         }
 
         private string UnescapeCStyleString(string input)
