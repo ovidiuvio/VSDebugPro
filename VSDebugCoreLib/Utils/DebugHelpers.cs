@@ -201,6 +201,33 @@ namespace VSDebugCoreLib.Utils
                     return true;
                 }
             }
+            // C++ filter variant index
+            if (Regex.IsMatch(parent.Type, @"^std::variant<.*>$", RegexOptions.IgnoreCase))
+            {
+                string[] ExcludeKeywords = { "index" };
+                if (ExcludeKeywords.Contains(child.Name))
+                {
+                    return true;
+                }
+            }
+            // C++ filter shared_ptr meta members
+            if (Regex.IsMatch(parent.Type, @"^std::shared_ptr<.*>$", RegexOptions.IgnoreCase))
+            {
+                string[] ExcludeKeywords = { "[control block]" };
+                if (ExcludeKeywords.Contains(child.Name))
+                {
+                    return true;
+                }
+            }
+            // C++ filter unique_ptr meta members
+            if (Regex.IsMatch(parent.Type, @"^std::unique_ptr<.*>$", RegexOptions.IgnoreCase))
+            {
+                string[] ExcludeKeywords = { "[deleter]" };
+                if (ExcludeKeywords.Contains(child.Name))
+                {
+                    return true;
+                }
+            }
 
             return false;
         }
