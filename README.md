@@ -7,7 +7,7 @@ Enhanced debugging for C/C++, C#/.NET. Dump blocks of data, load data in memory 
 
 **[www.vsdebug.pro](https://www.vsdebug.pro)**
 
-<img src="/assets/console.png" width="85%"/>
+<img src="https://www.vsdebug.pro/assets/img/ft_console.webp" width="85%"/>
 
 ###### Available for:
 
