@@ -1,3 +1,8 @@
+VSDebugPro_4-3-2-0
+    [+] Added C++ json serialization for print / export
+    [*] Refactored expression evaluation
+    [*] Improved debug format serialization
+
 VSDebugPro_4-3-1-0
     [*] Fix empty variables crash in exec command
 
