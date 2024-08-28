@@ -127,7 +127,11 @@
     <Compile Include="UI\SettingsWindow.xaml.cs">
       <DependentUpon>SettingsWindow.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Utils\CppDebuggerExpressionEvaluator.cs" />
+    <Compile Include="Utils\DebuggerExpressionEvaluator.cs" />
+    <Compile Include="Utils\DebuggerLanguage.cs" />
     <Compile Include="Utils\DebugHelpers.cs" />
+    <Compile Include="Utils\DefaultDebuggerExpressionEvaluator.cs" />
     <Compile Include="Utils\DkmMethods.cs" />
     <Compile Include="Utils\MiscHelpers.cs" />
     <Compile Include="Utils\MemoryHelpers.cs" />

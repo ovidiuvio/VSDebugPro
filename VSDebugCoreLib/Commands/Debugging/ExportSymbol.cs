@@ -10,10 +10,9 @@ namespace VSDebugCoreLib.Commands.Debugging
 {
     public class ExportSymbol : BaseCommand
     {
-        private readonly DebuggerExpressionEvaluator _evaluator;
-
         private const char TknForce = 'f';
         private const char TknAppend = 'a';
+        private const char TknJson = 'j'; // New JSON flag
 
         public ExportSymbol(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, "export")
@@ -24,12 +23,11 @@ namespace VSDebugCoreLib.Commands.Debugging
                                 "\tFlags:\n" +
                                 $"\t\t  -{TknForce}\t- Force file overwrite.\n" +
                                 $"\t\t  -{TknAppend}\t- Append to the file.\n" +
+                                $"\t\t  -{TknJson}\t- Export result in JSON format.\n" + // Updated help string
                                 "\t<filename>   \t- output filename\n" +
                                 "\t<expression> \t- symbol to evaluate\n" +
                                 "\tExample: export output.txt myVariable\n" +
                                 $"\tExample: export -{TknForce} output.txt myObject";
-
-            _evaluator = new DebuggerExpressionEvaluator(context.IDE);
         }
 
         public override void Execute(string text)
@@ -48,6 +46,7 @@ namespace VSDebugCoreLib.Commands.Debugging
             // Parse options
             bool forceOverwrite = false;
             bool appendToFile = false;
+            bool jsonMode = false; // New JSON mode flag
             string filename;
             string expression;
 
@@ -58,6 +57,7 @@ namespace VSDebugCoreLib.Commands.Debugging
                 string options = argv[0].Substring(1).ToLower();
                 forceOverwrite = options.Contains(TknForce);
                 appendToFile = options.Contains(TknAppend);
+                jsonMode = options.Contains(TknJson); // Parse JSON flag
                 argIndex++;
             }
 
@@ -70,13 +70,16 @@ namespace VSDebugCoreLib.Commands.Debugging
             filename = argv[argIndex++];
             expression = argv[argIndex];
 
+            // Create the evaluator based on the current language
+            var _evaluator = DebugHelpers.CreateEvaluator(Context.IDE);
+
             try
             {
-                string result = _evaluator.EvaluateExpression(expression);
+                string result = _evaluator.EvaluateExpression(expression, jsonMode); // Pass JSON mode
 
                 // Ensure the directory exists
                 string directory = Path.GetDirectoryName(filename);
-                if (!string.IsNullOrEmpty(directory) )
+                if (!string.IsNullOrEmpty(directory))
                 {
                     if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
                 }

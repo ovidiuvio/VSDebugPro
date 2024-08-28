@@ -9,17 +9,19 @@ namespace VSDebugCoreLib.Commands.Debugging
 {
     public class PrintSymbol : BaseCommand
     {
-        private readonly DebuggerExpressionEvaluator _evaluator;
+        private const char TknJson = 'j'; // New JSON flag
 
         public PrintSymbol(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, "print")
         {
             CommandDescription = "Evaluates and prints the value of a symbol or expression.";
-            CommandHelpString = "Syntax: print <expression>\n" +
+            CommandHelpString = "Syntax: print <optional flags> <expression>\n" +
                                 "\tEvaluates <expression> and prints its value.\n" +
-                                "\tExample: print myVariable\n";
-
-            _evaluator = new DebuggerExpressionEvaluator(context.IDE);
+                                "\tFlags:\n" +
+                                $"\t\t  -{TknJson}\t- Print result in JSON format.\n" + // Updated help string
+                                "\t<expression> \t- symbol to evaluate\n" +
+                                "\tExample: print myVariable\n" +
+                                $"\tExample: print -{TknJson} myObject";
         }
 
         public override void Execute(string text)
@@ -32,11 +34,27 @@ namespace VSDebugCoreLib.Commands.Debugging
                 return;
             }
 
-            string expression = text;
+            // Parse options
+            bool jsonMode = false; // New JSON mode flag
+            string expression;
+
+            if (text.StartsWith("-"))
+            {
+                string options = text.Substring(1, 1).ToLower();
+                jsonMode = options.Contains(TknJson); // Parse JSON flag
+                expression = text.Substring(3).Trim();
+            }
+            else
+            {
+                expression = text;
+            }
+
+            // Create the evaluator based on the current language
+            var _evaluator = DebugHelpers.CreateEvaluator(Context.IDE);
 
             try
             {
-                string result = _evaluator.EvaluateExpression(expression);
+                string result = _evaluator.EvaluateExpression(expression, jsonMode); // Pass JSON mode
                 Context.ConsoleEngine.Write(result);
             }
             catch (Exception ex)
