@@ -9,6 +9,16 @@ Enhanced debugging for C/C++, C#/.NET. Dump blocks of data, load data in memory 
 
 <img src="https://www.vsdebug.pro/assets/img/ft_console.webp" width="85%"/>
 
+<img src="https://www.vsdebug.pro/assets/img/ft_json.webp" width="85%"/>
+
+<img src="https://www.vsdebug.pro/assets/img/ft_console_handlers.webp" width="85%"/>
+
+<img src="https://www.vsdebug.pro/assets/img/ft_history.webp" width="40%"/>
+
+<img src="https://www.vsdebug.pro/assets/img/ft_repeat.webp" width="20%"/>
+
+<img src="https://www.vsdebug.pro/assets/img/ft_settings.webp" width="40%"/>
+
 ###### Available for:
 
 `VS2010 - VS2022`, `C/C++`, `C#`, `x86/64`, `Arm64/Arm64EC`
