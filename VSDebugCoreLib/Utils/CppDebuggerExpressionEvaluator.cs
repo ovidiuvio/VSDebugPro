@@ -13,12 +13,12 @@ namespace VSDebugCoreLib.Utils
     {
         public CppDebuggerExpressionEvaluator(DTE2 dte) : base(dte) { }
 
-        protected override string FullyExpandExpressionJson(Expression rootExpr)
+        protected override string FullyExpandExpressionJson(Expression rootExpr, int maxDepth)
         {
-            return JsonConvert.SerializeObject(ExpandExpressionToObject(rootExpr), Formatting.Indented);
+            return JsonConvert.SerializeObject(ExpandExpressionToObject(rootExpr, maxDepth), Formatting.Indented);
         }
 
-        private JToken ExpandExpressionToObject(Expression rootExpr)
+        private JToken ExpandExpressionToObject(Expression rootExpr, int maxDepth)
         {
             var stack = new Stack<(EnvDTE.Expression Expr, int Depth, JToken Parent, string Key)>();
             var root = new JObject();
@@ -93,7 +93,7 @@ namespace VSDebugCoreLib.Utils
                 }
 
                 // Limit expansion depth to prevent potential issues
-                if (depth > MAX_DEPTH)
+                if (depth > maxDepth)
                 {
                     SetJsonValue(parent, TrimQuotes(key), new JValue("<maximum depth reached>"));
                     continue;

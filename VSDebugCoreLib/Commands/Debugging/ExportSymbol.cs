@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using VSDebugCoreLib.Utils;
 
 namespace VSDebugCoreLib.Commands.Debugging
@@ -12,7 +10,8 @@ namespace VSDebugCoreLib.Commands.Debugging
     {
         private const char TknForce = 'f';
         private const char TknAppend = 'a';
-        private const char TknJson = 'j'; // New JSON flag
+        private const char TknJson = 'j';
+        private const char TknDepth = 'd';
 
         public ExportSymbol(VSDebugContext context)
             : base(context, (int)PkgCmdIDList.CmdIDAbout, "export")
@@ -23,21 +22,23 @@ namespace VSDebugCoreLib.Commands.Debugging
                                 "\tFlags:\n" +
                                 $"\t\t  -{TknForce}\t- Force file overwrite.\n" +
                                 $"\t\t  -{TknAppend}\t- Append to the file.\n" +
-                                $"\t\t  -{TknJson}\t- Export result in JSON format.\n" + // Updated help string
+                                $"\t\t  -{TknJson}\t- Export result in JSON format.\n" +
+                                $"\t\t  -{TknDepth} <num>\t- Specify evaluation depth (default is {DebugHelpers.MAX_EVAL_DEPTH}).\n" +
                                 "\t<filename>   \t- output filename\n" +
                                 "\t<expression> \t- symbol to evaluate\n" +
                                 "\tExample: export output.txt myVariable\n" +
-                                $"\tExample: export -{TknForce} output.txt myObject";
+                                $"\tExample: export -{TknForce} output.txt myObject\n" +
+                                $"\tExample: export -{TknJson} -{TknDepth} 10 output.txt myComplexObject\n" +
+                                $"\tExample: export -{TknDepth} 5 -{TknJson} -{TknForce} output.txt myComplexObject";
         }
 
         public override void Execute(string text)
         {
             base.Execute(text);
 
-            char[] sp = { ' ', '\t' };
-            var argv = text.Split(sp, 3, StringSplitOptions.RemoveEmptyEntries);
+            var args = text.Split(new[] { ' ' }, StringSplitOptions.RemoveEmptyEntries);
 
-            if (argv.Length < 2)
+            if (args.Length < 2)
             {
                 Context.ConsoleEngine.Write(CommandHelpString);
                 return;
@@ -46,51 +47,65 @@ namespace VSDebugCoreLib.Commands.Debugging
             // Parse options
             bool forceOverwrite = false;
             bool appendToFile = false;
-            bool jsonMode = false; // New JSON mode flag
+            bool jsonMode = false;
+            int depth = DebugHelpers.MAX_EVAL_DEPTH;
             string filename;
             string expression;
 
-            int argIndex = 0;
+            var argsList = new List<string>(args);
 
-            if (argv[0].StartsWith("-"))
+            for (int i = 0; i < argsList.Count - 2; i++)
             {
-                string options = argv[0].Substring(1).ToLower();
-                forceOverwrite = options.Contains(TknForce);
-                appendToFile = options.Contains(TknAppend);
-                jsonMode = options.Contains(TknJson); // Parse JSON flag
-                argIndex++;
+                if (argsList[i].StartsWith("-"))
+                {
+                    string option = argsList[i].Substring(1).ToLower();
+                    if (option == TknForce.ToString()) forceOverwrite = true;
+                    else if (option == TknAppend.ToString()) appendToFile = true;
+                    else if (option == TknJson.ToString()) jsonMode = true;
+                    else if (option == TknDepth.ToString())
+                    {
+                        if (i + 1 < argsList.Count - 2 && int.TryParse(argsList[i + 1], out int parsedDepth))
+                        {
+                            depth = parsedDepth;
+                            argsList.RemoveAt(i + 1); // Remove the depth value
+                        }
+                        else
+                        {
+                            Context.ConsoleEngine.Write($"Invalid depth specified after -{TknDepth}. Using default depth.");
+                        }
+                    }
+                    argsList.RemoveAt(i);
+                    i--;
+                }
             }
 
-            if (argIndex + 1 >= argv.Length)
+            if (argsList.Count < 2)
             {
                 Context.ConsoleEngine.Write(CommandHelpString);
                 return;
             }
 
-            filename = argv[argIndex++];
-            expression = argv[argIndex];
+            filename = argsList[argsList.Count - 2];
+            expression = argsList[argsList.Count - 1];
 
             // Create the evaluator based on the current language
             var _evaluator = DebugHelpers.CreateEvaluator(Context.IDE);
 
             try
             {
-                string result = _evaluator.EvaluateExpression(expression, jsonMode); // Pass JSON mode
+                string result = _evaluator.EvaluateExpression(expression, jsonMode, depth);
 
                 // Ensure the directory exists
                 string directory = Path.GetDirectoryName(filename);
                 if (!string.IsNullOrEmpty(directory))
                 {
-                    if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+                    Directory.CreateDirectory(directory);
                 }
                 else
                 {
                     filename = Path.Combine(Context.Settings.GeneralSettings.WorkingDirectory, filename);
-
                     directory = Path.GetDirectoryName(filename);
-
-                    // create folder if it doesn`t exist
-                    if (!Directory.Exists(directory)) Directory.CreateDirectory(directory);
+                    Directory.CreateDirectory(directory);
                 }
 
                 // Check if file exists
