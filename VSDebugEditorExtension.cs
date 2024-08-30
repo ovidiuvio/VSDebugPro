@@ -53,14 +53,14 @@ namespace VSDebugPro
     /// </summary>
     internal static class VSDContentTypeDefinition
     {
-        public const string ContentType = "vsdscript";
+        public const string ContentType = "vsdconsoletext";
 
         /// <summary>
         ///     Exports the vsd content type
         /// </summary>
         [Export]
         [Name(ContentType)]
-        [BaseDefinition("code")]
+        [BaseDefinition("text")]
         internal static ContentTypeDefinition VSDContentType { get; set; }
     }
 
@@ -299,7 +299,7 @@ namespace VSDebugPro
     }
 
     [Export(typeof(IViewTaggerProvider))]
-    [ContentType("vsdscript")]
+    [ContentType(VSDContentTypeDefinition.ContentType)]
     [TagType(typeof(HighlightWordTag))]
     public class HighlightWordTaggerProvider : IViewTaggerProvider
     {
@@ -312,7 +312,7 @@ namespace VSDebugPro
         public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
         {
             // Only provide highlighting on the top-level buffer
-            if (!buffer.ContentType.IsOfType("vsdscript"))
+            if (!buffer.ContentType.IsOfType(VSDContentTypeDefinition.ContentType))
                 return null;
 
             var textStructureNavigator =
@@ -549,7 +549,7 @@ namespace VSDebugPro
     }
 
     [Export(typeof(IViewTaggerProvider))]
-    [ContentType("vsdscript")]
+    [ContentType(VSDContentTypeDefinition.ContentType)]
     [TagType(typeof(HighlightActionTag))]
     public class HighlightActionTaggerProvider : IViewTaggerProvider
     {
@@ -562,7 +562,7 @@ namespace VSDebugPro
         public ITagger<T> CreateTagger<T>(ITextView textView, ITextBuffer buffer) where T : ITag
         {
             // Only provide highlighting on the top-level buffer
-            if (!buffer.ContentType.IsOfType("vsdscript"))
+            if (!buffer.ContentType.IsOfType(VSDContentTypeDefinition.ContentType))
                 return null;
 
             var textStructureNavigator =
