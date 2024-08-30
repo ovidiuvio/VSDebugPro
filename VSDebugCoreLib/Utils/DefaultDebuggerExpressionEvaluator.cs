@@ -13,7 +13,7 @@ namespace VSDebugCoreLib.Utils
         {
         }
 
-        protected override string FullyExpandExpressionJson(Expression rootExpr)
+        protected override string FullyExpandExpressionJson(Expression rootExpr, int maxDepth)
         {
             throw new NotSupportedException("JSON serialization is not supported for the default evaluator.");
         }

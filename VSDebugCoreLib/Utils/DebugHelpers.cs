@@ -15,6 +15,8 @@ namespace VSDebugCoreLib.Utils
 {
     public class DebugHelpers
     {
+        public const int MAX_CONTAINER_ELEMENTS = 1000;
+        public const int MAX_EVAL_DEPTH = 20;
         public static bool IsMiniDumpProcess(Process process)
         {
             var strExt = Path.GetExtension(process.Name.ToLower());

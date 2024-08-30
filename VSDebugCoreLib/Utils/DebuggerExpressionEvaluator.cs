@@ -11,8 +11,6 @@ namespace VSDebugCoreLib.Utils
     public abstract class DebuggerExpressionEvaluator
     {
         protected readonly DTE2 _dte;
-        protected const int MAX_DEPTH = 20;
-        protected const int MAX_CONTAINER_ELEMENTS = 1000;
         protected static readonly string[] ExcludedMembers = { "[Raw View]", "Raw View", "[comparator]", "[allocator]", "[capacity]" };
 
         protected DebuggerExpressionEvaluator(DTE2 dte)
@@ -20,14 +18,14 @@ namespace VSDebugCoreLib.Utils
             _dte = dte;
         }
 
-        public string EvaluateExpression(string expression, bool jsonMode = false)
+        public string EvaluateExpression(string expression, bool jsonMode = false, int maxDepth = DebugHelpers.MAX_EVAL_DEPTH)
         {
             if (_dte.Debugger.CurrentMode == EnvDTE.dbgDebugMode.dbgBreakMode)
             {
                 EnvDTE.Expression expr = _dte.Debugger.GetExpression(expression, true, 100);
                 if (expr.IsValidValue)
                 {
-                    return jsonMode ? FullyExpandExpressionJson(expr) : FullyExpandExpression(expr);
+                    return jsonMode ? FullyExpandExpressionJson(expr, maxDepth) : FullyExpandExpression(expr, maxDepth);
                 }
                 else
                 {
@@ -42,7 +40,7 @@ namespace VSDebugCoreLib.Utils
             }
         }
 
-        protected string FullyExpandExpression(Expression rootExpr)
+        protected string FullyExpandExpression(Expression rootExpr, int maxDepth)
         {
             StringBuilder result = new StringBuilder();
             Stack<(Expression Expr, int Depth)> stack = new Stack<(Expression, int)>();
@@ -66,7 +64,7 @@ namespace VSDebugCoreLib.Utils
                 }
 
                 // Limit expansion depth to prevent potential issues
-                if (depth > MAX_DEPTH)
+                if (depth >= maxDepth)
                 {
                     result.AppendLine($"{indent}  <maximum depth reached>");
                     break;
@@ -76,7 +74,7 @@ namespace VSDebugCoreLib.Utils
             return result.ToString();
         }
 
-        protected abstract string FullyExpandExpressionJson(Expression rootExpr);
+        protected abstract string FullyExpandExpressionJson(Expression rootExpr, int maxDepth);
         protected abstract bool IsPrimitiveType(Expression expr);
         protected abstract bool IsCollection(Expression expr);
         protected abstract bool IsDictionary(Expression expr);
