@@ -1,3 +1,8 @@
+VSDebugPro_4-3-4-0
+    [+] Added evaluation depth flag for print / export commands
+    [*] Move to AsyncPackage
+    [*] Fixed possible crash due to content type at initialization
+
 VSDebugPro_4-3-3-0
     [*] Minor VSIX changes
 
