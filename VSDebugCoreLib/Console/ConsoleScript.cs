@@ -5,14 +5,14 @@ namespace VSDebugCoreLib.Console
 {
     internal static class VSDContentTypeDefinition
     {
-        public const string ContentType = "vsdscript";
+        public const string ContentType = "vsdconsoletext";
 
         /// <summary>
         ///     Exports the vsd content type
         /// </summary>
         [Export]
         [Name(ContentType)]
-        [BaseDefinition("code")]
+        [BaseDefinition("text")]
         internal static ContentTypeDefinition VSDContentType { get; set; }
     }
 }
