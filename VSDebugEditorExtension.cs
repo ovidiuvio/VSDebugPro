@@ -60,7 +60,7 @@ namespace VSDebugPro
         /// </summary>
         [Export]
         [Name(ContentType)]
-        [BaseDefinition("text")]
+        [BaseDefinition("code")]
         internal static ContentTypeDefinition VSDContentType { get; set; }
     }
 

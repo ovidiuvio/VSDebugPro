@@ -96,6 +96,17 @@ namespace VSDebugCoreLib.UI.Tools
             }
         }
 
+        private IContentType GetContentType(IContentTypeRegistryService registryService)
+        {
+            var contentType = registryService.GetContentType(VSDContentTypeDefinition.ContentType);
+            if (contentType == null)
+            {
+                // If the content type is not available, we can try to create it
+                contentType = registryService.AddContentType(VSDContentTypeDefinition.ContentType, new[] { "code" });
+            }
+            return contentType;
+        }
+
         protected override void Initialize()
         {
             base.Initialize();
@@ -151,7 +162,7 @@ namespace VSDebugCoreLib.UI.Tools
                 adapterFactory.GetWpfTextView(textView).Caret.MoveTo(new SnapshotPoint(mefTextBuffer.CurrentSnapshot,
                     mefTextBuffer.CurrentSnapshot.Length));
 
-                var ivsdContentType = registryService.GetContentType(VSDContentTypeDefinition.ContentType);
+                var ivsdContentType = GetContentType(registryService);
 
                 mefTextBuffer.ChangeContentType(ivsdContentType, null);
             }
