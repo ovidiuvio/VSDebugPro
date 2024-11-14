@@ -1,6 +1,7 @@
 ﻿using System;
 using Microsoft.VisualStudio;
 using Microsoft.VisualStudio.Shell.Interop;
+using VSDebugCoreLib.Console;
 using VSDebugCoreLib.UI.Tools;
 
 namespace VSDebugCoreLib.Commands.UI
@@ -19,6 +20,15 @@ namespace VSDebugCoreLib.Commands.UI
             // The last flag is set to true so that if the tool window does not exists it will be created.
             var window = Context.PACKAGE.FindToolWindow(typeof(ConsoleWindow), 0, true);
             if (null == window || null == window.Frame) throw new NotSupportedException(Resources.CanNotCreateWindow);
+
+            var console = (ConsoleWindow)window;
+
+            console.LoadHistory(Context.SettingsManager.VSDSettings.CmdHistory);
+            console.Engine = Context.ConsoleEngine;
+            console.Context = Context;
+
+            Context.Console = console;
+
             var windowFrame = (IVsWindowFrame) window.Frame;
             ErrorHandler.ThrowOnFailure(windowFrame.Show());
         }

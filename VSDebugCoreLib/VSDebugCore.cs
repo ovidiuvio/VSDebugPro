@@ -33,11 +33,6 @@ namespace VSDebugCoreLib
         private readonly ICollection<BaseCommand> _commands = new List<BaseCommand>();
 
         /// <summary>
-        ///     VS console window.
-        /// </summary>
-        private ConsoleWindow _console;
-
-        /// <summary>
         ///     VSDebugTool console engine.
         /// </summary>
         private ConsoleEngine _consoleEngine;
@@ -67,7 +62,7 @@ namespace VSDebugCoreLib
 
         public ConsoleEngine ConsoleEngine => _consoleEngine;
 
-        public ConsoleWindow Console => _console;
+        public ConsoleWindow Console { get; set; }
 
         /// <summary>
         ///     VS IDE that is executing this context.
@@ -102,7 +97,7 @@ namespace VSDebugCoreLib
             InitSettings();
 
             // Initialize console window
-            InitConsoleTool();
+            InitConsoleEngine();
 
             // Register commands
             InitCommands();
@@ -122,20 +117,9 @@ namespace VSDebugCoreLib
             _settingsManager.LoadSettings();
         }
 
-        private void InitConsoleTool()
-        {
-            var consoleWnd = PACKAGE.FindToolWindow(typeof(ConsoleWindow), 0, true);
-            if (null == consoleWnd || null == consoleWnd.Frame)
-                throw new NotSupportedException(Resources.CanNotCreateWindow);
-
-            _console = (ConsoleWindow) consoleWnd;
-
-            _console.LoadHistory(_settingsManager.VSDSettings.CmdHistory);
-
+        private void InitConsoleEngine()
+        { 
             _consoleEngine = new ConsoleEngine(this, _commands);
-
-            _console.Engine = _consoleEngine;
-            _console.Context = this;
         }
 
         private void RegisterBaseCommand(BaseCommand cmd)
